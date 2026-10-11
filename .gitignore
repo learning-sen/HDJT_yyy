@@ -3,6 +3,7 @@
 venv/
 env/
 venv.bak/
+private/
 
 # pip 缓存 / 打包产物
 pip-wheel-metadata/

@@ -39,3 +39,22 @@ Output_Swing, Input_CM_Range, CMRR, PSRR, Noise, Offset
 - 增益裕度归一到负值域：GM <= -10dB
 - 出现"所有 PVT / 全 corner / 全场景" -> pvt_condition "all_corners"，worst_case true
 - 阈值型描述（"不得低于 40dB"）是硬约束，不是优化目标；方向的描述才是优化目标
+
+【默认底线补全规则】
+当用户没有明确给出下列指标时，按赛题评分底线补成硬约束：
+- Phase_Margin >= 50 deg
+- Gain_Margin  <= -10 dB
+- I_OPA        <= 3 mA
+- DC_Gain      >= 40 dB
+
+【口语映射规则】
+- "稳定 / 不能振荡"      -> Phase_Margin、Gain_Margin 硬约束
+- "低功耗 / 省电"        -> Power 最小化，且 I_OPA 硬约束
+- "高增益 / 增益要大"    -> DC_Gain 最大化
+- "大带宽 / 速度快"      -> UGB 最大化
+- "面积小 / 省面积"      -> Area 最小化
+
+【字段完整性（评分硬要求，缺一项扣 1 分）】
+- constraints 每一项必须含：name, op, value, unit, type, priority
+- objectives  每一项必须含：name, direction, unit, priority
+- priority：1 表示最重要，数字越大越次要
