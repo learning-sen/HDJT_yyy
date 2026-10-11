@@ -37,7 +37,8 @@ Output_Swing, Input_CM_Range, CMRR, PSRR, Noise, Offset
 - "尽可能大/越大越好/最大化" -> direction "maximize"
 - "尽可能小/越小越好/最小化" -> direction "minimize"
 - 增益裕度归一到负值域：GM <= -10dB
-- 出现"所有 PVT / 全 corner / 全场景" -> pvt_condition "all_corners"，worst_case true
+- 出现"所有 PVT / 全 PVT / 全 corner / 全场景 / 各种工艺角 / 所有工艺角"
+  -> pvt_condition "all_corners"，worst_case true
 - 阈值型描述（"不得低于 40dB"）是硬约束，不是优化目标；方向的描述才是优化目标
 
 【默认底线补全规则】
@@ -46,6 +47,15 @@ Output_Swing, Input_CM_Range, CMRR, PSRR, Noise, Offset
 - Gain_Margin  <= -10 dB
 - I_OPA        <= 3 mA
 - DC_Gain      >= 40 dB
+
+【PVT 默认规则（必须执行，优先级高于字面缺失）】
+- 赛题评分体系规定：PM、GM、I_OPA 需在【所有 PVT】下均满足，
+  DC_Gain、UGB 按【所有 PVT 条件下的最坏情况】评比。
+- 因此：除非用户明确限定只在标称条件下评估
+  （如"仅标称"、"常温常压即可"、"nominal only"、"只看 TT"），
+  pvt_condition 一律填 "all_corners"，worst_case 一律填 true。
+- 用户根本没有提到 PVT 时，不得填 "nominal" / false ——
+  信息缺失一律按赛题最严条件补全，与上面"默认底线补全规则"同一原则。
 
 【口语映射规则】
 - "稳定 / 不能振荡"      -> Phase_Margin、Gain_Margin 硬约束

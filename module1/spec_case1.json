@@ -2,6 +2,14 @@
   "design_type": "fully_differential_operational_amplifier_with_CMFB",
   "constraints": [
     {
+      "name": "DC_Gain",
+      "op": ">=",
+      "value": 40,
+      "unit": "dB",
+      "type": "hard",
+      "priority": 1
+    },
+    {
       "name": "Phase_Margin",
       "op": ">=",
       "value": 50,
@@ -18,48 +26,40 @@
       "priority": 1
     },
     {
-      "name": "DC_Gain",
-      "op": ">=",
-      "value": 40,
-      "unit": "dB",
-      "type": "hard",
-      "priority": 2
-    },
-    {
       "name": "I_OPA",
       "op": "<=",
       "value": 3,
       "unit": "mA",
       "type": "hard",
-      "priority": 3
+      "priority": 1
     }
   ],
   "objectives": [
     {
-      "name": "Power",
-      "direction": "minimize",
-      "unit": "mW",
-      "priority": 1
-    },
-    {
       "name": "DC_Gain",
       "direction": "maximize",
       "unit": "dB",
-      "priority": 2
+      "priority": 1
     },
     {
       "name": "UGB",
       "direction": "maximize",
       "unit": "MHz",
-      "priority": 3
+      "priority": 1
+    },
+    {
+      "name": "Power",
+      "direction": "minimize",
+      "unit": "mW",
+      "priority": 2
     },
     {
       "name": "Area",
       "direction": "minimize",
       "unit": "um^2",
-      "priority": 4
+      "priority": 2
     }
   ],
-  "pvt_condition": "nominal",
-  "worst_case": false
+  "pvt_condition": "all_corners",
+  "worst_case": true
 }
