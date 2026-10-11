@@ -1,0 +1,22 @@
+* Description: simulation for 2026_EDA_case1/OPA_loopgain/schematic
+simulator lang=spectre
+
+include "/home/eda_2026/EDA_2026_Empyrean_lab_start/hes_release/models/spectre/spe_demo.scs" section=tt
+include "./OPA_loopgain.netlist"
+parameters vdd=1.8 I_BIAS=10u
+simulatorOptions options reltol=1e-3 trtol=1e-3 maxvoltage=1e-3 vabstol=1e-6 
++iabstol=1e-12 temp=27 tnom=27 gmin=1e-12 rforce=1 pivrel=1e-3 scalm=1.0 
++scale=1.0 checklimitdest=psf maxnotes=5 maxwarns=5 digits=5 cols=80 
++sensfile="../psf/sens.output"
+
+dcOp dc write="alps.dc" annotate=status
+dcOpInfo info what=oppoint where=file file=dc.op
+ac ac start=1 stop=1G dec=10 annotate=status
+
+modelParameter info what=models where=file
+element info what=inst where=file
+designParamVals info what=parameters where=rawfile
+subckts info what=subckts where=file
+saveOptions options save=allpub
+
+save vout_p vout_n

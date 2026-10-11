@@ -1,0 +1,293 @@
+ 
+ 2026 华大九天PyAether生态系统工具基础知识-竞赛 
+ 手机扫描二维码答题
+  00:00:00 
+ 2026 华大九天PyAether生态系统工具基础知识-竞赛
+  录音中... 
+ 单选题 （ 共18题，每题2分，总分值36分 ） 
+ * 1.
+ Liberal Mem：华大九天 Liberal Mem 工具的核心作用，是突破传统 K 库瓶颈，提升以下哪项效率？
+ A. 电源管理电路版图效率
+ B. 射频电路仿真效率
+ C. 存储器特征化效率（提升 100X）
+ D. 数字电路时序收敛效率
+ * 2.
+ ALPS：华大九天 ALPS 大规模高精度仿真器中，Snapshot 功能的核心作用是？
+ A. 快速保存与恢复仿真状态，提升大规模仿真效率
+ B. 自动生成仿真波形报告
+ C. 自动优化仿真参数
+ D. 并行处理多个仿真任务
+ * 3.
+ ALPS CS：华大九天 ALPS CS 工具通过以下哪项技术，突破提升数模混合仿真效率？
+ A. 寄生参数自动压缩技术
+ B. 数模域同步协同和并行计算技术
+ C. 仿真波形自动分析技术
+ D. 电路参数自动优化技术
+ * 4.
+ Liberal IP：华大九天 Liberal IP 通过以下哪项技术，实现了混合信号芯片设计的性能跃升？
+ A. 寄生参数自动提取
+ B. 数模混合仿真协同
+ C. LVF 精准 K 库
+ D. 时序自动优化
+ * 5.
+ ADA：华大九天 Empyrean ADA 工具的核心定位是？ 
+ A. 新一代版图寄生参数分析工具
+ B. 模拟电路仿真工具
+ C. 数字电路时序分析工具
+ D. 封装信号完整性分析工具
+ * 6.
+ 华大九天 Vision CA 工具的核心功能，是为先进制程实现以下哪项关键能力？
+ A. 芯片良率提升中的 Care Area 精准提取
+ B. 电路功能仿真验证
+ C. 版图自动布线优化
+ D. 电源完整性分析
+ * 7.
+ ArtemisFPD：华大九天 ArtemisFPD 的 Noise 分析功能，主要赋能以下哪类场景的仿真？
+ A. 数字电路时序噪声分析
+ B. 电源管理电路纹波分析
+ C. 显控一体信号干扰分析
+ D. 射频电路相位噪声分析
+ * 8.
+ Liberal：华大九天全栈式 K 库解决方案 Liberal，主要赋能哪类 IC 设计流程？
+ A. 数字 IC 设计
+ B. 模拟 IC 设计
+ C. 射频 IC 设计
+ D. 封装设计
+ * 9.
+ 以下哪个命令用于将一个视图类型转换为另一个视图类型，支持原理图schemtic和符号symbol之间的相互转换?（）
+ A. aeScheViewToView
+ B. aeDMCopyView
+ C. aeNewCell
+ D. aeNewLib
+ * 10.
+ aeMoveObj 函数的作用是什么?（）
+ A. 移动选中的对象
+ B. 移动选中的窗口
+ C. 移动选中的设计
+ D. 移动选中的引脚
+ * 11.
+ 调用aeCreateDoughnut必须指定哪些参数?（）
+ A. inner和outer半径
+ B. 圆心坐标
+ C. 颜色和线型
+ D. 层名称和用途
+ * 12.
+ 在pyAether中，哪个模块提供了Query、GOA等拓展功能?
+ A. emyDatabase
+ B. Extension
+ C. Mde
+ D. Qt Extension
+ * 13.
+ 若要在 Python 脚本中调用 Tcl 脚本，应使用以下哪个函数?（）
+ A. aeRunTcl
+ B. aeClickMsgBoxOk
+ C. aeClickMsgBoxCancel
+ D. aeClickMsgBoxApply
+ * 14.
+ dbChangeCVMode命令中，mode参数的有效值不包括以下哪项?（）
+ A. "r"
+ B. "w"
+ C. "a"
+ D. "x"
+ * 15.
+ emyAttrDisplay类用于显示对象的属性值，创建该类对象时，object参数可以是以下哪种类型?（ ）
+ A. emyNet
+ B. emyInst
+ C. emyTerm
+ D. 以上都是
+ * 16.
+ dbCrtPRBoundary命令用于创建什么?（）
+ A. PR边界
+ B. 实例
+ C. 网络
+ D. 引脚
+ * 17.
+ 在Python中，以下哪些关键字可以用于定义类?
+ A. class
+ B. def
+ C. method
+ D. func
+ * 18.
+ 以下哪个命令用于创建一个新的矩形?（）
+ A. dbCrtRect(cv, bbox, layer, purpose)
+ B. dbCrtCircle(cv, center, radius, layer)
+ C. dbCrtLine(cv, points, layer)
+ D. dbCrtPolygon(cv, points, fillStyle)
+ 多选题 （ 共18题，每题3分，总分值54分 ，少选得1分，选错不得分） 
+ * 19.
+ Argus：华大九天 Argus 物理验证工具支持的设计场景包括？
+ 【多选题】 
+ A. 大规模数字 SoC 设计
+ B. 泛模拟电路设计
+ C. 3D IC/Chiplet 设计
+ D. 射频电路版图验证
+ * 20.
+ Liberal GT：华大九天 Liberal GT 工具的核心突破包括？ 
+ 【多选题】 
+ A. 全球首发的 K 库优化工具
+ B. 实现 K 库处理效率 10X 提速
+ C. 重塑 K 库设计格局
+ D. 通过GPU加速K库效率达10X以上
+ * 21.
+ ALPS：华大九天 ALPS 大规模高精度仿真器的核心特点包括？ 
+ 【多选题】 
+ A. 支持大规模电路仿真
+ B. 具备 Snapshot 状态保存 / 恢复功能
+ C. 仅支持直流分析，不支持瞬态仿真
+ D. 可提升复杂电路仿真效率
+ * 22.
+ Storm：华大九天先进封装设计平台 Storm 的核心突破包括？
+ 【多选题】 
+ A. 全球首发的先进封装设计平台
+ B. Chiplet 布线效率提升 1-2 倍
+ C. 仅支持 2D 封装，不支持 3D 封装
+ D. 优化 Chiplet 设计的布线瓶颈
+ * 23.
+ PyAether全定制平台生态系统可以用于（ ） 【多选题】 
+ A. 自动生成版图
+ B. 自动进行电路仿真设置
+ C. 自动提取电路参数
+ D. 自动进行设计规则检查
+ * 24.
+ dbSeCheckDesignInfo返回的结果包含哪些?（） 【多选题】 
+ A. Error strings
+ B. Warning strings
+ C. Layers
+ D. Instances
+ * 25.
+ AetherWings有哪些功能模块（） 【多选题】 
+ A.Kits-Tools
+ B.Pins-Tools
+ C.vEditors-Tools
+ D.Router-Tools
+ E.UniVia-Tools
+ F.GetNet- Tools
+ G.Customized-Tools
+ * 26.
+ aeCreateRect 函数可以指定哪些参数?（） 【多选题】 
+ A. 矩形的起点和终点
+ B. 矩形的图层
+ C. 矩形的purpose
+ D. 矩形的颜色
+ * 27.
+ dbLayerGen命令中，op参数的可选值有（）。 【多选题】 
+ A. OR
+ B. AND
+ C. XOR
+ D. NOT
+ * 28.
+ 在pyAether中创建菜单menu的时候，需要用到以下哪些步骤? 【多选题】 
+ A.调用aeCreateMenuItem创建MenuItem。
+ B.调用aeCreateMenu创建Menu。
+ C.调用aeInsertBannerMenu接口来向Aether中插入自定义menu。
+ D. 使用aeDisplayForm API
+ * 29.
+ dmCellObj类的getCell（）获取的属性包括（ ） 【多选题】 
+ A. name
+ B. type
+ C. readPath
+ D. writePath
+ * 30.
+ 以下哪些命令可用于编辑对象的属性?（） 【多选题】 
+ A. aeAttribute
+ B. aeBoolean
+ C. aeModifyCorner
+ D. aeReplace
+ E. aeSchReplaceProperty
+ * 31.
+ dbPasteObj函数的可能失败原因包括?（） 【多选题】 
+ A. 剪贴板为空
+ B. 源和目标设计技术不同
+ C. 粘贴对象超出边界
+ D. 参数point为整数
+ * 32.
+ 在 Ae Commands 的 DM File Ae Commands 中，用于操作库lib和单元cell的命令有（）。 【多选题】 
+ A. aeCopyLib
+ B. aeDelCell
+ C. aeDelLib
+ D. aeNewCell
+ E. aeNewLib
+ * 33.
+ emyDesign 对象的属性可能包括? 【多选题】 
+ A. name
+ B. cells
+ C. layers
+ D. views
+ * 34.
+ 在 PyAether 中，若要修改 CDF 参数，以下哪两个接口命令可以用于设置 和修改CDF 参数的值? 【多选题】 
+ A.cdfSetRefParamValues
+ B.cdfSetParamValueByName
+ C. cdfModify
+ D. cdfChange
+ * 35.
+ 在 Ae Commands 中，用于创建图形对象的命令有（）。 【多选题】 
+ A. aeCreateCircle
+ B. aeCreateDoughnut
+ C. aeCreateEllipse
+ D. aeCreateRect
+ E. aeCreatePoly
+ * 36.
+ 以下哪些是dbCatModify命令的参数（）。 【多选题】 
+ A. cat
+ B. cells
+ C. subs
+ D. lib
+ 判断题 （ 共10题，每题1分，总分值10分 ） 
+ * 37.
+ Polas：华大九天 Polas 工具主要用于解决数字电路的时序收敛问题，与功率电路设计无关。
+ 对
+ 错
+ * 38.
+ Liberal GT：华大九天 Liberal GT 工具可实现 K 库处理效率 10X 提速，重塑 K 库设计格局。
+ 对
+ 错
+ * 39.
+ 华大九天 Vision 工具的核心定位是通过版图处理技术重塑晶圆制造良率优化新标杆。
+ 对
+ 错
+ * 40.
+ dbCrtMarker命令的isVisible参数默认是True。
+ 对
+ 错
+ * 41.
+ dbCatContains 命令返回一个布尔值。 ​​
+ 对
+ 错
+ * 42.
+ dbCrtPath命令的points参数必须包含至少3个点。​​
+ 对
+ 错
+ * 43.
+ emyBox类的isInverted方法用于判断矩形区域的坐标是否为倒序（左大于右或下大于上）。
+ 对
+ 错
+ * 44.
+ dbIsCellViewModified命令用于判断一个单元视图是否被修改，返回值为布尔类型。
+ 对
+ 错
+ * 45.
+ dbCrtLine 命令可以在符号视图（Symbol View）中创建线条。
+ 对
+ 错
+ * 46.
+ dbCrtSymbolArc 命令用于创建圆弧。
+ 对
+ 错
+ 个人信息（认真填写，便于奖品发放） 
+ * 您的姓名：
+  
+ * 联系邮箱（建议填写工作邮箱）
+ * 请输入您的手机号码：
+  
+ 论坛username (用于论坛积分奖励，如不需要积分奖励，可以跳过)
+ 微信账号 (注意不是微信昵称)：
+ * 公司或高校
+ 提交
+ 开始作答 
+ 隐私政策  问卷星 提供技术支持 
+ 举报 
+ 字体大小
+  
+ 2026 华大九天PyAether生态系统工具基础知识-竞赛
+ 复制 
+ 

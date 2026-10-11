@@ -1,0 +1,216 @@
+# 只有 1 个账号 + 多人共用同一桌面 + 全 Windows 客户端 —— 落地方案
+
+这种情况下唯一可行且稳定的架构是：**一台 Windows 常驻机独占 VPN 账号作跳板，其他人通过 SSH 隧道连它的 5901，共同看同一个 TigerVNC 桌面。**
+
+```
+协作者A ─┐
+协作者B ─┼─ SSH隧道 ─→ [跳板机 Win，唯一挂着EasyConnect] ─内网─→ [目标Linux :1]
+协作者C ─┘                                                        TigerVNC AlwaysShared
+```
+
+关键点有三个，缺一个就会"顶号"或"被踢"：
+1. 跳板机必须**独占且常驻**那个 VPN 账号（谁也别在自己电脑上登 EasyConnect）。
+2. 跳板机提供 SSH 服务，且内网可达目标 Linux 的 5901。
+3. 目标 Linux 的 TigerVNC 必须开 **AlwaysShared**，否则第二个人连上会踢掉第一个人。
+
+---
+
+## 第 1 步：目标 Linux 开启共享桌面
+
+`sudo vim /etc/tigervnc/vncserver-config-defaults`（无此文件就改 `~/.vnc/config`）：
+
+```
+AlwaysShared
+localhost=no
+geometry=1920x1080
+depth=24
+```
+
+重启并校验：
+
+```bash
+sudo systemctl restart vncserver@:1    # 或 vncserver -kill :1 && vncserver -AlwaysShared :1
+vncserver -list                        # 记住 display 号与端口：:1 → 5901
+ss -lntp | grep 590          # 确认监听 0.0.0.0:5901 而不是 127.0.0.1
+```
+
+如果目标是 **display :0 的物理桌面**（比如接显示器的工控机），改用：
+
+```bash
+x11vnc -display :0 -shared -forever -rfbauth ~/.vnc/passwd -rfbport 5901
+```
+
+> 判断标准：能"多人同时看见同一个界面操作"就必须有 `AlwaysShared` / `-shared`，这是很多人误判成 VPN 顶号的头号原因。
+
+---
+
+## 第 2 步：Windows 跳板机 —— 常驻 EasyConnect + SSH 服务
+
+### 2.1 让 EasyConnect 掉线自动重连
+
+建 `C:\vpn\keepalive.ps1`：
+
+```powershell
+$ec = "C:\Program Files (x86)\Sangfor\SSL\SangforCSClient\SangforCSClient.exe"
+while ($true) {
+    if (-not (Get-Process SangforCSClient -ErrorAction SilentlyContinue)) {
+        Start-Process $ec
+        Start-Sleep 30          # 等它自动登录/重连
+    }
+    Start-Sleep 15
+}
+```
+
+用**计划任务**注册（开机自启、最高权限、不管用户是否登录）：
+
+```powershell
+schtasks /create /tn "VPNKeepAlive" /tr "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\vpn\keepalive.ps1" /sc onstart /ru SYSTEM /rl HIGHEST /f
+```
+
+同时在这台机器的 EasyConnect 里勾选"记住密码/自动登录"，并设置 **Windows 不休眠、不锁屏断网**：
+
+```powershell
+powercfg /change standby-timeout-ac 0
+powercfg /change monitor-timeout-ac 0
+powercfg /hibernate off
+```
+
+### 2.2 开启 Windows OpenSSH 服务端
+
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Set-Service sshd -StartupType Automatic
+Start-Service sshd
+New-NetFirewallRule -Name sshd -DisplayName "OpenSSH Server" -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+```
+
+给每个协作者建**独立 Windows 账号**（比共用账号好审计、可单独禁用）：
+
+```powershell
+net user alice P@ssw0rd123 /add
+net user bob   P@ssw0rd456 /add
+```
+
+**强烈建议改成密钥登录**（跳板机是单点入口）：
+
+```powershell
+# 在跳板机上，以管理员身份
+$f = "$env:ProgramData\ssh\administrators_authorized_keys"
+Add-Content $f "ssh-ed25519 AAAA... alice@pc"
+icacls $f /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"
+```
+
+并把 `C:\ProgramData\ssh\sshd_config` 里设为 `PasswordAuthentication no`，然后 `Restart-Service sshd`。
+
+### 2.3 验证跳板机内网可达
+
+在跳板机上（**EasyConnect 已连上时**）执行：
+
+```powershell
+Test-NetConnection 192.168.1.50 -Port 5901
+```
+
+`TcpTestSucceeded : True` 才能继续。若为 False，说明 EasyConnect 未把该网段路由进来，或目标机防火墙（`firewalld`）挡了 —— 在 Linux 上 `sudo firewall-cmd --add-port=5901/tcp --permanent && sudo firewall-cmd --reload`。
+
+---
+
+## 第 3 步：每个协作者在自己 Windows 电脑上建隧道
+
+用系统自带的 OpenSSH 客户端（Win10 1809+ / Win11 默认有，`ssh -V` 可验证）。
+
+### 3.1 配置 `C:\Users\<你>\.ssh\config`（没有就新建）
+
+```
+Host jump
+    HostName 10.0.0.20          # 跳板机的 IP（公司局域网/VPN 可达地址）
+    User alice
+    Port 22
+    ServerAliveInterval 30
+    ServerAliveCountMax 6
+    ExitOnForwardFailure yes
+    LocalForward 5901 192.168.1.50:5901
+```
+
+### 3.2 一条命令拉起隧道
+
+```powershell
+ssh -N jump
+```
+
+这条窗口保持开着即可。想让它后台常驻、掉线自动重连，用这个循环：
+
+```powershell
+while ($true) { ssh -N jump; Start-Sleep 5 }
+```
+
+### 3.3 用 TigerVNC Viewer 连接
+
+打开 TigerVNC Viewer（或 RealVNC/TightVNC 都可），地址填：
+
+```
+localhost:5901
+```
+
+如果有多个协作者同时连，**每个人都连自己机器上的 `localhost:5901`**，端口号相同也不冲突，因为它们各自在本机回环上。
+
+> 端口占用提示：若本机 5901 已被别的程序占用，改成 `LocalForward 5902 192.168.1.50:5901`，然后连 `localhost:5902` 即可（`5902` 对应显示号 `:2`，但如果只做端口转发，**连着写 `localhost:5901` 更稳**，避免 VNC Viewer 自行换算显示号）。
+
+### 3.4 一次性免配置写法（不想改 config）
+
+```powershell
+ssh -N -L 5901:192.168.1.50:5901 alice@10.0.0.20
+```
+
+---
+
+## 第 4 步：多人共用同一桌面的协作纪律
+
+`AlwaysShared` 的语义是**键鼠共享、所有人权限相同**，所以会出现"抢鼠标"。根据场景选一种用法：
+
+| 场景 | 做法 |
+|---|---|
+| 一人操作，其他人看 | 其他人只观看不点。TigerVNC Viewer 有 `Options → Inputs → 取消勾选 Send keyboard/mouse`（RealVNC 里叫 View Only） |
+| 轮换操作 | 约定"谁操作谁说话"，或临时把其他人的输入关掉 |
+| 想避免抢鼠标 | 改成每人独立桌面（各开 `:2`、`:3`），但这就不是"共用同一界面"了 |
+
+另外提醒两件容易被忽略的事：
+
+- **剪贴板是共享的**，任何人复制的内容其他人都能粘贴，敏感环境要注意。
+- **一个人断开 VNC 不会影响其他人**；但只要**跳板机的 EasyConnect 掉了**，所有人一起断。所以第 2.1 步的保活脚本是这套方案的命门。
+
+---
+
+## 第 5 步：验收清单
+
+在跳板机上：
+
+```powershell
+Get-Process SangforCSClient                    # VPN 在跑
+Test-NetConnection 192.168.1.50 -Port 5901     # 内网可达
+Get-Service sshd                               # SSH 是 Running
+```
+
+在协作者机上：
+
+```powershell
+Test-NetConnection 127.0.0.1 -Port 5901        # 隧道通了（连上 VNC 前执行）
+```
+
+然后 A、B、C 三人**同时**打开 VNC Viewer 连 `localhost:5901`，三人都能看到同一个画面并且**没有互相踢掉**，即成功。
+
+---
+
+## 常见故障速查
+
+| 现象 | 原因 | 处理 |
+|---|---|---|
+| 第二个人连上，第一个人被踢 | 目标机没开 `AlwaysShared` | 回到第 1 步，重启 vncserver 后 `vncserver -list` 确认 |
+| `ssh: connect to host ... port 22: Connection refused` | 跳板机 sshd 没起 / 防火墙 | `Start-Service sshd`，检查 22 端口入站规则 |
+| 隧道建了但 VNC 连不上 | 跳板机内网不通或 Linux 防火墙 | 跳板机上先 `Test-NetConnection` 验 5901 |
+| VNC 黑屏/无窗口管理器 | 目标机 X session 没配桌面环境 | 在 `~/.vnc/xstartup` 里启动 `startxfce4`/`gnome-session` 等 |
+| 每隔几分钟全体掉线 | EasyConnect 空闲超时 | 保活脚本 + 关休眠；必要时让管理员延长会话超时 |
+| 跳板机重启后大家全断 | 计划任务/服务未设自启 | 用 `/sc onstart /ru SYSTEM` 重建任务，`sshd` 设 Automatic |
+
+---
+
+要不要我把**跳板机一键初始化脚本**（装 SSH、开防火墙、建用户、配密码钥、注册保活任务）和**协作者一键连 VNC 脚本**（自动检测端口、拉起隧道、启动 Viewer）写成两个可以直接运行的 `.ps1` 文件给你？另外告诉我跳板机和目标 Linux 的**实际 IP、VNC 显示号、Linux 发行版**，我可以把上面的配置填成最终值。
