@@ -1,0 +1,23 @@
+# 虚拟环境（必须忽略：体积大、含本机绝对路径、跨平台不可用）
+.venv/
+venv/
+env/
+venv.bak/
+private/
+
+# pip 缓存 / 打包产物
+pip-wheel-metadata/
+build/
+dist/
+*.egg-info/
+
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
