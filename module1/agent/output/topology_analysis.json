@@ -1,0 +1,884 @@
+{
+  "stats": {
+    "subckt": "OPA",
+    "ports": [
+      "IREF",
+      "GNDA",
+      "SUB",
+      "VCM",
+      "VDDA",
+      "VINN",
+      "VINP",
+      "VOUTN",
+      "VOUTP"
+    ],
+    "n_instances": 59,
+    "n_instances_collapsed": 43,
+    "n_segmented_collapsed": 2,
+    "n_mos": 29,
+    "by_kind": {
+      "cap": 6,
+      "mos": 29,
+      "res": 8
+    },
+    "by_type": {
+      "active_load": 1,
+      "bias_branch": 1,
+      "cmfb": 1,
+      "current_mirror": 4,
+      "input_pair": 1,
+      "matching_pair": 8,
+      "segmented_device": 2,
+      "two_terminal_shorted": 4
+    },
+    "n_variables_before": 121,
+    "n_variables_raw": 153,
+    "n_nets": 45,
+    "vdd_nets": [
+      "GNDA",
+      "SUB",
+      "VDDA"
+    ]
+  },
+  "modules": [
+    {
+      "id": "CM1",
+      "type": "current_mirror",
+      "devices": [
+        "NM2",
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3"
+      ],
+      "reference_device": "NM2",
+      "mirrored_devices": [
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3"
+      ],
+      "polarity": "nmos",
+      "shared_gate_net": "net53",
+      "shared_source_net": "GNDA",
+      "confidence": 3,
+      "evidence": "同型(nmos)；栅极同接 net53；源极同接 GNDA；NM2 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM2",
+      "type": "current_mirror",
+      "devices": [
+        "PM5",
+        "PM6"
+      ],
+      "reference_device": "PM5",
+      "mirrored_devices": [
+        "PM6"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "net5",
+      "shared_source_net": "VDDA",
+      "confidence": 3,
+      "evidence": "同型(pmos)；栅极同接 net5；源极同接 VDDA；PM5 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM3",
+      "type": "current_mirror",
+      "devices": [
+        "PM0",
+        "PM4",
+        "PM1"
+      ],
+      "reference_device": "PM0",
+      "mirrored_devices": [
+        "PM4",
+        "PM1"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "net6",
+      "shared_source_net": "VDDA",
+      "confidence": 3,
+      "evidence": "同型(pmos)；栅极同接 net6；源极同接 VDDA；PM0 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM4",
+      "type": "current_mirror",
+      "devices": [
+        "PM3",
+        "PM2"
+      ],
+      "reference_device": "PM3",
+      "mirrored_devices": [
+        "PM2"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "vcmfb",
+      "shared_source_net": "VDDA",
+      "confidence": 2,
+      "evidence": "同型(pmos)；栅极同接 vcmfb；源极同接 VDDA；组内无二极管连接，取 PM3 为参考管",
+      "notes": ""
+    },
+    {
+      "id": "IP1",
+      "type": "input_pair",
+      "devices": [
+        "PM10",
+        "PM9"
+      ],
+      "polarity": "pmos",
+      "shared_source_net": "net37",
+      "gate_nets": [
+        "VINN",
+        "VINP"
+      ],
+      "gate_nets_are_input_ports": true,
+      "confidence": 3,
+      "evidence": "同型(pmos)；源极同接 net37（尾节点）；栅极分别接输入端口 VINN / VINP；漏极分别接 net44 / net4",
+      "notes": ""
+    },
+    {
+      "id": "AL1",
+      "type": "active_load",
+      "devices": [
+        "NM7",
+        "NM6"
+      ],
+      "source_mirror": "CM1",
+      "connection_net": [
+        "net4",
+        "net44"
+      ],
+      "confidence": 2,
+      "evidence": "电流镜 CM1 的器件；漏极接在输入对管漏极节点 ['net4', 'net44'] 上；以有源器件替代电阻作负载，提高增益",
+      "notes": ""
+    },
+    {
+      "id": "MP1",
+      "type": "matching_pair",
+      "devices": [
+        "NM12",
+        "NM13"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "group_members": [
+        "NM12",
+        "NM13",
+        "NM6",
+        "NM7"
+      ],
+      "group_size": 4,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP2",
+      "type": "matching_pair",
+      "devices": [
+        "NM12",
+        "NM6"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "group_members": [
+        "NM12",
+        "NM13",
+        "NM6",
+        "NM7"
+      ],
+      "group_size": 4,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP3",
+      "type": "matching_pair",
+      "devices": [
+        "NM12",
+        "NM7"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "group_members": [
+        "NM12",
+        "NM13",
+        "NM6",
+        "NM7"
+      ],
+      "group_size": 4,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP4",
+      "type": "matching_pair",
+      "devices": [
+        "NM8",
+        "NM9"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "group_members": [
+        "NM8",
+        "NM9"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP5",
+      "type": "matching_pair",
+      "devices": [
+        "PM10",
+        "PM9"
+      ],
+      "kind": "mos",
+      "polarity": "pmos",
+      "match_rule": "differential_arms",
+      "group_members": [
+        "PM10",
+        "PM9"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(p_mos_a)、同 multi(2)、源极同接 net37 的差分两臂，栅极分别接 VINN / VINP；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP6",
+      "type": "matching_pair",
+      "devices": [
+        "PM2",
+        "PM3"
+      ],
+      "kind": "mos",
+      "polarity": "pmos",
+      "match_rule": "same_branch",
+      "group_members": [
+        "PM2",
+        "PM3"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(p_mos_a)、同 multi(40)、同一支路（源极同接 VDDA、栅极同接 vcmfb）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP7",
+      "type": "matching_pair",
+      "devices": [
+        "R0",
+        "R3"
+      ],
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "shared_node",
+      "group_members": [
+        "R0",
+        "R3"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(res_p_poly)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN']；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "MP8",
+      "type": "matching_pair",
+      "devices": [
+        "C2",
+        "C3"
+      ],
+      "kind": "cap",
+      "polarity": "-",
+      "match_rule": "shared_node",
+      "group_members": [
+        "C2",
+        "C3"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(cap_mim)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN']；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "notes": ""
+    },
+    {
+      "id": "TIE1",
+      "type": "two_terminal_shorted",
+      "devices": [
+        "R6"
+      ],
+      "kind": "res",
+      "net": "net12",
+      "confidence": 2,
+      "evidence": "两端器件 R6 的两个端子都接在 net12 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
+      "notes": "不是 Dummy，不应删除"
+    },
+    {
+      "id": "TIE2",
+      "type": "two_terminal_shorted",
+      "devices": [
+        "R5"
+      ],
+      "kind": "res",
+      "net": "net11",
+      "confidence": 2,
+      "evidence": "两端器件 R5 的两个端子都接在 net11 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
+      "notes": "不是 Dummy，不应删除"
+    },
+    {
+      "id": "TIE3",
+      "type": "two_terminal_shorted",
+      "devices": [
+        "C5"
+      ],
+      "kind": "cap",
+      "net": "net12",
+      "confidence": 2,
+      "evidence": "两端器件 C5 的两个端子都接在 net12 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
+      "notes": "不是 Dummy，不应删除"
+    },
+    {
+      "id": "TIE4",
+      "type": "two_terminal_shorted",
+      "devices": [
+        "C4"
+      ],
+      "kind": "cap",
+      "net": "net11",
+      "confidence": 2,
+      "evidence": "两端器件 C4 的两个端子都接在 net11 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
+      "notes": "不是 Dummy，不应删除"
+    },
+    {
+      "id": "CMFB1",
+      "type": "cmfb",
+      "devices": [
+        "NM11",
+        "PM12",
+        "PM8",
+        "PM6",
+        "PM3",
+        "PM2",
+        "R3",
+        "C3",
+        "C2",
+        "R0",
+        "R3"
+      ],
+      "cmfb_nets": [
+        "VCM",
+        "outaverage",
+        "vcmfb"
+      ],
+      "sense_divider": [
+        [
+          "R0",
+          "R0",
+          "VOUTP",
+          "VOUTP",
+          "VOUTP"
+        ],
+        [
+          "R0",
+          "R3",
+          "outaverage",
+          "VOUTP",
+          "VOUTN"
+        ]
+      ],
+      "confidence": 3,
+      "evidence": "检测到共模相关节点: ['VCM', 'outaverage', 'vcmfb']；电阻分压网络 R0/R0：从 VOUTP 与 VOUTP 取平均到 VOUTP；涉及器件 11 个：['NM11', 'PM12', 'PM8', 'PM6', 'PM3', 'PM2', 'R3', 'C3', 'C2', 'R0', 'R3']；作用：稳定全差分输出的共模电平",
+      "notes": ""
+    },
+    {
+      "id": "BIAS1",
+      "type": "bias_branch",
+      "devices": [
+        "NM0",
+        "NM1",
+        "NM10",
+        "NM11",
+        "NM14",
+        "NM15",
+        "NM4",
+        "NM5",
+        "PM2",
+        "PM3",
+        "PM8"
+      ],
+      "bias_nets": [
+        "IREF",
+        "VCM",
+        "vcmfb"
+      ],
+      "confidence": 2,
+      "evidence": "偏置节点 ['IREF', 'VCM', 'vcmfb'] 直接驱动 11 个器件（栅极或独立源），构成参考偏置支路",
+      "notes": ""
+    },
+    {
+      "id": "SEG1",
+      "type": "segmented_device",
+      "devices": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "base_device": "R0",
+      "segment_count": 9,
+      "confidence": 3,
+      "evidence": "器件 R0 被自动拆分为 9 段串联（后缀 _<n>_res_gen）；参数完全相同（同一物理器件的分段实现）；-> 应视为**一个**器件，只保留一组变量",
+      "notes": ""
+    },
+    {
+      "id": "SEG2",
+      "type": "segmented_device",
+      "devices": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "base_device": "R3",
+      "segment_count": 9,
+      "confidence": 3,
+      "evidence": "器件 R3 被自动拆分为 9 段串联（后缀 _<n>_res_gen）；参数完全相同（同一物理器件的分段实现）；-> 应视为**一个**器件，只保留一组变量",
+      "notes": ""
+    }
+  ],
+  "decision_log": [
+    {
+      "rule": "collapse_segmented",
+      "targets": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "reason": "自动分段器件 R0 共 9 段折叠为 1 个逻辑器件（2 个外部端点 ['VOUTP', 'outaverage']）"
+    },
+    {
+      "rule": "collapse_segmented",
+      "targets": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "reason": "自动分段器件 R3 共 9 段折叠为 1 个逻辑器件（2 个外部端点 ['VOUTN', 'outaverage']）"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3",
+        "NM2"
+      ],
+      "reason": "同型(nmos)；栅极同接 net53；源极同接 GNDA；NM2 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM6",
+        "PM5"
+      ],
+      "reason": "同型(pmos)；栅极同接 net5；源极同接 VDDA；PM5 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM4",
+        "PM1",
+        "PM0"
+      ],
+      "reason": "同型(pmos)；栅极同接 net6；源极同接 VDDA；PM0 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM3",
+        "PM2"
+      ],
+      "reason": "同型(pmos)；栅极同接 vcmfb；源极同接 VDDA；组内无二极管连接，取 PM3 为参考管"
+    },
+    {
+      "rule": "input_pair",
+      "targets": [
+        "PM10",
+        "PM9"
+      ],
+      "reason": "栅极接输入端口 VINN/VINP 且源极同网 net37 -> 差分输入对"
+    },
+    {
+      "rule": "active_load",
+      "targets": [
+        "NM7",
+        "NM6"
+      ],
+      "reason": "漏极接输入对管漏极 -> 承担负载功能"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM12",
+        "NM13"
+      ],
+      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM12",
+        "NM6"
+      ],
+      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM12",
+        "NM7"
+      ],
+      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM8",
+        "NM9"
+      ],
+      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "PM10",
+        "PM9"
+      ],
+      "reason": "同 model(p_mos_a)、同 multi(2)、源极同接 net37 的差分两臂，栅极分别接 VINN / VINP -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "PM2",
+        "PM3"
+      ],
+      "reason": "同 model(p_mos_a)、同 multi(40)、同一支路（源极同接 VDDA、栅极同接 vcmfb） -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R0",
+        "R3"
+      ],
+      "reason": "同 model(res_p_poly)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN'] -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C2",
+        "C3"
+      ],
+      "reason": "同 model(cap_mim)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN'] -> 尺寸绑定，只保留一组变量"
+    },
+    {
+      "rule": "cmfb",
+      "targets": [
+        "VCM",
+        "outaverage",
+        "vcmfb"
+      ],
+      "reason": "存在共模检测节点/分压网络，判为共模反馈结构"
+    },
+    {
+      "rule": "bias_branch",
+      "targets": [
+        "NM15",
+        "NM14",
+        "NM11",
+        "NM10",
+        "NM4",
+        "NM1",
+        "NM0",
+        "NM5",
+        "PM8",
+        "PM3",
+        "PM2"
+      ],
+      "reason": "由偏置端口 ['IREF', 'VCM', 'vcmfb'] 驱动"
+    },
+    {
+      "rule": "segmented_device",
+      "targets": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "reason": "同一物理器件被拆成 9 段，只保留一组变量"
+    },
+    {
+      "rule": "segmented_device",
+      "targets": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "reason": "同一物理器件被拆成 9 段，只保留一组变量"
+    }
+  ],
+  "device_roles": {
+    "C2": [
+      "cmfb",
+      "matching_pair"
+    ],
+    "C3": [
+      "cmfb",
+      "matching_pair"
+    ],
+    "C4": [
+      "two_terminal_shorted"
+    ],
+    "C5": [
+      "two_terminal_shorted"
+    ],
+    "NM0": [
+      "bias_branch"
+    ],
+    "NM1": [
+      "bias_branch"
+    ],
+    "NM10": [
+      "bias_branch"
+    ],
+    "NM11": [
+      "bias_branch",
+      "cmfb"
+    ],
+    "NM12": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM13": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM14": [
+      "bias_branch"
+    ],
+    "NM15": [
+      "bias_branch"
+    ],
+    "NM2": [
+      "current_mirror"
+    ],
+    "NM3": [
+      "current_mirror"
+    ],
+    "NM4": [
+      "bias_branch"
+    ],
+    "NM5": [
+      "bias_branch"
+    ],
+    "NM6": [
+      "active_load",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM7": [
+      "active_load",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM8": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM9": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM0": [
+      "current_mirror"
+    ],
+    "PM1": [
+      "current_mirror"
+    ],
+    "PM10": [
+      "input_pair",
+      "matching_pair"
+    ],
+    "PM12": [
+      "cmfb"
+    ],
+    "PM2": [
+      "bias_branch",
+      "cmfb",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM3": [
+      "bias_branch",
+      "cmfb",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM4": [
+      "current_mirror"
+    ],
+    "PM5": [
+      "current_mirror"
+    ],
+    "PM6": [
+      "cmfb",
+      "current_mirror"
+    ],
+    "PM8": [
+      "bias_branch",
+      "cmfb"
+    ],
+    "PM9": [
+      "input_pair",
+      "matching_pair"
+    ],
+    "R0": [
+      "cmfb",
+      "matching_pair",
+      "segmented_device"
+    ],
+    "R0_10_res_gen": [
+      "segmented_device"
+    ],
+    "R0_2_res_gen": [
+      "segmented_device"
+    ],
+    "R0_3_res_gen": [
+      "segmented_device"
+    ],
+    "R0_4_res_gen": [
+      "segmented_device"
+    ],
+    "R0_5_res_gen": [
+      "segmented_device"
+    ],
+    "R0_6_res_gen": [
+      "segmented_device"
+    ],
+    "R0_7_res_gen": [
+      "segmented_device"
+    ],
+    "R0_8_res_gen": [
+      "segmented_device"
+    ],
+    "R0_9_res_gen": [
+      "segmented_device"
+    ],
+    "R3": [
+      "cmfb",
+      "matching_pair",
+      "segmented_device"
+    ],
+    "R3_10_res_gen": [
+      "segmented_device"
+    ],
+    "R3_2_res_gen": [
+      "segmented_device"
+    ],
+    "R3_3_res_gen": [
+      "segmented_device"
+    ],
+    "R3_4_res_gen": [
+      "segmented_device"
+    ],
+    "R3_5_res_gen": [
+      "segmented_device"
+    ],
+    "R3_6_res_gen": [
+      "segmented_device"
+    ],
+    "R3_7_res_gen": [
+      "segmented_device"
+    ],
+    "R3_8_res_gen": [
+      "segmented_device"
+    ],
+    "R3_9_res_gen": [
+      "segmented_device"
+    ],
+    "R5": [
+      "two_terminal_shorted"
+    ],
+    "R6": [
+      "two_terminal_shorted"
+    ]
+  },
+  "warnings": [
+    "候选差分对 PM11/PM7（源极同网 VDDA，栅极 net8/net0）未接输入端口，不判为 input_pair；若为次级的差分单元请在报告中说明",
+    "候选差分对 PM12/PM8（源极同网 net13，栅极 outaverage/VCM）未接输入端口，不判为 input_pair；若为次级的差分单元请在报告中说明",
+    "R6 两端接同一网（net12）：按『真实器件』保留变量，请在报告说明其作用",
+    "R5 两端接同一网（net11）：按『真实器件』保留变量，请在报告说明其作用",
+    "C5 两端接同一网（net12）：按『真实器件』保留变量，请在报告说明其作用",
+    "C4 两端接同一网（net11）：按『真实器件』保留变量，请在报告说明其作用"
+  ]
+}
