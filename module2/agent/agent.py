@@ -45,6 +45,9 @@ REDUCTION_RULES = [
                            "（两侧栅极接的是不同信号），因此与 R3 分开判定"},
     {"rule": "R5", "desc": "电流镜组（同型号、同栅、同源）内各管共享 w/l，"
                            "各支路电流比值由 m 承担，m 保持独立"},
+    {"rule": "R6", "desc": "共源共栅偏置家族（栅极共接由二极管产生的偏置网、源极分别叠在"
+                           "不同支路下管漏极上）共享 L；基准二极管的 L 保持独立。"
+                           "同一偏置、同一电流密度下共源共栅取相同 L 是常规画法"},
 ]
 
 
@@ -105,6 +108,11 @@ def build_facts(cir, res: dict) -> dict:
                     "（每个器件都有镜像对象）；校验不通过的配对会被回退，不出现在 pairs 里",
         },
         "matching_pairs": res["match_pairs"],
+        "cascode_banks": [{"id": b["id"], "gate": b["gate"], "reference": b["reference"],
+                           "devices": b["devices"], "cascodes": b["cascodes"],
+                           "bias_devices": b["bias_devices"]}
+                          for b in res["cascode_banks"]],
+        "coverage": res["coverage"],
         "mirror_groups": [{"id": m["id"], "type": m["type"], "reference": m["reference"],
                            "gate": m["gate"], "source": m["source"],
                            "devices": m["devices"], "confidence": m.get("confidence")}
@@ -279,6 +287,9 @@ def main():
           f"对称对 {len(res['pairing'])} 对"
           f"（σ 全局校验{'通过' if res['symmetry_verified'] else '失败'}），"
           f"工艺匹配对 {len(res['match_pairs'])} 对，Dummy {len(res['dummies'])} 个")
+    cov = res["coverage"]
+    print(f"      识别覆盖：{cov['n_covered']}/{cov['n_devices']} 个器件"
+          + ("；未覆盖 " + ",".join(cov["uncovered"]) if cov["uncovered"] else "（全覆盖）"))
     print(f"      参数约减：{res['raw_variable_count']} -> {res['reduced_variable_count']} "
           f"（约减 {100 * (1 - res['reduced_variable_count'] / res['raw_variable_count']):.1f}%）")
 
@@ -338,6 +349,8 @@ def main():
             "multifold_classes": res.get("multifold_classes", []),
         },
         "matching_pairs": res["match_pairs"],
+        "cascode_banks": res["cascode_banks"],
+        "coverage": res["coverage"],
         "pairing_relation": res["pairing_relation"],
         "mirror_groups": res["mirror_groups"],
         "seeds": res["seeds"],
@@ -405,6 +418,30 @@ def main():
                 missing += 1
             f.write(f"{v['var']}={val}\n")
 
+    # 回写模板：原理图实际使用的**全部符号**（本例 105 行）。
+    # 这是"49 是搜索空间、105 是回写面"的落地件：
+    # 优化器只调 49 个自由变量，但回写/仿真参数文件必须覆盖全部 105 个符号，
+    # 否则被合并掉的成员（如 NM3_fw）不会被写回，**匹配关系会在仿真里静默失效**。
+    def _sym_sort(s: str):
+        return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", s)]
+
+    symbol_owner = {}
+    for v in res["reduced_variables"]:
+        for sym in v["merged_from"]:
+            symbol_owner[sym] = "@" + v["var"]
+    for v in res["fixed_variables"]:
+        symbol_owner.setdefault(v["var"], "#fixed")
+    all_symbols = sorted(cir.all_variables, key=_sym_sort)
+    orphans = [s for s in all_symbols if s not in symbol_owner]
+    tpl_path = OUT_ROOT / "params_writeback_template.txt"
+    with open(tpl_path, "w", encoding="utf-8") as f:
+        f.write("// 回写参数模板：每行 <原理图原始符号>=<驱动来源>\n")
+        f.write("//   @自由变量 -> 该符号的值取对应自由变量的最优值（同组符号写成同一个值）\n")
+        f.write("//   #fixed    -> Dummy 器件，不参与优化，保留原理图初值\n")
+        f.write("// 用法：expand_params.py 读入优化结果，按本模板展开成回写文件（symbol=value）\n")
+        for s in all_symbols:
+            f.write("%s=%s\n" % (s, symbol_owner.get(s, "#unknown")))
+
     # 约减后网表
     net_path = OUT_ROOT / f"{in_path.stem}_reduced.netlist"
     net_path.write_text(emit_reduced_netlist(cir, res), encoding="utf-8")
@@ -416,6 +453,8 @@ def main():
     print(f"约减后网表     : {net_path}")
     print(f"参数清单       : {param_path}"
           + (f"   （{missing} 个变量缺初值，需 extractcdfVal_0.txt 提供）" if missing else ""))
+    print(f"回写模板       : {tpl_path}   （{len(all_symbols)} 行 = 原理图全部符号"
+          + (f"；{len(orphans)} 个无归属，见 #unknown" if orphans else "；全部有归属") + "）")
     print(f"推理链日志     : {trace_path}")
     print("-" * 64)
     print(f"原始优化变量 {res['raw_variable_count']} -> 约减后 "

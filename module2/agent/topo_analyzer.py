@@ -55,6 +55,10 @@ MERGE_PARAMS = ("w", "l", "segL", "segW", "r", "c")
 # 注意这和"电流镜比值旋钮"是两回事：后者由 MERGE_PARAMS 控制，m 保持独立。
 PAIR_MERGE_PARAMS = MERGE_PARAMS + ("m", "multi", "seg", "nf")
 
+# R6 开关：共源共栅偏置家族是否共享 L（同一偏置下的常规画法，默认开；
+# 关掉则各自保留独立的 l 变量，变量数会多 2 个）
+BIND_CASCODE_L = True
+
 # 电源/地网络：不参与极性判定
 RAILS = {"0", "gnd!", "gnda", "gnd", "vdda", "vdd", "vssa", "vss", "sub"}
 
@@ -498,6 +502,72 @@ def arm_match(c: Circuit, seeds: list, already: set, dummy_names: set):
     return pairs, corr
 
 
+def find_cascode_banks(c: Circuit, mos: list, dummy_names: set) -> list:
+    """E5-2：共源共栅偏置家族（补上 E2 漏掉的那条偏置链）。
+
+    判据（只看连接关系，不认器件名）：
+      1. 存在一条"偏置网"：网上至少挂着一只**二极管接法**的管子（栅漏短接），
+         说明这条网是被当栅偏压用的；
+      2. 同型、栅极都接这条偏置网；
+      3. **各管源极两两不同、且都不是电源地** —— 说明它们不是同一支路里的镜像/并联，
+         而是分别叠在不同支路上的共源共栅管。
+    这样得到的是「一支基准二极管 + 若干叠在各支路上的共源共栅」。
+
+    为什么必须单独判：E2 的判据是"同栅 + **同源**"，而共源共栅家族的源极**各不相同**
+    （各自接在所属支路的下管漏极上），按 E2 会被拆成若干单元素桶、整条偏置链无人识别。
+    """
+    bias_nets: dict = {}
+    for d in mos:
+        if d.name in dummy_names or not d.is_diode_connected():
+            continue
+        g = d.net_map.get("g")
+        if g and g.lower() not in RAILS:
+            bias_nets.setdefault(g, []).append(d.name)
+    if not bias_nets:
+        return []
+
+    buckets: dict = {}
+    for d in mos:
+        if d.name in dummy_names:
+            continue
+        g = d.net_map.get("g")
+        if not g or g not in bias_nets or g.lower() in RAILS:
+            continue
+        buckets.setdefault((d.kind, g), []).append(d)
+
+    banks: list = []
+    for (kind, gate), members_all in sorted(buckets.items(), key=lambda kv: str(kv[0])):
+        # 逐管筛：共源共栅必须是"叠管"——漏源不能短接，且下面真有同型下管。
+        # （公开电路里的 NM14/NM15 漏源同网，会被这条剔除，避免 NM15←NM15 这种自指）
+        members = []
+        for d in members_all:
+            m = d.net_map
+            if m.get("d") == m.get("s"):
+                continue
+            if not any(x.name != d.name and x.kind == d.kind
+                       and x.net_map.get("d") == m.get("s") for x in mos):
+                continue
+            members.append(d)
+        if len(members) < 2:
+            continue
+        srcs = [d.net_map.get("s") for d in members]
+        if any(s is None or s.lower() in RAILS for s in srcs):
+            continue                      # 有管子直接接电源地 -> 是镜像支路，不是共源共栅家族
+        if len(set(srcs)) != len(srcs):
+            continue                      # 源极有重复 -> 同一支路内的并联/镜像
+        refs = [d.name for d in members if d.is_diode_connected()]
+        banks.append({
+            "id": "CB%d" % (len(banks) + 1),
+            "gate": gate, "kind": kind, "model": members[0].model,
+            "bias_devices": sorted(bias_nets[gate], key=_natkey),
+            "reference": refs[0] if refs else None,
+            "cascodes": [d.name for d in members if not d.is_diode_connected()],
+            "devices": [d.name for d in members],
+            "sources": srcs,
+        })
+    return banks
+
+
 # ---------- 主分析 ----------
 
 def analyze(c: Circuit) -> dict:
@@ -608,6 +678,9 @@ def analyze(c: Circuit) -> dict:
             "devices": [x.name for x in members], "evidence": ev,
         })
 
+    # ================= E5-2：共源共栅偏置家族 =================
+    cascode_banks = find_cascode_banks(c, mos, dummy_names)
+
     # CMFB 误差放大器差分对（辅助差分对）
     cmfb_pair = None
     if cm_sense:
@@ -630,6 +703,28 @@ def analyze(c: Circuit) -> dict:
     for i, g in enumerate(mirror_groups, 1):
         g["id"] = f"CM{i}"
         modules.append(g)
+    for bank in cascode_banks:
+        stack = []
+        for name in bank["devices"]:
+            d = c.by_name(name)
+            if not d:
+                continue
+            lower = next((x.name for x in mos
+                          if x.net_map.get("d") == d.net_map.get("s")), None)
+            stack.append(f"{name}←{lower}" if lower else name)
+        ref = bank["reference"]
+        modules.append({
+            "id": bank["id"], "type": "cascode_bias_bank",
+            "name_zh": "共源共栅偏置家族（%s 偏置）" % bank["gate"],
+            "devices": bank["devices"],
+            "evidence": (f"{bank['kind']}({bank['model']}) 管栅极共接偏置网 {bank['gate']}"
+                         f"（该网由二极管接法的 {ref} 产生，栅漏短接）；"
+                         f"各管源极分别接不同支路的下管漏极，构成共源共栅叠管："
+                         + "、".join(stack)
+                         + f"；源极互不相同（{', '.join(bank['sources'])}）故不是同一支路的镜像。"
+                         f"作用：{ref} 给共源共栅管提供栅偏压，"
+                         f"所属支路的下管给镜像管提供栅偏压"),
+        })
     for i, dp in enumerate(diff_pairs, 1):
         a, b = dp["a"], dp["b"]
         modules.append({
@@ -771,6 +866,21 @@ def analyze(c: Circuit) -> dict:
             if g.get("reference"):
                 prefer[uf.find((anchor.name, p))] = anchor.name
 
+    # R6：共源共栅偏置家族共享 L
+    #   同一偏置网、同一电流密度下，共源共栅取相同 L 是常规画法（各支路 Vds 一致、
+    #   系统失调更小）；W 与 m 仍然自由，所以各支路电流照旧可调。
+    #   家族里的**基准二极管**不参与（它的 L 决定偏置电压，应保留为设计自由度）。
+    if BIND_CASCODE_L:
+        for bank in cascode_banks:
+            casc = [c.by_name(n) for n in bank["cascodes"]]
+            casc = [d for d in casc if d and "l" in d.variables]
+            if len(casc) < 2:
+                continue
+            anchor = min(casc, key=lambda d: (_natkey(d.name), d.name))
+            for d in casc:
+                uf.union((anchor.name, "l"), (d.name, "l"))
+            prefer[uf.find((anchor.name, "l"))] = anchor.name
+
     # 规范名：优先用基准器件/参考管的变量名（可追溯）
     groups: dict = {}
     for d in devs:
@@ -809,9 +919,13 @@ def analyze(c: Circuit) -> dict:
         k = "整数(m)" if r["kind"] == "integer" else r["param"]
         by_cat[k] = by_cat.get(k, 0) + 1
 
+    # ================= 识别覆盖率自检 =================
+    all_names = {d.name for d in devs}
+    covered = {n for m in modules for n in m["devices"]}
+    uncovered = sorted(all_names - covered, key=_natkey)
+
     # ================= 自检断言（防止"看起来对、实际不自洽"） =================
     assert sym["verified"], "σ 未通过全局自同构校验：%s" % sym["missing_images"]
-    all_names = {d.name for d in devs}
     for a, b, _ in strict_pairs:
         assert a in all_names and b in all_names, "配对里出现不存在的器件 %s/%s" % (a, b)
     for m in mirror_groups:
@@ -825,6 +939,10 @@ def analyze(c: Circuit) -> dict:
         "subckt": c.subckt, "ports": c.ports, "device_count": len(devs),
         "raw_variable_count": len(c.all_variables), "raw_variables": c.all_variables,
         "modules": modules, "mirror_groups": mirror_groups,
+        "cascode_banks": cascode_banks,
+        "cascode_l_bound": bool(BIND_CASCODE_L and cascode_banks),
+        "coverage": {"n_devices": len(all_names), "n_covered": len(covered),
+                     "uncovered": uncovered},
         "pairing": [{"a": a, "b": b} for a, b in pairing],
         "pairing_relation": pair_relation,
         "symmetry_verified": sym["verified"],
@@ -928,6 +1046,11 @@ if __name__ == "__main__":
     print(f"σ 自同构校验    : {'通过' if r['symmetry_verified'] else '失败'}"
           f"   对称对 {len(r['pairing'])} 对，回退 {len(r['symmetry_rejected'])} 对")
     print(f"工艺匹配对      : {len(r['match_pairs'])} 对")
+    cov = r["coverage"]
+    print(f"识别覆盖        : {cov['n_covered']}/{cov['n_devices']}"
+          + ("  未覆盖: " + ",".join(cov["uncovered"]) if cov["uncovered"] else "  （全部器件都有归属）"))
+    print(f"共源共栅家族    : {[b['devices'] for b in r['cascode_banks']]}"
+          f"   L 绑定: {'是' if r['cascode_l_bound'] else '否'}")
     print(f"Dummy           : {r['dummies']}")
     print(f"二极管接法      : {r['diode_connected']}")
     print(f"输出端口对      : {r['output_pair']}    共模检测点: {r['cm_sense_node']}")

@@ -16,11 +16,11 @@
   },
   "variable_stats": {
     "raw": 105,
-    "reduced": 49,
-    "removed": 56,
-    "reduction_pct": 53.3,
+    "reduced": 47,
+    "removed": 58,
+    "reduction_pct": 55.2,
     "by_category": {
-      "l": 14,
+      "l": 12,
       "w": 12,
       "整数(m)": 19,
       "segL": 2,
@@ -120,6 +120,20 @@
       ],
       "evidence": "pmos(p_mos_a) 管栅极同为 vcmfb、源极同为 VDDA，共 2 管；组内无二极管接法器件 -> 不是标准电流镜，栅压由 vcmfb 外部确定，各管电流比 = (W/L·m) 之比；仍需尺寸匹配但**不能**称参考管",
       "id": "CM4"
+    },
+    {
+      "id": "CB1",
+      "type": "cascode_bias_bank",
+      "name_zh": "共源共栅偏置家族（IREF 偏置）",
+      "devices": [
+        "NM11",
+        "NM10",
+        "NM4",
+        "NM1",
+        "NM0",
+        "NM5"
+      ],
+      "evidence": "nmos(n_mos_a) 管栅极共接偏置网 IREF（该网由二极管接法的 NM0 产生，栅漏短接）；各管源极分别接不同支路的下管漏极，构成共源共栅叠管：NM11←NM13、NM10←NM12、NM4←NM6、NM1←NM3、NM0←NM2、NM5←NM7；源极互不相同（net52, net3, net4, net32, net53, net44）故不是同一支路的镜像。作用：NM0 给共源共栅管提供栅偏压，所属支路的下管给镜像管提供栅偏压"
     },
     {
       "id": "DP1",
@@ -368,6 +382,46 @@
       "why": "两臂对应网 net3↔net52 上的同位器件"
     }
   ],
+  "cascode_banks": [
+    {
+      "id": "CB1",
+      "gate": "IREF",
+      "kind": "nmos",
+      "model": "n_mos_a",
+      "bias_devices": [
+        "NM0"
+      ],
+      "reference": "NM0",
+      "cascodes": [
+        "NM11",
+        "NM10",
+        "NM4",
+        "NM1",
+        "NM5"
+      ],
+      "devices": [
+        "NM11",
+        "NM10",
+        "NM4",
+        "NM1",
+        "NM0",
+        "NM5"
+      ],
+      "sources": [
+        "net52",
+        "net3",
+        "net4",
+        "net32",
+        "net53",
+        "net44"
+      ]
+    }
+  ],
+  "coverage": {
+    "n_devices": 59,
+    "n_covered": 59,
+    "uncovered": []
+  },
   "pairing_relation": [
     {
       "a": "NM15",
@@ -775,6 +829,10 @@
     {
       "rule": "R5",
       "desc": "电流镜组（同型号、同栅、同源）内各管共享 w/l，各支路电流比值由 m 承担，m 保持独立"
+    },
+    {
+      "rule": "R6",
+      "desc": "共源共栅偏置家族（栅极共接由二极管产生的偏置网、源极分别叠在不同支路下管漏极上）共享 L；基准二极管的 L 保持独立。同一偏置、同一电流密度下共源共栅取相同 L 是常规画法"
     }
   ],
   "reduced_variables": [
@@ -858,10 +916,18 @@
       "var": "NM1_l",
       "param": "l",
       "devices": [
-        "NM1"
+        "NM1",
+        "NM4",
+        "NM5",
+        "NM10",
+        "NM11"
       ],
       "merged_from": [
-        "NM1_l"
+        "NM1_l",
+        "NM4_l",
+        "NM5_l",
+        "NM10_l",
+        "NM11_l"
       ],
       "kind": "continuous",
       "unit": "m"
@@ -969,20 +1035,6 @@
       "unit": "m"
     },
     {
-      "var": "NM4_l",
-      "param": "l",
-      "devices": [
-        "NM4",
-        "NM5"
-      ],
-      "merged_from": [
-        "NM4_l",
-        "NM5_l"
-      ],
-      "kind": "continuous",
-      "unit": "m"
-    },
-    {
       "var": "NM4_m",
       "param": "m",
       "devices": [
@@ -1034,20 +1086,6 @@
       "merged_from": [
         "NM10_fw",
         "NM11_fw"
-      ],
-      "kind": "continuous",
-      "unit": "m"
-    },
-    {
-      "var": "NM10_l",
-      "param": "l",
-      "devices": [
-        "NM10",
-        "NM11"
-      ],
-      "merged_from": [
-        "NM10_l",
-        "NM11_l"
       ],
       "kind": "continuous",
       "unit": "m"
@@ -1542,7 +1580,7 @@
     }
   ],
   "reasoning": {
-    "topology": "由确定性解析器判定的全差分运放：Dummy 器件（电气无效）、NMOS 电流镜、PMOS 电流镜、PMOS 电流镜、PMOS 共栅对（无参考管）、辅助差分对（误差放大器）、输入差分对、尾电流源、输出级、共模反馈网络（CMFB）",
+    "topology": "由确定性解析器判定的全差分运放：Dummy 器件（电气无效）、NMOS 电流镜、PMOS 电流镜、PMOS 电流镜、PMOS 共栅对（无参考管）、共源共栅偏置家族（IREF 偏置）、辅助差分对（误差放大器）、输入差分对、尾电流源、输出级、共模反馈网络（CMFB）",
     "module_reasons": [
       {
         "id": "D1",
@@ -1563,6 +1601,10 @@
       {
         "id": "CM4",
         "reason": "pmos(p_mos_a) 管栅极同为 vcmfb、源极同为 VDDA，共 2 管；组内无二极管接法器件 -> 不是标准电流镜，栅压由 vcmfb 外部确定，各管电流比 = (W/L·m) 之比；仍需尺寸匹配但**不能**称参考管"
+      },
+      {
+        "id": "CB1",
+        "reason": "nmos(n_mos_a) 管栅极共接偏置网 IREF（该网由二极管接法的 NM0 产生，栅漏短接）；各管源极分别接不同支路的下管漏极，构成共源共栅叠管：NM11←NM13、NM10←NM12、NM4←NM6、NM1←NM3、NM0←NM2、NM5←NM7；源极互不相同（net52, net3, net4, net32, net53, net44）故不是同一支路的镜像。作用：NM0 给共源共栅管提供栅偏压，所属支路的下管给镜像管提供栅偏压"
       },
       {
         "id": "DP1",
@@ -1613,6 +1655,10 @@
       {
         "rule": "R5",
         "reason": "电流镜组（同型号、同栅、同源）内各管共享 w/l，各支路电流比值由 m 承担，m 保持独立"
+      },
+      {
+        "rule": "R6",
+        "reason": "共源共栅偏置家族（栅极共接由二极管产生的偏置网、源极分别叠在不同支路下管漏极上）共享 L；基准二极管的 L 保持独立。同一偏置、同一电流密度下共源共栅取相同 L 是常规画法"
       }
     ],
     "variable_notes": [],
