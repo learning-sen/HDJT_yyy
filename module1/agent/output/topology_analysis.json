@@ -13,32 +13,50 @@
       "VOUTP"
     ],
     "n_instances": 59,
-    "n_instances_collapsed": 43,
+    "n_instances_collapsed": 41,
     "n_segmented_collapsed": 2,
     "n_mos": 29,
     "by_kind": {
       "cap": 6,
       "mos": 29,
-      "res": 8
+      "res": 6
     },
     "by_type": {
       "active_load": 1,
       "bias_branch": 1,
       "cmfb": 1,
       "current_mirror": 4,
-      "input_pair": 1,
-      "matching_pair": 8,
-      "segmented_device": 2,
-      "two_terminal_shorted": 4
+      "dummy": 4,
+      "input_pair": 2,
+      "matching_pair": 13,
+      "segmented_device": 2
     },
-    "n_variables_before": 121,
-    "n_variables_raw": 153,
+    "n_variables_before": 105,
+    "n_variables_raw": 141,
+    "n_size_params_raw": 153,
+    "n_fixed_params": 12,
     "n_nets": 45,
     "vdd_nets": [
       "GNDA",
       "SUB",
       "VDDA"
-    ]
+    ],
+    "n_isolated_devices": 4,
+    "isolated_devices": [
+      "C4",
+      "C5",
+      "R5",
+      "R6"
+    ],
+    "n_inert_devices": 4,
+    "inert_devices": [
+      "C4",
+      "C5",
+      "R5",
+      "R6"
+    ],
+    "n_symmetry_pairs": 12,
+    "n_heuristic_groups": 1
   },
   "modules": [
     {
@@ -130,6 +148,38 @@
     {
       "id": "IP1",
       "type": "input_pair",
+      "role": "auxiliary",
+      "devices": [
+        "PM12",
+        "PM8"
+      ],
+      "polarity": "pmos",
+      "shared_source_net": "net13",
+      "gate_nets": [
+        "outaverage",
+        "VCM"
+      ],
+      "drain_nets": [
+        "net52",
+        "net3"
+      ],
+      "gate_nets_are_input_ports": false,
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "confidence": 2,
+      "evidence": "同型(pmos)同尺寸(同 model p_mos_a / 同 multi 6)；源极同接 net13（尾节点）；栅极分别接 outaverage / VCM（非输入端口，判为辅助差分对）；漏极分别接 net52 / net3；-> 差分两臂必须尺寸一致，做尺寸绑定",
+      "notes": "非主输入对（如共模反馈误差放大器），仍需尺寸匹配"
+    },
+    {
+      "id": "IP2",
+      "type": "input_pair",
+      "role": "main",
       "devices": [
         "PM10",
         "PM9"
@@ -140,9 +190,21 @@
         "VINN",
         "VINP"
       ],
+      "drain_nets": [
+        "net44",
+        "net4"
+      ],
       "gate_nets_are_input_ports": true,
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "confidence": 3,
-      "evidence": "同型(pmos)；源极同接 net37（尾节点）；栅极分别接输入端口 VINN / VINP；漏极分别接 net44 / net4",
+      "evidence": "同型(pmos)同尺寸(同 model p_mos_a / 同 multi 2)；源极同接 net37（尾节点）；栅极分别接 VINN / VINP（差分输入端口）；漏极分别接 net44 / net4；-> 差分两臂必须尺寸一致，做尺寸绑定",
       "notes": ""
     },
     {
@@ -165,207 +227,409 @@
       "id": "MP1",
       "type": "matching_pair",
       "devices": [
-        "NM12",
-        "NM13"
+        "NM15",
+        "NM14"
       ],
       "kind": "mos",
       "polarity": "nmos",
       "match_rule": "same_branch",
-      "group_members": [
-        "NM12",
-        "NM13",
-        "NM6",
-        "NM7"
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
       ],
-      "group_size": 4,
-      "confidence": 2,
-      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "group_members": [
+        "NM15",
+        "NM14"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(1)；对称两臂（栅极同接 IREF、源极同接 VOUTN，漏极分别接 VOUTN / VOUTP）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP2",
       "type": "matching_pair",
       "devices": [
-        "NM12",
-        "NM6"
+        "PM11",
+        "PM7"
       ],
       "kind": "mos",
-      "polarity": "nmos",
-      "match_rule": "same_branch",
-      "group_members": [
-        "NM12",
-        "NM13",
-        "NM6",
-        "NM7"
+      "polarity": "pmos",
+      "match_rule": "differential_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
       ],
-      "group_size": 4,
-      "confidence": 2,
-      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "group_members": [
+        "PM11",
+        "PM7"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(p_mos_a)、同 multi(4)；差分两臂（栅极分别接 net8 / net0，尾节点 VDDA）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP3",
       "type": "matching_pair",
       "devices": [
-        "NM12",
-        "NM7"
+        "PM3",
+        "PM2"
       ],
       "kind": "mos",
-      "polarity": "nmos",
+      "polarity": "pmos",
       "match_rule": "same_branch",
-      "group_members": [
-        "NM12",
-        "NM13",
-        "NM6",
-        "NM7"
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
       ],
-      "group_size": 4,
-      "confidence": 2,
-      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "group_members": [
+        "PM3",
+        "PM2"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(p_mos_a)、同 multi(40)；对称两臂（栅极同接 vcmfb、源极同接 VDDA，漏极分别接 net8 / net0）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP4",
       "type": "matching_pair",
       "devices": [
-        "NM8",
-        "NM9"
+        "R6",
+        "R5"
       ],
-      "kind": "mos",
-      "polarity": "nmos",
-      "match_rule": "same_branch",
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "group_members": [
-        "NM8",
-        "NM9"
+        "R6",
+        "R5"
       ],
       "group_size": 2,
-      "confidence": 2,
-      "evidence": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "confidence": 3,
+      "evidence": "同 model(res_n_poly)、同 multi(1)；两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP5",
       "type": "matching_pair",
       "devices": [
-        "PM10",
-        "PM9"
+        "R1",
+        "R2"
       ],
-      "kind": "mos",
-      "polarity": "pmos",
-      "match_rule": "differential_arms",
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "group_members": [
-        "PM10",
-        "PM9"
+        "R1",
+        "R2"
       ],
       "group_size": 2,
-      "confidence": 2,
-      "evidence": "同 model(p_mos_a)、同 multi(2)、源极同接 net37 的差分两臂，栅极分别接 VINN / VINP；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "confidence": 3,
+      "evidence": "同 model(res_p_poly)、同 multi(1)；两端器件对称臂（端子 ['net0', 'net17'] / ['net8', 'net7']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP6",
       "type": "matching_pair",
       "devices": [
-        "PM2",
-        "PM3"
+        "C5",
+        "C4"
       ],
-      "kind": "mos",
-      "polarity": "pmos",
-      "match_rule": "same_branch",
+      "kind": "cap",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "group_members": [
-        "PM2",
-        "PM3"
+        "C5",
+        "C4"
       ],
       "group_size": 2,
-      "confidence": 2,
-      "evidence": "同 model(p_mos_a)、同 multi(40)、同一支路（源极同接 VDDA、栅极同接 vcmfb）；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(1)；两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP7",
       "type": "matching_pair",
       "devices": [
-        "R0",
-        "R3"
+        "C11",
+        "C0"
       ],
-      "kind": "res",
+      "kind": "cap",
       "polarity": "-",
-      "match_rule": "shared_node",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "group_members": [
-        "R0",
-        "R3"
+        "C11",
+        "C0"
       ],
       "group_size": 2,
-      "confidence": 2,
-      "evidence": "同 model(res_p_poly)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN']；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(2)；两端器件对称臂（端子 ['net17', 'VOUTP'] / ['net7', 'VOUTN']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
       "id": "MP8",
       "type": "matching_pair",
       "devices": [
-        "C2",
-        "C3"
+        "C3",
+        "C2"
       ],
       "kind": "cap",
       "polarity": "-",
-      "match_rule": "shared_node",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
       "group_members": [
-        "C2",
-        "C3"
+        "C3",
+        "C2"
       ],
       "group_size": 2,
-      "confidence": 2,
-      "evidence": "同 model(cap_mim)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN']；-> 版图匹配要求尺寸绑定，共享同一组变量（只保留一个基准变量）",
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(1)；两端器件对称臂（端子 ['VOUTN', 'outaverage'] / ['outaverage', 'VOUTP']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
       "notes": ""
     },
     {
-      "id": "TIE1",
-      "type": "two_terminal_shorted",
+      "id": "MP9",
+      "type": "matching_pair",
+      "devices": [
+        "R0",
+        "R3"
+      ],
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "R0",
+        "R3"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(res_p_poly)、同 multi(1)；两端器件对称臂（端子 ['VOUTP', 'outaverage'] / ['VOUTN', 'outaverage']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP10",
+      "type": "matching_pair",
+      "devices": [
+        "NM9",
+        "NM8"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM9",
+        "NM8"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 VOUTN / VOUTP）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP11",
+      "type": "matching_pair",
+      "devices": [
+        "NM7",
+        "NM6"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM7",
+        "NM6"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 net44 / net4）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP12",
+      "type": "matching_pair",
+      "devices": [
+        "NM4",
+        "NM5"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM4",
+        "NM5"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 IREF、源极同接 net4，漏极分别接 net0 / net8）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP13",
+      "type": "matching_pair",
+      "devices": [
+        "NM12",
+        "NM13"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "structure_heuristic",
+      "bind_params": [
+        "l"
+      ],
+      "base_device": "NM12",
+      "group_members": [
+        "NM12",
+        "NM13"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一镜像支路（源极同接 GNDA、栅极同接 net53，共 2 只）；由连接结构（图分析）判为匹配结构 -> 只绑 L（镜像比由 w/m 表达），只保留一个基准变量",
+      "notes": "镜像支路匹配：镜像比通过 w/m 的比例表达，w/m 保持自由"
+    },
+    {
+      "id": "DM1",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
       "devices": [
         "R6"
       ],
       "kind": "res",
-      "net": "net12",
-      "confidence": 2,
-      "evidence": "两端器件 R6 的两个端子都接在 net12 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
-      "notes": "不是 Dummy，不应删除"
+      "confidence": 3,
+      "evidence": "两端器件 R6 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
     },
     {
-      "id": "TIE2",
-      "type": "two_terminal_shorted",
+      "id": "DM2",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
       "devices": [
         "R5"
       ],
       "kind": "res",
-      "net": "net11",
-      "confidence": 2,
-      "evidence": "两端器件 R5 的两个端子都接在 net11 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
-      "notes": "不是 Dummy，不应删除"
+      "confidence": 3,
+      "evidence": "两端器件 R5 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
     },
     {
-      "id": "TIE3",
-      "type": "two_terminal_shorted",
+      "id": "DM3",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
       "devices": [
         "C5"
       ],
       "kind": "cap",
-      "net": "net12",
-      "confidence": 2,
-      "evidence": "两端器件 C5 的两个端子都接在 net12 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
-      "notes": "不是 Dummy，不应删除"
+      "confidence": 3,
+      "evidence": "两端器件 C5 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
     },
     {
-      "id": "TIE4",
-      "type": "two_terminal_shorted",
+      "id": "DM4",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
       "devices": [
         "C4"
       ],
       "kind": "cap",
-      "net": "net11",
-      "confidence": 2,
-      "evidence": "两端器件 C4 的两个端子都接在 net11 上 -> 电气上短路；版图里常见于寄生/去耦电容或参考电阻，**保留其变量**，但需在报告中说明为何保留",
-      "notes": "不是 Dummy，不应删除"
+      "confidence": 3,
+      "evidence": "两端器件 C4 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
     },
     {
       "id": "CMFB1",
@@ -377,7 +641,6 @@
         "PM6",
         "PM3",
         "PM2",
-        "R3",
         "C3",
         "C2",
         "R0",
@@ -391,13 +654,6 @@
       "sense_divider": [
         [
           "R0",
-          "R0",
-          "VOUTP",
-          "VOUTP",
-          "VOUTP"
-        ],
-        [
-          "R0",
           "R3",
           "outaverage",
           "VOUTP",
@@ -405,7 +661,7 @@
         ]
       ],
       "confidence": 3,
-      "evidence": "检测到共模相关节点: ['VCM', 'outaverage', 'vcmfb']；电阻分压网络 R0/R0：从 VOUTP 与 VOUTP 取平均到 VOUTP；涉及器件 11 个：['NM11', 'PM12', 'PM8', 'PM6', 'PM3', 'PM2', 'R3', 'C3', 'C2', 'R0', 'R3']；作用：稳定全差分输出的共模电平",
+      "evidence": "检测到共模相关节点: ['VCM', 'outaverage', 'vcmfb']；共模取样分压网络 R0 / R3：分别从输出 VOUTP 与 VOUTN 取样，在 outaverage 取平均；取样节点 outaverage 送入 PM12 的栅极；涉及器件 10 个：['NM11', 'PM12', 'PM8', 'PM6', 'PM3', 'PM2', 'C3', 'C2', 'R0', 'R3']；作用：稳定全差分输出的共模电平",
       "notes": ""
     },
     {
@@ -491,7 +747,7 @@
         "R0_9_res_gen",
         "R0_10_res_gen"
       ],
-      "reason": "自动分段器件 R0 共 9 段折叠为 1 个逻辑器件（2 个外部端点 ['VOUTP', 'outaverage']）"
+      "reason": "自动分段器件 R0 由 1 个基准器件 + 9 个自动生成段（共 10 段串联）折叠为 1 个逻辑器件（2 个外部端点 ['VOUTP', 'outaverage']）"
     },
     {
       "rule": "collapse_segmented",
@@ -507,7 +763,7 @@
         "R3_9_res_gen",
         "R3_10_res_gen"
       ],
-      "reason": "自动分段器件 R3 共 9 段折叠为 1 个逻辑器件（2 个外部端点 ['VOUTN', 'outaverage']）"
+      "reason": "自动分段器件 R3 由 1 个基准器件 + 9 个自动生成段（共 10 段串联）折叠为 1 个逻辑器件（2 个外部端点 ['VOUTN', 'outaverage']）"
     },
     {
       "rule": "current_mirror",
@@ -549,12 +805,20 @@
       "reason": "同型(pmos)；栅极同接 vcmfb；源极同接 VDDA；组内无二极管连接，取 PM3 为参考管"
     },
     {
-      "rule": "input_pair",
+      "rule": "differential_pair",
+      "targets": [
+        "PM12",
+        "PM8"
+      ],
+      "reason": "共尾节点 net13、双栅 outaverage/VCM、双漏 net52/net3 -> 辅助差分对"
+    },
+    {
+      "rule": "differential_pair",
       "targets": [
         "PM10",
         "PM9"
       ],
-      "reason": "栅极接输入端口 VINN/VINP 且源极同网 net37 -> 差分输入对"
+      "reason": "共尾节点 net37、双栅 VINN/VINP、双漏 net44/net4 -> 主差分对"
     },
     {
       "rule": "active_load",
@@ -567,34 +831,18 @@
     {
       "rule": "matching_pair",
       "targets": [
-        "NM12",
-        "NM13"
+        "NM15",
+        "NM14"
       ],
-      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 IREF、源极同接 VOUTN，漏极分别接 VOUTN / VOUTP），尺寸绑定只保留一组变量"
     },
     {
       "rule": "matching_pair",
       "targets": [
-        "NM12",
-        "NM6"
+        "PM11",
+        "PM7"
       ],
-      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
-    },
-    {
-      "rule": "matching_pair",
-      "targets": [
-        "NM12",
-        "NM7"
-      ],
-      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
-    },
-    {
-      "rule": "matching_pair",
-      "targets": [
-        "NM8",
-        "NM9"
-      ],
-      "reason": "同 model(n_mos_a)、同 multi(4)、同一支路（源极同接 GNDA、栅极同接 net53） -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 差分两臂（栅极分别接 net8 / net0，尾节点 VDDA），尺寸绑定只保留一组变量"
     },
     {
       "rule": "matching_pair",
@@ -602,15 +850,55 @@
         "PM10",
         "PM9"
       ],
-      "reason": "同 model(p_mos_a)、同 multi(2)、源极同接 net37 的差分两臂，栅极分别接 VINN / VINP -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 差分两臂（栅极分别接 VINN / VINP，尾节点 net37），尺寸绑定只保留一组变量"
     },
     {
       "rule": "matching_pair",
       "targets": [
-        "PM2",
-        "PM3"
+        "PM3",
+        "PM2"
       ],
-      "reason": "同 model(p_mos_a)、同 multi(40)、同一支路（源极同接 VDDA、栅极同接 vcmfb） -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 vcmfb、源极同接 VDDA，漏极分别接 net8 / net0），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R6",
+        "R5"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R1",
+        "R2"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net0', 'net17'] / ['net8', 'net7']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C5",
+        "C4"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C11",
+        "C0"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net17', 'VOUTP'] / ['net7', 'VOUTN']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C3",
+        "C2"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['VOUTN', 'outaverage'] / ['outaverage', 'VOUTP']），尺寸绑定只保留一组变量"
     },
     {
       "rule": "matching_pair",
@@ -618,15 +906,67 @@
         "R0",
         "R3"
       ],
-      "reason": "同 model(res_p_poly)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN'] -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['VOUTP', 'outaverage'] / ['VOUTN', 'outaverage']），尺寸绑定只保留一组变量"
     },
     {
       "rule": "matching_pair",
       "targets": [
-        "C2",
-        "C3"
+        "NM9",
+        "NM8"
       ],
-      "reason": "同 model(cap_mim)、同 multi(None)、同 model 且共享节点 ['outaverage']，另一端分别接 ['VOUTP'] / ['VOUTN'] -> 尺寸绑定，只保留一组变量"
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 VOUTN / VOUTP），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM7",
+        "NM6"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 net44 / net4），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM4",
+        "NM5"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 IREF、源极同接 net4，漏极分别接 net0 / net8），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_group",
+      "targets": [
+        "NM12",
+        "NM13"
+      ],
+      "reason": "同一镜像支路（源极同接 GNDA、栅极同接 net53，共 2 只） -> 只绑 L（镜像比由 w/m 表达）"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "R6"
+      ],
+      "reason": "两端器件 R6 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "R5"
+      ],
+      "reason": "两端器件 R5 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "C5"
+      ],
+      "reason": "两端器件 C5 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "C4"
+      ],
+      "reason": "两端器件 C4 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
     },
     {
       "rule": "cmfb",
@@ -688,6 +1028,12 @@
     }
   ],
   "device_roles": {
+    "C0": [
+      "matching_pair"
+    ],
+    "C11": [
+      "matching_pair"
+    ],
     "C2": [
       "cmfb",
       "matching_pair"
@@ -697,10 +1043,12 @@
       "matching_pair"
     ],
     "C4": [
-      "two_terminal_shorted"
+      "dummy",
+      "matching_pair"
     ],
     "C5": [
-      "two_terminal_shorted"
+      "dummy",
+      "matching_pair"
     ],
     "NM0": [
       "bias_branch"
@@ -724,10 +1072,12 @@
       "matching_pair"
     ],
     "NM14": [
-      "bias_branch"
+      "bias_branch",
+      "matching_pair"
     ],
     "NM15": [
-      "bias_branch"
+      "bias_branch",
+      "matching_pair"
     ],
     "NM2": [
       "current_mirror"
@@ -736,10 +1086,12 @@
       "current_mirror"
     ],
     "NM4": [
-      "bias_branch"
+      "bias_branch",
+      "matching_pair"
     ],
     "NM5": [
-      "bias_branch"
+      "bias_branch",
+      "matching_pair"
     ],
     "NM6": [
       "active_load",
@@ -766,11 +1118,14 @@
       "current_mirror"
     ],
     "PM10": [
-      "input_pair",
+      "input_pair"
+    ],
+    "PM11": [
       "matching_pair"
     ],
     "PM12": [
-      "cmfb"
+      "cmfb",
+      "input_pair"
     ],
     "PM2": [
       "bias_branch",
@@ -794,13 +1149,16 @@
       "cmfb",
       "current_mirror"
     ],
+    "PM7": [
+      "matching_pair"
+    ],
     "PM8": [
       "bias_branch",
-      "cmfb"
+      "cmfb",
+      "input_pair"
     ],
     "PM9": [
-      "input_pair",
-      "matching_pair"
+      "input_pair"
     ],
     "R0": [
       "cmfb",
@@ -833,6 +1191,12 @@
     ],
     "R0_9_res_gen": [
       "segmented_device"
+    ],
+    "R1": [
+      "matching_pair"
+    ],
+    "R2": [
+      "matching_pair"
     ],
     "R3": [
       "cmfb",
@@ -867,18 +1231,13 @@
       "segmented_device"
     ],
     "R5": [
-      "two_terminal_shorted"
+      "dummy",
+      "matching_pair"
     ],
     "R6": [
-      "two_terminal_shorted"
+      "dummy",
+      "matching_pair"
     ]
   },
-  "warnings": [
-    "候选差分对 PM11/PM7（源极同网 VDDA，栅极 net8/net0）未接输入端口，不判为 input_pair；若为次级的差分单元请在报告中说明",
-    "候选差分对 PM12/PM8（源极同网 net13，栅极 outaverage/VCM）未接输入端口，不判为 input_pair；若为次级的差分单元请在报告中说明",
-    "R6 两端接同一网（net12）：按『真实器件』保留变量，请在报告说明其作用",
-    "R5 两端接同一网（net11）：按『真实器件』保留变量，请在报告说明其作用",
-    "C5 两端接同一网（net12）：按『真实器件』保留变量，请在报告说明其作用",
-    "C4 两端接同一网（net11）：按『真实器件』保留变量，请在报告说明其作用"
-  ]
+  "warnings": []
 }
