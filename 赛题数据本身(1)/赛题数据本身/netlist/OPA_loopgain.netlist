@@ -1,0 +1,368 @@
+//OPA_loopgain
+////////////////////////////////////////
+// Type     : spectre
+// Tool     : AETHER-SE
+// Date     : Wed Sep  9 17:23:30 2026
+// User     : empyrean
+// Top Design : 2026_EDA_case1/OPA_loopgain/schematic
+////////////////////////////////////////
+
+simulator lang = spectre
+
+global 0
+
+////////////////////////////////////////
+// Library : 2026_EDA_case1
+// Cell    : OPA
+// View    : schematic
+////////////////////////////////////////
+
+subckt OPA (IREF GNDA SUB VCM VDDA VINN VINP VOUTN VOUTP)
+parameters
+NM15 (VOUTN IREF VOUTN SUB) n_mos_a l=NM15_l w=NM15_fw multi=1 m=NM15_m 
++ad=(NM15_fw<300n)?((0*(9e-14+(NM15_fw*1.4e-07)))+((9e-14+(NM15_fw*70n))))/1:((0*(3.8e-07*NM15_fw))+((3.4e-07*NM15_fw)))/1
++as=(NM15_fw<300n)?((9e-14+(NM15_fw*70n))+(0*(9e-14+(NM15_fw*1.4e-07)))+0)/1:((3.4e-07*NM15_fw)+(0*(3.8e-07*NM15_fw))+0)/1
++pd=(NM15_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM15_fw)))+((6.8e-07+(2*NM15_fw))))/1
++ps=(NM15_fw<300n)?1.34e-06:((6.8e-07+(2*NM15_fw))+(0*(7.6e-07+(2*NM15_fw)))+0)/1
++nrd=((NM15_fw<300n)?((0*(9e-14+(NM15_fw*140n)))+((9e-14+(NM15_fw*70n))))/1:((0*(3.8e-07*NM15_fw))+((3.4e-07*NM15_fw)))/1)/(NM15_fw*NM15_fw)
++nrs=((NM15_fw<300n)?((9e-14+(NM15_fw*70n))+(0*(9e-14+(NM15_fw*140n)))+0)/1:((3.4e-07*NM15_fw)+(0*(3.8e-07*NM15_fw))+0)/1)/(NM15_fw*NM15_fw)
++sa=(NM15_fw<300n)?(3.7e-07+NM15_l*1*0/2+0)/1:((3.4e-07+NM15_l*1*0/2+0)/1) 
++sb=(NM15_fw<300n)?(3.7e-07+NM15_l*1*0/2+0)/1:((3.4e-07+NM15_l*1*0/2+0)/1) sca=0
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM14 (VOUTP IREF VOUTP SUB) n_mos_a l=NM14_l w=NM14_fw multi=1 m=NM14_m 
++ad=(NM14_fw<300n)?((0*(9e-14+(NM14_fw*1.4e-07)))+((9e-14+(NM14_fw*70n))))/1:((0*(3.8e-07*NM14_fw))+((3.4e-07*NM14_fw)))/1
++as=(NM14_fw<300n)?((9e-14+(NM14_fw*70n))+(0*(9e-14+(NM14_fw*1.4e-07)))+0)/1:((3.4e-07*NM14_fw)+(0*(3.8e-07*NM14_fw))+0)/1
++pd=(NM14_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM14_fw)))+((6.8e-07+(2*NM14_fw))))/1
++ps=(NM14_fw<300n)?1.34e-06:((6.8e-07+(2*NM14_fw))+(0*(7.6e-07+(2*NM14_fw)))+0)/1
++nrd=((NM14_fw<300n)?((0*(9e-14+(NM14_fw*140n)))+((9e-14+(NM14_fw*70n))))/1:((0*(3.8e-07*NM14_fw))+((3.4e-07*NM14_fw)))/1)/(NM14_fw*NM14_fw)
++nrs=((NM14_fw<300n)?((9e-14+(NM14_fw*70n))+(0*(9e-14+(NM14_fw*140n)))+0)/1:((3.4e-07*NM14_fw)+(0*(3.8e-07*NM14_fw))+0)/1)/(NM14_fw*NM14_fw)
++sa=(NM14_fw<300n)?(3.7e-07+NM14_l*1*0/2+0)/1:((3.4e-07+NM14_l*1*0/2+0)/1) 
++sb=(NM14_fw<300n)?(3.7e-07+NM14_l*1*0/2+0)/1:((3.4e-07+NM14_l*1*0/2+0)/1) sca=0
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM13 (net52 net53 GNDA SUB) n_mos_a l=NM13_l w=NM13_fw multi=4 m=NM13_m 
++ad=(NM13_fw<300n)?((2*(9e-14+(NM13_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM13_fw))+0)/4
++as=(NM13_fw<300n)?((9e-14+(NM13_fw*70n))+(1*(9e-14+(NM13_fw*1.4e-07)))+((9e-14+(NM13_fw*70n))))/4:((3.4e-07*NM13_fw)+(1*(3.8e-07*NM13_fw))+((3.4e-07*NM13_fw)))/4
++pd=(NM13_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM13_fw)))+0)/4 
++ps=(NM13_fw<300n)?1.04e-06:((6.8e-07+(2*NM13_fw))+(1*(7.6e-07+(2*NM13_fw)))+((6.8e-07+(2*NM13_fw))))/4
++nrd=((NM13_fw<300n)?((2*(9e-14+(NM13_fw*140n)))+0)/1:((2*(3.8e-07*NM13_fw))+0)/1)/(NM13_fw*NM13_fw)
++nrs=((NM13_fw<300n)?((9e-14+(NM13_fw*70n))+(1*(9e-14+(NM13_fw*140n)))+((9e-14+(NM13_fw*70n))))/1:((3.4e-07*NM13_fw)+(1*(3.8e-07*NM13_fw))+((3.4e-07*NM13_fw)))/1)/(NM13_fw*NM13_fw)
++sa=(NM13_fw<300n)?(1.48e-06+NM13_l*4*3/2+2.28e-06)/4:((1.36e-06+NM13_l*4*3/2+2.28e-06)/4)
++sb=(NM13_fw<300n)?(1.48e-06+NM13_l*4*3/2+2.28e-06)/4:((1.36e-06+NM13_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM12 (net3 net53 GNDA SUB) n_mos_a l=NM12_l w=NM12_fw multi=4 m=NM12_m 
++ad=(NM12_fw<300n)?((2*(9e-14+(NM12_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM12_fw))+0)/4
++as=(NM12_fw<300n)?((9e-14+(NM12_fw*70n))+(1*(9e-14+(NM12_fw*1.4e-07)))+((9e-14+(NM12_fw*70n))))/4:((3.4e-07*NM12_fw)+(1*(3.8e-07*NM12_fw))+((3.4e-07*NM12_fw)))/4
++pd=(NM12_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM12_fw)))+0)/4 
++ps=(NM12_fw<300n)?1.04e-06:((6.8e-07+(2*NM12_fw))+(1*(7.6e-07+(2*NM12_fw)))+((6.8e-07+(2*NM12_fw))))/4
++nrd=((NM12_fw<300n)?((2*(9e-14+(NM12_fw*140n)))+0)/1:((2*(3.8e-07*NM12_fw))+0)/1)/(NM12_fw*NM12_fw)
++nrs=((NM12_fw<300n)?((9e-14+(NM12_fw*70n))+(1*(9e-14+(NM12_fw*140n)))+((9e-14+(NM12_fw*70n))))/1:((3.4e-07*NM12_fw)+(1*(3.8e-07*NM12_fw))+((3.4e-07*NM12_fw)))/1)/(NM12_fw*NM12_fw)
++sa=(NM12_fw<300n)?(1.48e-06+NM12_l*4*3/2+2.28e-06)/4:((1.36e-06+NM12_l*4*3/2+2.28e-06)/4)
++sb=(NM12_fw<300n)?(1.48e-06+NM12_l*4*3/2+2.28e-06)/4:((1.36e-06+NM12_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM11 (vcmfb IREF net52 SUB) n_mos_a l=NM11_l w=NM11_fw multi=1 m=NM11_m 
++ad=(NM11_fw<300n)?((0*(9e-14+(NM11_fw*1.4e-07)))+((9e-14+(NM11_fw*70n))))/1:((0*(3.8e-07*NM11_fw))+((3.4e-07*NM11_fw)))/1
++as=(NM11_fw<300n)?((9e-14+(NM11_fw*70n))+(0*(9e-14+(NM11_fw*1.4e-07)))+0)/1:((3.4e-07*NM11_fw)+(0*(3.8e-07*NM11_fw))+0)/1
++pd=(NM11_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM11_fw)))+((6.8e-07+(2*NM11_fw))))/1
++ps=(NM11_fw<300n)?1.34e-06:((6.8e-07+(2*NM11_fw))+(0*(7.6e-07+(2*NM11_fw)))+0)/1
++nrd=((NM11_fw<300n)?((0*(9e-14+(NM11_fw*140n)))+((9e-14+(NM11_fw*70n))))/1:((0*(3.8e-07*NM11_fw))+((3.4e-07*NM11_fw)))/1)/(NM11_fw*NM11_fw)
++nrs=((NM11_fw<300n)?((9e-14+(NM11_fw*70n))+(0*(9e-14+(NM11_fw*140n)))+0)/1:((3.4e-07*NM11_fw)+(0*(3.8e-07*NM11_fw))+0)/1)/(NM11_fw*NM11_fw)
++sa=(NM11_fw<300n)?(3.7e-07+NM11_l*1*0/2+0)/1:((3.4e-07+NM11_l*1*0/2+0)/1) 
++sb=(NM11_fw<300n)?(3.7e-07+NM11_l*1*0/2+0)/1:((3.4e-07+NM11_l*1*0/2+0)/1) sca=0
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM10 (net5 IREF net3 SUB) n_mos_a l=NM10_l w=NM10_fw multi=1 m=NM10_m 
++ad=(NM10_fw<300n)?((0*(9e-14+(NM10_fw*1.4e-07)))+((9e-14+(NM10_fw*70n))))/1:((0*(3.8e-07*NM10_fw))+((3.4e-07*NM10_fw)))/1
++as=(NM10_fw<300n)?((9e-14+(NM10_fw*70n))+(0*(9e-14+(NM10_fw*1.4e-07)))+0)/1:((3.4e-07*NM10_fw)+(0*(3.8e-07*NM10_fw))+0)/1
++pd=(NM10_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM10_fw)))+((6.8e-07+(2*NM10_fw))))/1
++ps=(NM10_fw<300n)?1.34e-06:((6.8e-07+(2*NM10_fw))+(0*(7.6e-07+(2*NM10_fw)))+0)/1
++nrd=((NM10_fw<300n)?((0*(9e-14+(NM10_fw*140n)))+((9e-14+(NM10_fw*70n))))/1:((0*(3.8e-07*NM10_fw))+((3.4e-07*NM10_fw)))/1)/(NM10_fw*NM10_fw)
++nrs=((NM10_fw<300n)?((9e-14+(NM10_fw*70n))+(0*(9e-14+(NM10_fw*140n)))+0)/1:((3.4e-07*NM10_fw)+(0*(3.8e-07*NM10_fw))+0)/1)/(NM10_fw*NM10_fw)
++sa=(NM10_fw<300n)?(3.7e-07+NM10_l*1*0/2+0)/1:((3.4e-07+NM10_l*1*0/2+0)/1) 
++sb=(NM10_fw<300n)?(3.7e-07+NM10_l*1*0/2+0)/1:((3.4e-07+NM10_l*1*0/2+0)/1) sca=0
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM9 (VOUTN net53 GNDA GNDA) n_mos_a l=NM9_l w=NM9_fw multi=4 m=NM9_m 
++ad=(NM9_fw<300n)?((2*(9e-14+(NM9_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM9_fw))+0)/4 
++as=(NM9_fw<300n)?((9e-14+(NM9_fw*70n))+(1*(9e-14+(NM9_fw*1.4e-07)))+((9e-14+(NM9_fw*70n))))/4:((3.4e-07*NM9_fw)+(1*(3.8e-07*NM9_fw))+((3.4e-07*NM9_fw)))/4
++pd=(NM9_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM9_fw)))+0)/4 
++ps=(NM9_fw<300n)?1.04e-06:((6.8e-07+(2*NM9_fw))+(1*(7.6e-07+(2*NM9_fw)))+((6.8e-07+(2*NM9_fw))))/4
++nrd=((NM9_fw<300n)?((2*(9e-14+(NM9_fw*140n)))+0)/1:((2*(3.8e-07*NM9_fw))+0)/1)/(NM9_fw*NM9_fw)
++nrs=((NM9_fw<300n)?((9e-14+(NM9_fw*70n))+(1*(9e-14+(NM9_fw*140n)))+((9e-14+(NM9_fw*70n))))/1:((3.4e-07*NM9_fw)+(1*(3.8e-07*NM9_fw))+((3.4e-07*NM9_fw)))/1)/(NM9_fw*NM9_fw)
++sa=(NM9_fw<300n)?(1.48e-06+NM9_l*4*3/2+2.28e-06)/4:((1.36e-06+NM9_l*4*3/2+2.28e-06)/4)
++sb=(NM9_fw<300n)?(1.48e-06+NM9_l*4*3/2+2.28e-06)/4:((1.36e-06+NM9_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM8 (VOUTP net53 GNDA GNDA) n_mos_a l=NM8_l w=NM8_fw multi=4 m=NM8_m 
++ad=(NM8_fw<300n)?((2*(9e-14+(NM8_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM8_fw))+0)/4 
++as=(NM8_fw<300n)?((9e-14+(NM8_fw*70n))+(1*(9e-14+(NM8_fw*1.4e-07)))+((9e-14+(NM8_fw*70n))))/4:((3.4e-07*NM8_fw)+(1*(3.8e-07*NM8_fw))+((3.4e-07*NM8_fw)))/4
++pd=(NM8_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM8_fw)))+0)/4 
++ps=(NM8_fw<300n)?1.04e-06:((6.8e-07+(2*NM8_fw))+(1*(7.6e-07+(2*NM8_fw)))+((6.8e-07+(2*NM8_fw))))/4
++nrd=((NM8_fw<300n)?((2*(9e-14+(NM8_fw*140n)))+0)/1:((2*(3.8e-07*NM8_fw))+0)/1)/(NM8_fw*NM8_fw)
++nrs=((NM8_fw<300n)?((9e-14+(NM8_fw*70n))+(1*(9e-14+(NM8_fw*140n)))+((9e-14+(NM8_fw*70n))))/1:((3.4e-07*NM8_fw)+(1*(3.8e-07*NM8_fw))+((3.4e-07*NM8_fw)))/1)/(NM8_fw*NM8_fw)
++sa=(NM8_fw<300n)?(1.48e-06+NM8_l*4*3/2+2.28e-06)/4:((1.36e-06+NM8_l*4*3/2+2.28e-06)/4)
++sb=(NM8_fw<300n)?(1.48e-06+NM8_l*4*3/2+2.28e-06)/4:((1.36e-06+NM8_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM7 (net44 net53 GNDA SUB) n_mos_a l=NM7_l w=NM7_fw multi=4 m=NM7_m 
++ad=(NM7_fw<300n)?((2*(9e-14+(NM7_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM7_fw))+0)/4 
++as=(NM7_fw<300n)?((9e-14+(NM7_fw*70n))+(1*(9e-14+(NM7_fw*1.4e-07)))+((9e-14+(NM7_fw*70n))))/4:((3.4e-07*NM7_fw)+(1*(3.8e-07*NM7_fw))+((3.4e-07*NM7_fw)))/4
++pd=(NM7_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM7_fw)))+0)/4 
++ps=(NM7_fw<300n)?1.04e-06:((6.8e-07+(2*NM7_fw))+(1*(7.6e-07+(2*NM7_fw)))+((6.8e-07+(2*NM7_fw))))/4
++nrd=((NM7_fw<300n)?((2*(9e-14+(NM7_fw*140n)))+0)/1:((2*(3.8e-07*NM7_fw))+0)/1)/(NM7_fw*NM7_fw)
++nrs=((NM7_fw<300n)?((9e-14+(NM7_fw*70n))+(1*(9e-14+(NM7_fw*140n)))+((9e-14+(NM7_fw*70n))))/1:((3.4e-07*NM7_fw)+(1*(3.8e-07*NM7_fw))+((3.4e-07*NM7_fw)))/1)/(NM7_fw*NM7_fw)
++sa=(NM7_fw<300n)?(1.48e-06+NM7_l*4*3/2+2.28e-06)/4:((1.36e-06+NM7_l*4*3/2+2.28e-06)/4)
++sb=(NM7_fw<300n)?(1.48e-06+NM7_l*4*3/2+2.28e-06)/4:((1.36e-06+NM7_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM6 (net4 net53 GNDA SUB) n_mos_a l=NM6_l w=NM6_fw multi=4 m=NM6_m 
++ad=(NM6_fw<300n)?((2*(9e-14+(NM6_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM6_fw))+0)/4 
++as=(NM6_fw<300n)?((9e-14+(NM6_fw*70n))+(1*(9e-14+(NM6_fw*1.4e-07)))+((9e-14+(NM6_fw*70n))))/4:((3.4e-07*NM6_fw)+(1*(3.8e-07*NM6_fw))+((3.4e-07*NM6_fw)))/4
++pd=(NM6_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM6_fw)))+0)/4 
++ps=(NM6_fw<300n)?1.04e-06:((6.8e-07+(2*NM6_fw))+(1*(7.6e-07+(2*NM6_fw)))+((6.8e-07+(2*NM6_fw))))/4
++nrd=((NM6_fw<300n)?((2*(9e-14+(NM6_fw*140n)))+0)/1:((2*(3.8e-07*NM6_fw))+0)/1)/(NM6_fw*NM6_fw)
++nrs=((NM6_fw<300n)?((9e-14+(NM6_fw*70n))+(1*(9e-14+(NM6_fw*140n)))+((9e-14+(NM6_fw*70n))))/1:((3.4e-07*NM6_fw)+(1*(3.8e-07*NM6_fw))+((3.4e-07*NM6_fw)))/1)/(NM6_fw*NM6_fw)
++sa=(NM6_fw<300n)?(1.48e-06+NM6_l*4*3/2+2.28e-06)/4:((1.36e-06+NM6_l*4*3/2+2.28e-06)/4)
++sb=(NM6_fw<300n)?(1.48e-06+NM6_l*4*3/2+2.28e-06)/4:((1.36e-06+NM6_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM4 (net0 IREF net4 SUB) n_mos_a l=NM4_l w=NM4_fw multi=4 m=NM4_m 
++ad=(NM4_fw<300n)?((2*(9e-14+(NM4_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM4_fw))+0)/4 
++as=(NM4_fw<300n)?((9e-14+(NM4_fw*70n))+(1*(9e-14+(NM4_fw*1.4e-07)))+((9e-14+(NM4_fw*70n))))/4:((3.4e-07*NM4_fw)+(1*(3.8e-07*NM4_fw))+((3.4e-07*NM4_fw)))/4
++pd=(NM4_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM4_fw)))+0)/4 
++ps=(NM4_fw<300n)?1.04e-06:((6.8e-07+(2*NM4_fw))+(1*(7.6e-07+(2*NM4_fw)))+((6.8e-07+(2*NM4_fw))))/4
++nrd=((NM4_fw<300n)?((2*(9e-14+(NM4_fw*140n)))+0)/1:((2*(3.8e-07*NM4_fw))+0)/1)/(NM4_fw*NM4_fw)
++nrs=((NM4_fw<300n)?((9e-14+(NM4_fw*70n))+(1*(9e-14+(NM4_fw*140n)))+((9e-14+(NM4_fw*70n))))/1:((3.4e-07*NM4_fw)+(1*(3.8e-07*NM4_fw))+((3.4e-07*NM4_fw)))/1)/(NM4_fw*NM4_fw)
++sa=(NM4_fw<300n)?(1.48e-06+NM4_l*4*3/2+2.28e-06)/4:((1.36e-06+NM4_l*4*3/2+2.28e-06)/4)
++sb=(NM4_fw<300n)?(1.48e-06+NM4_l*4*3/2+2.28e-06)/4:((1.36e-06+NM4_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM3 (net32 net53 GNDA SUB) n_mos_a l=NM3_l w=NM3_fw multi=1 m=NM3_m 
++ad=(NM3_fw<300n)?((0*(9e-14+(NM3_fw*1.4e-07)))+((9e-14+(NM3_fw*70n))))/1:((0*(3.8e-07*NM3_fw))+((3.4e-07*NM3_fw)))/1
++as=(NM3_fw<300n)?((9e-14+(NM3_fw*70n))+(0*(9e-14+(NM3_fw*1.4e-07)))+0)/1:((3.4e-07*NM3_fw)+(0*(3.8e-07*NM3_fw))+0)/1
++pd=(NM3_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM3_fw)))+((6.8e-07+(2*NM3_fw))))/1 
++ps=(NM3_fw<300n)?1.34e-06:((6.8e-07+(2*NM3_fw))+(0*(7.6e-07+(2*NM3_fw)))+0)/1 
++nrd=((NM3_fw<300n)?((0*(9e-14+(NM3_fw*140n)))+((9e-14+(NM3_fw*70n))))/1:((0*(3.8e-07*NM3_fw))+((3.4e-07*NM3_fw)))/1)/(NM3_fw*NM3_fw)
++nrs=((NM3_fw<300n)?((9e-14+(NM3_fw*70n))+(0*(9e-14+(NM3_fw*140n)))+0)/1:((3.4e-07*NM3_fw)+(0*(3.8e-07*NM3_fw))+0)/1)/(NM3_fw*NM3_fw)
++sa=(NM3_fw<300n)?(3.7e-07+NM3_l*1*0/2+0)/1:((3.4e-07+NM3_l*1*0/2+0)/1) 
++sb=(NM3_fw<300n)?(3.7e-07+NM3_l*1*0/2+0)/1:((3.4e-07+NM3_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM2 (net53 net53 GNDA SUB) n_mos_a l=NM2_l w=NM2_fw multi=1 m=NM2_m 
++ad=(NM2_fw<300n)?((0*(9e-14+(NM2_fw*1.4e-07)))+((9e-14+(NM2_fw*70n))))/1:((0*(3.8e-07*NM2_fw))+((3.4e-07*NM2_fw)))/1
++as=(NM2_fw<300n)?((9e-14+(NM2_fw*70n))+(0*(9e-14+(NM2_fw*1.4e-07)))+0)/1:((3.4e-07*NM2_fw)+(0*(3.8e-07*NM2_fw))+0)/1
++pd=(NM2_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM2_fw)))+((6.8e-07+(2*NM2_fw))))/1 
++ps=(NM2_fw<300n)?1.34e-06:((6.8e-07+(2*NM2_fw))+(0*(7.6e-07+(2*NM2_fw)))+0)/1 
++nrd=((NM2_fw<300n)?((0*(9e-14+(NM2_fw*140n)))+((9e-14+(NM2_fw*70n))))/1:((0*(3.8e-07*NM2_fw))+((3.4e-07*NM2_fw)))/1)/(NM2_fw*NM2_fw)
++nrs=((NM2_fw<300n)?((9e-14+(NM2_fw*70n))+(0*(9e-14+(NM2_fw*140n)))+0)/1:((3.4e-07*NM2_fw)+(0*(3.8e-07*NM2_fw))+0)/1)/(NM2_fw*NM2_fw)
++sa=(NM2_fw<300n)?(3.7e-07+NM2_l*1*0/2+0)/1:((3.4e-07+NM2_l*1*0/2+0)/1) 
++sb=(NM2_fw<300n)?(3.7e-07+NM2_l*1*0/2+0)/1:((3.4e-07+NM2_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM1 (net6 IREF net32 SUB) n_mos_a l=NM1_l w=NM1_fw multi=1 m=NM1_m 
++ad=(NM1_fw<300n)?((0*(9e-14+(NM1_fw*1.4e-07)))+((9e-14+(NM1_fw*70n))))/1:((0*(3.8e-07*NM1_fw))+((3.4e-07*NM1_fw)))/1
++as=(NM1_fw<300n)?((9e-14+(NM1_fw*70n))+(0*(9e-14+(NM1_fw*1.4e-07)))+0)/1:((3.4e-07*NM1_fw)+(0*(3.8e-07*NM1_fw))+0)/1
++pd=(NM1_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM1_fw)))+((6.8e-07+(2*NM1_fw))))/1 
++ps=(NM1_fw<300n)?1.34e-06:((6.8e-07+(2*NM1_fw))+(0*(7.6e-07+(2*NM1_fw)))+0)/1 
++nrd=((NM1_fw<300n)?((0*(9e-14+(NM1_fw*140n)))+((9e-14+(NM1_fw*70n))))/1:((0*(3.8e-07*NM1_fw))+((3.4e-07*NM1_fw)))/1)/(NM1_fw*NM1_fw)
++nrs=((NM1_fw<300n)?((9e-14+(NM1_fw*70n))+(0*(9e-14+(NM1_fw*140n)))+0)/1:((3.4e-07*NM1_fw)+(0*(3.8e-07*NM1_fw))+0)/1)/(NM1_fw*NM1_fw)
++sa=(NM1_fw<300n)?(3.7e-07+NM1_l*1*0/2+0)/1:((3.4e-07+NM1_l*1*0/2+0)/1) 
++sb=(NM1_fw<300n)?(3.7e-07+NM1_l*1*0/2+0)/1:((3.4e-07+NM1_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM0 (IREF IREF net53 SUB) n_mos_a l=NM0_l w=NM0_fw multi=1 m=NM0_m 
++ad=(NM0_fw<300n)?((0*(9e-14+(NM0_fw*1.4e-07)))+((9e-14+(NM0_fw*70n))))/1:((0*(3.8e-07*NM0_fw))+((3.4e-07*NM0_fw)))/1
++as=(NM0_fw<300n)?((9e-14+(NM0_fw*70n))+(0*(9e-14+(NM0_fw*1.4e-07)))+0)/1:((3.4e-07*NM0_fw)+(0*(3.8e-07*NM0_fw))+0)/1
++pd=(NM0_fw<300n)?1.34e-06:((0*(7.6e-07+(2*NM0_fw)))+((6.8e-07+(2*NM0_fw))))/1 
++ps=(NM0_fw<300n)?1.34e-06:((6.8e-07+(2*NM0_fw))+(0*(7.6e-07+(2*NM0_fw)))+0)/1 
++nrd=((NM0_fw<300n)?((0*(9e-14+(NM0_fw*140n)))+((9e-14+(NM0_fw*70n))))/1:((0*(3.8e-07*NM0_fw))+((3.4e-07*NM0_fw)))/1)/(NM0_fw*NM0_fw)
++nrs=((NM0_fw<300n)?((9e-14+(NM0_fw*70n))+(0*(9e-14+(NM0_fw*140n)))+0)/1:((3.4e-07*NM0_fw)+(0*(3.8e-07*NM0_fw))+0)/1)/(NM0_fw*NM0_fw)
++sa=(NM0_fw<300n)?(3.7e-07+NM0_l*1*0/2+0)/1:((3.4e-07+NM0_l*1*0/2+0)/1) 
++sb=(NM0_fw<300n)?(3.7e-07+NM0_l*1*0/2+0)/1:((3.4e-07+NM0_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+NM5 (net8 IREF net44 SUB) n_mos_a l=NM5_l w=NM5_fw multi=4 m=NM5_m 
++ad=(NM5_fw<300n)?((2*(9e-14+(NM5_fw*1.4e-07)))+0)/4:((2*(3.8e-07*NM5_fw))+0)/4 
++as=(NM5_fw<300n)?((9e-14+(NM5_fw*70n))+(1*(9e-14+(NM5_fw*1.4e-07)))+((9e-14+(NM5_fw*70n))))/4:((3.4e-07*NM5_fw)+(1*(3.8e-07*NM5_fw))+((3.4e-07*NM5_fw)))/4
++pd=(NM5_fw<300n)?7.4e-07:((2*(7.6e-07+(2*NM5_fw)))+0)/4 
++ps=(NM5_fw<300n)?1.04e-06:((6.8e-07+(2*NM5_fw))+(1*(7.6e-07+(2*NM5_fw)))+((6.8e-07+(2*NM5_fw))))/4
++nrd=((NM5_fw<300n)?((2*(9e-14+(NM5_fw*140n)))+0)/1:((2*(3.8e-07*NM5_fw))+0)/1)/(NM5_fw*NM5_fw)
++nrs=((NM5_fw<300n)?((9e-14+(NM5_fw*70n))+(1*(9e-14+(NM5_fw*140n)))+((9e-14+(NM5_fw*70n))))/1:((3.4e-07*NM5_fw)+(1*(3.8e-07*NM5_fw))+((3.4e-07*NM5_fw)))/1)/(NM5_fw*NM5_fw)
++sa=(NM5_fw<300n)?(1.48e-06+NM5_l*4*3/2+2.28e-06)/4:((1.36e-06+NM5_l*4*3/2+2.28e-06)/4)
++sb=(NM5_fw<300n)?(1.48e-06+NM5_l*4*3/2+2.28e-06)/4:((1.36e-06+NM5_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM12 (net52 outaverage net13 VDDA) p_mos_a l=PM12_l w=PM12_fw multi=6 m=PM12_m 
++ad=(PM12_fw<300n)?((3*(9e-14+(PM12_fw*1.4e-07)))+0)/6:((3*(3.8e-07*PM12_fw))+0)/6
++as=(PM12_fw<300n)?((9e-14+(PM12_fw*70n))+(2*(9e-14+(PM12_fw*1.4e-07)))+((9e-14+(PM12_fw*70n))))/6:((3.4e-07*PM12_fw)+(2*(3.8e-07*PM12_fw))+((3.4e-07*PM12_fw)))/6
++pd=(PM12_fw<300n)?7.4e-07:((3*(7.6e-07+(2*PM12_fw)))+0)/6 
++ps=(PM12_fw<300n)?9.4e-07:((6.8e-07+(2*PM12_fw))+(2*(7.6e-07+(2*PM12_fw)))+((6.8e-07+(2*PM12_fw))))/6
++nrd=((PM12_fw<300n)?((3*(9e-14+(PM12_fw*140n)))+0)/1:((3*(3.8e-07*PM12_fw))+0)/1)/(PM12_fw*PM12_fw)
++nrs=((PM12_fw<300n)?((9e-14+(PM12_fw*70n))+(2*(9e-14+(PM12_fw*140n)))+((9e-14+(PM12_fw*70n))))/1:((3.4e-07*PM12_fw)+(2*(3.8e-07*PM12_fw))+((3.4e-07*PM12_fw)))/1)/(PM12_fw*PM12_fw)
++sa=(PM12_fw<300n)?(2.22e-06+PM12_l*6*5/2+5.7e-06)/6:((2.04e-06+PM12_l*6*5/2+5.7e-06)/6)
++sb=(PM12_fw<300n)?(2.22e-06+PM12_l*6*5/2+5.7e-06)/6:((2.04e-06+PM12_l*6*5/2+5.7e-06)/6)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM11 (VOUTN net8 VDDA VDDA) p_mos_a l=PM11_l w=PM11_fw multi=4 m=PM11_m 
++ad=(PM11_fw<300n)?((2*(9e-14+(PM11_fw*1.4e-07)))+0)/4:((2*(3.8e-07*PM11_fw))+0)/4
++as=(PM11_fw<300n)?((9e-14+(PM11_fw*70n))+(1*(9e-14+(PM11_fw*1.4e-07)))+((9e-14+(PM11_fw*70n))))/4:((3.4e-07*PM11_fw)+(1*(3.8e-07*PM11_fw))+((3.4e-07*PM11_fw)))/4
++pd=(PM11_fw<300n)?7.4e-07:((2*(7.6e-07+(2*PM11_fw)))+0)/4 
++ps=(PM11_fw<300n)?1.04e-06:((6.8e-07+(2*PM11_fw))+(1*(7.6e-07+(2*PM11_fw)))+((6.8e-07+(2*PM11_fw))))/4
++nrd=((PM11_fw<300n)?((2*(9e-14+(PM11_fw*140n)))+0)/1:((2*(3.8e-07*PM11_fw))+0)/1)/(PM11_fw*PM11_fw)
++nrs=((PM11_fw<300n)?((9e-14+(PM11_fw*70n))+(1*(9e-14+(PM11_fw*140n)))+((9e-14+(PM11_fw*70n))))/1:((3.4e-07*PM11_fw)+(1*(3.8e-07*PM11_fw))+((3.4e-07*PM11_fw)))/1)/(PM11_fw*PM11_fw)
++sa=(PM11_fw<300n)?(1.48e-06+PM11_l*4*3/2+2.28e-06)/4:((1.36e-06+PM11_l*4*3/2+2.28e-06)/4)
++sb=(PM11_fw<300n)?(1.48e-06+PM11_l*4*3/2+2.28e-06)/4:((1.36e-06+PM11_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM7 (VOUTP net0 VDDA VDDA) p_mos_a l=PM7_l w=PM7_fw multi=4 m=PM7_m 
++ad=(PM7_fw<300n)?((2*(9e-14+(PM7_fw*1.4e-07)))+0)/4:((2*(3.8e-07*PM7_fw))+0)/4 
++as=(PM7_fw<300n)?((9e-14+(PM7_fw*70n))+(1*(9e-14+(PM7_fw*1.4e-07)))+((9e-14+(PM7_fw*70n))))/4:((3.4e-07*PM7_fw)+(1*(3.8e-07*PM7_fw))+((3.4e-07*PM7_fw)))/4
++pd=(PM7_fw<300n)?7.4e-07:((2*(7.6e-07+(2*PM7_fw)))+0)/4 
++ps=(PM7_fw<300n)?1.04e-06:((6.8e-07+(2*PM7_fw))+(1*(7.6e-07+(2*PM7_fw)))+((6.8e-07+(2*PM7_fw))))/4
++nrd=((PM7_fw<300n)?((2*(9e-14+(PM7_fw*140n)))+0)/1:((2*(3.8e-07*PM7_fw))+0)/1)/(PM7_fw*PM7_fw)
++nrs=((PM7_fw<300n)?((9e-14+(PM7_fw*70n))+(1*(9e-14+(PM7_fw*140n)))+((9e-14+(PM7_fw*70n))))/1:((3.4e-07*PM7_fw)+(1*(3.8e-07*PM7_fw))+((3.4e-07*PM7_fw)))/1)/(PM7_fw*PM7_fw)
++sa=(PM7_fw<300n)?(1.48e-06+PM7_l*4*3/2+2.28e-06)/4:((1.36e-06+PM7_l*4*3/2+2.28e-06)/4)
++sb=(PM7_fw<300n)?(1.48e-06+PM7_l*4*3/2+2.28e-06)/4:((1.36e-06+PM7_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM10 (net44 VINN net37 VDDA) p_mos_a l=PM10_l w=PM10_fw multi=2 m=PM10_m 
++ad=(PM10_fw<300n)?((1*(9e-14+(PM10_fw*1.4e-07)))+0)/2:((1*(3.8e-07*PM10_fw))+0)/2
++as=(PM10_fw<300n)?((9e-14+(PM10_fw*70n))+(0*(9e-14+(PM10_fw*1.4e-07)))+((9e-14+(PM10_fw*70n))))/2:((3.4e-07*PM10_fw)+(0*(3.8e-07*PM10_fw))+((3.4e-07*PM10_fw)))/2
++pd=(PM10_fw<300n)?7.4e-07:((1*(7.6e-07+(2*PM10_fw)))+0)/2 
++ps=(PM10_fw<300n)?1.34e-06:((6.8e-07+(2*PM10_fw))+(0*(7.6e-07+(2*PM10_fw)))+((6.8e-07+(2*PM10_fw))))/2
++nrd=((PM10_fw<300n)?((1*(9e-14+(PM10_fw*140n)))+0)/1:((1*(3.8e-07*PM10_fw))+0)/1)/(PM10_fw*PM10_fw)
++nrs=((PM10_fw<300n)?((9e-14+(PM10_fw*70n))+(0*(9e-14+(PM10_fw*140n)))+((9e-14+(PM10_fw*70n))))/1:((3.4e-07*PM10_fw)+(0*(3.8e-07*PM10_fw))+((3.4e-07*PM10_fw)))/1)/(PM10_fw*PM10_fw)
++sa=(PM10_fw<300n)?(7.4e-07+PM10_l*2*1/2+3.8e-07)/2:((6.8e-07+PM10_l*2*1/2+3.8e-07)/2)
++sb=(PM10_fw<300n)?(7.4e-07+PM10_l*2*1/2+3.8e-07)/2:((6.8e-07+PM10_l*2*1/2+3.8e-07)/2)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM9 (net4 VINP net37 VDDA) p_mos_a l=PM9_l w=PM9_fw multi=2 m=PM9_m 
++ad=(PM9_fw<300n)?((1*(9e-14+(PM9_fw*1.4e-07)))+0)/2:((1*(3.8e-07*PM9_fw))+0)/2 
++as=(PM9_fw<300n)?((9e-14+(PM9_fw*70n))+(0*(9e-14+(PM9_fw*1.4e-07)))+((9e-14+(PM9_fw*70n))))/2:((3.4e-07*PM9_fw)+(0*(3.8e-07*PM9_fw))+((3.4e-07*PM9_fw)))/2
++pd=(PM9_fw<300n)?7.4e-07:((1*(7.6e-07+(2*PM9_fw)))+0)/2 
++ps=(PM9_fw<300n)?1.34e-06:((6.8e-07+(2*PM9_fw))+(0*(7.6e-07+(2*PM9_fw)))+((6.8e-07+(2*PM9_fw))))/2
++nrd=((PM9_fw<300n)?((1*(9e-14+(PM9_fw*140n)))+0)/1:((1*(3.8e-07*PM9_fw))+0)/1)/(PM9_fw*PM9_fw)
++nrs=((PM9_fw<300n)?((9e-14+(PM9_fw*70n))+(0*(9e-14+(PM9_fw*140n)))+((9e-14+(PM9_fw*70n))))/1:((3.4e-07*PM9_fw)+(0*(3.8e-07*PM9_fw))+((3.4e-07*PM9_fw)))/1)/(PM9_fw*PM9_fw)
++sa=(PM9_fw<300n)?(7.4e-07+PM9_l*2*1/2+3.8e-07)/2:((6.8e-07+PM9_l*2*1/2+3.8e-07)/2)
++sb=(PM9_fw<300n)?(7.4e-07+PM9_l*2*1/2+3.8e-07)/2:((6.8e-07+PM9_l*2*1/2+3.8e-07)/2)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM8 (net3 VCM net13 VDDA) p_mos_a l=PM8_l w=PM8_fw multi=6 m=PM8_m 
++ad=(PM8_fw<300n)?((3*(9e-14+(PM8_fw*1.4e-07)))+0)/6:((3*(3.8e-07*PM8_fw))+0)/6 
++as=(PM8_fw<300n)?((9e-14+(PM8_fw*70n))+(2*(9e-14+(PM8_fw*1.4e-07)))+((9e-14+(PM8_fw*70n))))/6:((3.4e-07*PM8_fw)+(2*(3.8e-07*PM8_fw))+((3.4e-07*PM8_fw)))/6
++pd=(PM8_fw<300n)?7.4e-07:((3*(7.6e-07+(2*PM8_fw)))+0)/6 
++ps=(PM8_fw<300n)?9.4e-07:((6.8e-07+(2*PM8_fw))+(2*(7.6e-07+(2*PM8_fw)))+((6.8e-07+(2*PM8_fw))))/6
++nrd=((PM8_fw<300n)?((3*(9e-14+(PM8_fw*140n)))+0)/1:((3*(3.8e-07*PM8_fw))+0)/1)/(PM8_fw*PM8_fw)
++nrs=((PM8_fw<300n)?((9e-14+(PM8_fw*70n))+(2*(9e-14+(PM8_fw*140n)))+((9e-14+(PM8_fw*70n))))/1:((3.4e-07*PM8_fw)+(2*(3.8e-07*PM8_fw))+((3.4e-07*PM8_fw)))/1)/(PM8_fw*PM8_fw)
++sa=(PM8_fw<300n)?(2.22e-06+PM8_l*6*5/2+5.7e-06)/6:((2.04e-06+PM8_l*6*5/2+5.7e-06)/6)
++sb=(PM8_fw<300n)?(2.22e-06+PM8_l*6*5/2+5.7e-06)/6:((2.04e-06+PM8_l*6*5/2+5.7e-06)/6)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM6 (vcmfb net5 VDDA VDDA) p_mos_a l=PM6_l w=PM6_fw multi=1 m=PM6_m 
++ad=(PM6_fw<300n)?((0*(9e-14+(PM6_fw*1.4e-07)))+((9e-14+(PM6_fw*70n))))/1:((0*(3.8e-07*PM6_fw))+((3.4e-07*PM6_fw)))/1
++as=(PM6_fw<300n)?((9e-14+(PM6_fw*70n))+(0*(9e-14+(PM6_fw*1.4e-07)))+0)/1:((3.4e-07*PM6_fw)+(0*(3.8e-07*PM6_fw))+0)/1
++pd=(PM6_fw<300n)?1.34e-06:((0*(7.6e-07+(2*PM6_fw)))+((6.8e-07+(2*PM6_fw))))/1 
++ps=(PM6_fw<300n)?1.34e-06:((6.8e-07+(2*PM6_fw))+(0*(7.6e-07+(2*PM6_fw)))+0)/1 
++nrd=((PM6_fw<300n)?((0*(9e-14+(PM6_fw*140n)))+((9e-14+(PM6_fw*70n))))/1:((0*(3.8e-07*PM6_fw))+((3.4e-07*PM6_fw)))/1)/(PM6_fw*PM6_fw)
++nrs=((PM6_fw<300n)?((9e-14+(PM6_fw*70n))+(0*(9e-14+(PM6_fw*140n)))+0)/1:((3.4e-07*PM6_fw)+(0*(3.8e-07*PM6_fw))+0)/1)/(PM6_fw*PM6_fw)
++sa=(PM6_fw<300n)?(3.7e-07+PM6_l*1*0/2+0)/1:((3.4e-07+PM6_l*1*0/2+0)/1) 
++sb=(PM6_fw<300n)?(3.7e-07+PM6_l*1*0/2+0)/1:((3.4e-07+PM6_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM5 (net5 net5 VDDA VDDA) p_mos_a l=PM5_l w=PM5_fw multi=1 m=PM5_m 
++ad=(PM5_fw<300n)?((0*(9e-14+(PM5_fw*1.4e-07)))+((9e-14+(PM5_fw*70n))))/1:((0*(3.8e-07*PM5_fw))+((3.4e-07*PM5_fw)))/1
++as=(PM5_fw<300n)?((9e-14+(PM5_fw*70n))+(0*(9e-14+(PM5_fw*1.4e-07)))+0)/1:((3.4e-07*PM5_fw)+(0*(3.8e-07*PM5_fw))+0)/1
++pd=(PM5_fw<300n)?1.34e-06:((0*(7.6e-07+(2*PM5_fw)))+((6.8e-07+(2*PM5_fw))))/1 
++ps=(PM5_fw<300n)?1.34e-06:((6.8e-07+(2*PM5_fw))+(0*(7.6e-07+(2*PM5_fw)))+0)/1 
++nrd=((PM5_fw<300n)?((0*(9e-14+(PM5_fw*140n)))+((9e-14+(PM5_fw*70n))))/1:((0*(3.8e-07*PM5_fw))+((3.4e-07*PM5_fw)))/1)/(PM5_fw*PM5_fw)
++nrs=((PM5_fw<300n)?((9e-14+(PM5_fw*70n))+(0*(9e-14+(PM5_fw*140n)))+0)/1:((3.4e-07*PM5_fw)+(0*(3.8e-07*PM5_fw))+0)/1)/(PM5_fw*PM5_fw)
++sa=(PM5_fw<300n)?(3.7e-07+PM5_l*1*0/2+0)/1:((3.4e-07+PM5_l*1*0/2+0)/1) 
++sb=(PM5_fw<300n)?(3.7e-07+PM5_l*1*0/2+0)/1:((3.4e-07+PM5_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM4 (net13 net6 VDDA VDDA) p_mos_a l=PM4_l w=PM4_fw multi=4 m=PM4_m 
++ad=(PM4_fw<300n)?((2*(9e-14+(PM4_fw*1.4e-07)))+0)/4:((2*(3.8e-07*PM4_fw))+0)/4 
++as=(PM4_fw<300n)?((9e-14+(PM4_fw*70n))+(1*(9e-14+(PM4_fw*1.4e-07)))+((9e-14+(PM4_fw*70n))))/4:((3.4e-07*PM4_fw)+(1*(3.8e-07*PM4_fw))+((3.4e-07*PM4_fw)))/4
++pd=(PM4_fw<300n)?7.4e-07:((2*(7.6e-07+(2*PM4_fw)))+0)/4 
++ps=(PM4_fw<300n)?1.04e-06:((6.8e-07+(2*PM4_fw))+(1*(7.6e-07+(2*PM4_fw)))+((6.8e-07+(2*PM4_fw))))/4
++nrd=((PM4_fw<300n)?((2*(9e-14+(PM4_fw*140n)))+0)/1:((2*(3.8e-07*PM4_fw))+0)/1)/(PM4_fw*PM4_fw)
++nrs=((PM4_fw<300n)?((9e-14+(PM4_fw*70n))+(1*(9e-14+(PM4_fw*140n)))+((9e-14+(PM4_fw*70n))))/1:((3.4e-07*PM4_fw)+(1*(3.8e-07*PM4_fw))+((3.4e-07*PM4_fw)))/1)/(PM4_fw*PM4_fw)
++sa=(PM4_fw<300n)?(1.48e-06+PM4_l*4*3/2+2.28e-06)/4:((1.36e-06+PM4_l*4*3/2+2.28e-06)/4)
++sb=(PM4_fw<300n)?(1.48e-06+PM4_l*4*3/2+2.28e-06)/4:((1.36e-06+PM4_l*4*3/2+2.28e-06)/4)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM3 (net8 vcmfb VDDA VDDA) p_mos_a l=PM3_l w=PM3_fw multi=40 m=PM3_m 
++ad=(PM3_fw<300n)?((20*(9e-14+(PM3_fw*1.4e-07)))+0)/40:((20*(3.8e-07*PM3_fw))+0)/40
++as=(PM3_fw<300n)?((9e-14+(PM3_fw*70n))+(19*(9e-14+(PM3_fw*1.4e-07)))+((9e-14+(PM3_fw*70n))))/40:((3.4e-07*PM3_fw)+(19*(3.8e-07*PM3_fw))+((3.4e-07*PM3_fw)))/40
++pd=(PM3_fw<300n)?7.4e-07:((20*(7.6e-07+(2*PM3_fw)))+0)/40 
++ps=(PM3_fw<300n)?7.7e-07:((6.8e-07+(2*PM3_fw))+(19*(7.6e-07+(2*PM3_fw)))+((6.8e-07+(2*PM3_fw))))/40
++nrd=((PM3_fw<300n)?((20*(9e-14+(PM3_fw*140n)))+0)/1:((20*(3.8e-07*PM3_fw))+0)/1)/(PM3_fw*PM3_fw)
++nrs=((PM3_fw<300n)?((9e-14+(PM3_fw*70n))+(19*(9e-14+(PM3_fw*140n)))+((9e-14+(PM3_fw*70n))))/1:((3.4e-07*PM3_fw)+(19*(3.8e-07*PM3_fw))+((3.4e-07*PM3_fw)))/1)/(PM3_fw*PM3_fw)
++sa=(PM3_fw<300n)?(1.48e-05+PM3_l*40*39/2+0.0002964)/40:((1.36e-05+PM3_l*40*39/2+0.0002964)/40)
++sb=(PM3_fw<300n)?(1.48e-05+PM3_l*40*39/2+0.0002964)/40:((1.36e-05+PM3_l*40*39/2+0.0002964)/40)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM2 (net0 vcmfb VDDA VDDA) p_mos_a l=PM2_l w=PM2_fw multi=40 m=PM2_m 
++ad=(PM2_fw<300n)?((20*(9e-14+(PM2_fw*1.4e-07)))+0)/40:((20*(3.8e-07*PM2_fw))+0)/40
++as=(PM2_fw<300n)?((9e-14+(PM2_fw*70n))+(19*(9e-14+(PM2_fw*1.4e-07)))+((9e-14+(PM2_fw*70n))))/40:((3.4e-07*PM2_fw)+(19*(3.8e-07*PM2_fw))+((3.4e-07*PM2_fw)))/40
++pd=(PM2_fw<300n)?7.4e-07:((20*(7.6e-07+(2*PM2_fw)))+0)/40 
++ps=(PM2_fw<300n)?7.7e-07:((6.8e-07+(2*PM2_fw))+(19*(7.6e-07+(2*PM2_fw)))+((6.8e-07+(2*PM2_fw))))/40
++nrd=((PM2_fw<300n)?((20*(9e-14+(PM2_fw*140n)))+0)/1:((20*(3.8e-07*PM2_fw))+0)/1)/(PM2_fw*PM2_fw)
++nrs=((PM2_fw<300n)?((9e-14+(PM2_fw*70n))+(19*(9e-14+(PM2_fw*140n)))+((9e-14+(PM2_fw*70n))))/1:((3.4e-07*PM2_fw)+(19*(3.8e-07*PM2_fw))+((3.4e-07*PM2_fw)))/1)/(PM2_fw*PM2_fw)
++sa=(PM2_fw<300n)?(1.48e-05+PM2_l*40*39/2+0.0002964)/40:((1.36e-05+PM2_l*40*39/2+0.0002964)/40)
++sb=(PM2_fw<300n)?(1.48e-05+PM2_l*40*39/2+0.0002964)/40:((1.36e-05+PM2_l*40*39/2+0.0002964)/40)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM1 (net37 net6 VDDA VDDA) p_mos_a l=PM1_l w=PM1_fw multi=8 m=PM1_m 
++ad=(PM1_fw<300n)?((4*(9e-14+(PM1_fw*1.4e-07)))+0)/8:((4*(3.8e-07*PM1_fw))+0)/8 
++as=(PM1_fw<300n)?((9e-14+(PM1_fw*70n))+(3*(9e-14+(PM1_fw*1.4e-07)))+((9e-14+(PM1_fw*70n))))/8:((3.4e-07*PM1_fw)+(3*(3.8e-07*PM1_fw))+((3.4e-07*PM1_fw)))/8
++pd=(PM1_fw<300n)?7.4e-07:((4*(7.6e-07+(2*PM1_fw)))+0)/8 
++ps=(PM1_fw<300n)?8.9e-07:((6.8e-07+(2*PM1_fw))+(3*(7.6e-07+(2*PM1_fw)))+((6.8e-07+(2*PM1_fw))))/8
++nrd=((PM1_fw<300n)?((4*(9e-14+(PM1_fw*140n)))+0)/1:((4*(3.8e-07*PM1_fw))+0)/1)/(PM1_fw*PM1_fw)
++nrs=((PM1_fw<300n)?((9e-14+(PM1_fw*70n))+(3*(9e-14+(PM1_fw*140n)))+((9e-14+(PM1_fw*70n))))/1:((3.4e-07*PM1_fw)+(3*(3.8e-07*PM1_fw))+((3.4e-07*PM1_fw)))/1)/(PM1_fw*PM1_fw)
++sa=(PM1_fw<300n)?(2.96e-06+PM1_l*8*7/2+1.064e-05)/8:((2.72e-06+PM1_l*8*7/2+1.064e-05)/8)
++sb=(PM1_fw<300n)?(2.96e-06+PM1_l*8*7/2+1.064e-05)/8:((2.72e-06+PM1_l*8*7/2+1.064e-05)/8)
++sca=0 scb=0 scc=0 trise=0 option_vop=7 isoring=0
+PM0 (net6 net6 VDDA VDDA) p_mos_a l=PM0_l w=PM0_fw multi=1 m=PM0_m 
++ad=(PM0_fw<300n)?((0*(9e-14+(PM0_fw*1.4e-07)))+((9e-14+(PM0_fw*70n))))/1:((0*(3.8e-07*PM0_fw))+((3.4e-07*PM0_fw)))/1
++as=(PM0_fw<300n)?((9e-14+(PM0_fw*70n))+(0*(9e-14+(PM0_fw*1.4e-07)))+0)/1:((3.4e-07*PM0_fw)+(0*(3.8e-07*PM0_fw))+0)/1
++pd=(PM0_fw<300n)?1.34e-06:((0*(7.6e-07+(2*PM0_fw)))+((6.8e-07+(2*PM0_fw))))/1 
++ps=(PM0_fw<300n)?1.34e-06:((6.8e-07+(2*PM0_fw))+(0*(7.6e-07+(2*PM0_fw)))+0)/1 
++nrd=((PM0_fw<300n)?((0*(9e-14+(PM0_fw*140n)))+((9e-14+(PM0_fw*70n))))/1:((0*(3.8e-07*PM0_fw))+((3.4e-07*PM0_fw)))/1)/(PM0_fw*PM0_fw)
++nrs=((PM0_fw<300n)?((9e-14+(PM0_fw*70n))+(0*(9e-14+(PM0_fw*140n)))+0)/1:((3.4e-07*PM0_fw)+(0*(3.8e-07*PM0_fw))+0)/1)/(PM0_fw*PM0_fw)
++sa=(PM0_fw<300n)?(3.7e-07+PM0_l*1*0/2+0)/1:((3.4e-07+PM0_l*1*0/2+0)/1) 
++sb=(PM0_fw<300n)?(3.7e-07+PM0_l*1*0/2+0)/1:((3.4e-07+PM0_l*1*0/2+0)/1) sca=0 
++scb=0 scc=0 trise=0 option_vop=7 isoring=0
+R6 (net12 net12) res_n_poly m=1 segL=R6_segL segW=R6_segW
+
+R5 (net11 net11) res_n_poly m=1 segL=R5_segL segW=R5_segW
+
+R3 (outaverage R3_ic_2) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_2_res_gen (R3_ic_2 R3_ic_3 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_3_res_gen (R3_ic_3 R3_ic_4 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_4_res_gen (R3_ic_4 R3_ic_5 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_5_res_gen (R3_ic_5 R3_ic_6 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_6_res_gen (R3_ic_6 R3_ic_7 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_7_res_gen (R3_ic_7 R3_ic_8 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_8_res_gen (R3_ic_8 R3_ic_9 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_9_res_gen (R3_ic_9 R3_ic_10 ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+R3_10_res_gen (R3_ic_10 VOUTN ) res_p_poly m=1 segL=R3_segL segW=R3_segW
+
+R1 (net0 net17) res_p_poly m=1 segL=R1_segL segW=R1_segW
+
+R2 (net8 net7) res_p_poly m=1 segL=R2_segL segW=R2_segW
+
+R0 (VOUTP R0_ic_2) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_2_res_gen (R0_ic_2 R0_ic_3 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_3_res_gen (R0_ic_3 R0_ic_4 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_4_res_gen (R0_ic_4 R0_ic_5 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_5_res_gen (R0_ic_5 R0_ic_6 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_6_res_gen (R0_ic_6 R0_ic_7 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_7_res_gen (R0_ic_7 R0_ic_8 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_8_res_gen (R0_ic_8 R0_ic_9 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_9_res_gen (R0_ic_9 R0_ic_10 ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+R0_10_res_gen (R0_ic_10 outaverage ) res_p_poly m=1 segL=R0_segL segW=R0_segW
+
+C5 (net12 net12) cap_mim l=C5_l w=10u m=1 trise=0
+C11 (net17 VOUTP) cap_mim l=C11_l w=30u m=2 trise=0
+C0 (net7 VOUTN) cap_mim l=C0_l w=30u m=2 trise=0
+C4 (net11 net11) cap_mim l=C4_l w=10u m=1 trise=0
+C3 (VOUTN outaverage) cap_mim l=C3_l w=20u m=1 trise=0
+C2 (outaverage VOUTP) cap_mim l=C2_l w=20u m=1 trise=0
+ends OPA
+
+////////////////////////////////////////
+// Library : 2026_EDA_case1
+// Cell    : OPA_loopgain
+// View    : schematic
+////////////////////////////////////////
+
+VV0 (GND 0) vsource dc=0 type=dc
+VV_P (VDD 0) vsource dc=vdd type=dc
+VV3 (net1 0) vsource dc=vdd/2 type=dc
+VV1 (SUB 0) vsource dc=0 type=dc
+E0 (net1 vin_n net0 0) vcvs gain=0.5
+E2 (vin_p net1 net0 0) vcvs gain=0.5
+I0 (IREF GND SUB net1 net2 vin_n vin_p vout_n vout_p) OPA
+RR0 (net2 VDD) resistor r=10m
+II12 (VDD IREF) isource dc=I_BIAS type=dc
+CC2 (0 vout_p) capacitor c=100f
+CC0 (0 vout_n) capacitor c=100f
+V5 (net0 0) vsource mag=1 phase=0 type=sine sinedc=0 ampl=0
+

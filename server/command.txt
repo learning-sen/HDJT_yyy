@@ -1,0 +1,8 @@
+case1
+--mde_cell OPA_loopgain
+--mde_view spe_state1_Corner
+case2
+--mde_cell OPA_loopgain2
+--mde_view spe_state1_Corner2
+
+\u8bf4\u660e\uff1a\u8fd9\u90e8\u5206\u4e3ascore.py\u63d0\u4f9b\u8f93\u5165\u53c2\u6570

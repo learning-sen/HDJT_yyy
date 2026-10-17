@@ -1,0 +1,1 @@
+./run_score.sh  eda_2026_case_1.tar.gz
