@@ -3,37 +3,42 @@
 """
 模块四-① 参数化脚本：把电路图里的器件尺寸导出成"待优化变量"
 
-对应赛题模块四第 1 项：
-    "电路图器件尺寸转为待优化变量的参数化脚本"
+对应赛题模块四第 1 项：「电路图器件尺寸转为待优化变量的参数化脚本」
 
-它做三件事
-----------
-1. 遍历 schematic 的实例，把可变尺寸参数（MOS: m/l/fw；电阻: segW/segL/segments；
-   电容: m/l/fw）导出成**赛方格式**的参数文件（`"parameter","NAME","VALUE"`），
-   与 `case1_params_0.txt` / `extractcdfVal_0.txt` 完全一致，可直接喂给
-   模块三的优化器或 `sim_engine.py`。
-2. 同时导出**增强元数据** `params_meta.json`：每个变量的器件/参数/当前值/单位/
-   取值上下界/类型（连续 or 整数），供模块三构造搜索空间，不必再猜边界。
-3. 打印统计（器件数、变量数、按参数类型分布），并与模块二的 105 个符号口径对照。
+做三件事
+--------
+1. 遍历 schematic，把**真实 schema** 的尺寸参数导出成赛方格式
+   （`"parameter","NAME","VALUE"`），可直接喂给模块三优化器或 `sim_engine.py`。
+2. 导出增强元数据 `params_meta.json`：器件/参数/当前值/单位/**上下界**/类型，
+   供模块三构造搜索空间（不用再猜边界）。
+3. 打印统计，并与赛方真实口径对照（Public 电路 = **105** 个变量）。
+
+真实 schema（2026-10-18 用真实 `case1_params_0.txt` 反推，见 module3/修正说明.md P0-4）
+--------------------------------------------------------------------------------
+    105 = MOS 29×3 (`m,l,fw`) + 电容 6×1 (**只有 `l`**) + 电阻 6×2 (`segL,segW`)
+    —— 电容的 `fw/m`、电阻的 `segments` 都在参数文件之外（score.py 直接从电路 CV 读）。
+
+边界（P0-3，严格对齐 score.py::read_parameters 的 clamp）
+--------------------------------------------------------
+    fw 0.15..50 | segW 0.42..10 | segL 5..100 | 电容 l 4..30 | 其它 l 0.13..20 | m/segments 整数 1..100
 
 用法
 ----
     pythone param_extract.py --ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic \
-        --out_dir ./param_out [--out_name extractcdfVal_0.txt]
+        --out_dir ./param_out [--out_name extractcdfVal_0.txt] [--expect 105]
 
-    python param_extract.py --mock --out_dir ./param_out     # 本地验证
+    python param_extract.py --mock --out_dir ./param_out      # 本地验证
 
-产物
-----
-    param_out/extractcdfVal_0.txt   赛方格式的待优化变量表
-    param_out/params_meta.json      增强元数据（含边界/类型/器件归类）
-    param_out/params_table.md       人读表格
+产物：extractcdfVal_0.txt / params_meta.json / params_table.md
 """
 import argparse
 import io
 import json
 import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from m4_common import (EXPORT_SCHEMA, UNIT, bounds_for, kind_of, param_to_float)
 
 try:
     import pyAether as ae
@@ -46,59 +51,15 @@ DEFAULTS = {
     "ae_view": "schematic",
     "out_dir": "./param_out",
     "out_name": "extractcdfVal_0.txt",
+    "expect": 105,        # Public 电路的真实变量数；Hidden 不同，仅作提示
 }
-
-# 每类器件导出的参数与边界（边界来自赛题附件 2：W 0.13~20µm、L 0.13~10µm、m 1~20）
-KIND_SPEC = {
-    "R": {"params": ("segW", "segL", "segments"),
-          "bounds": {"segW": (0.13, 20.0), "segL": (0.13, 20.0), "segments": (1, 20)},
-          "integer": ("segments",)},
-    "C": {"params": ("m", "l", "fw"),
-          "bounds": {"m": (1, 20), "l": (0.13, 20.0), "fw": (0.13, 20.0)},
-          "integer": ("m",)},
-    "MOS": {"params": ("m", "l", "fw"),
-            "bounds": {"m": (1, 20), "l": (0.13, 10.0), "fw": (0.13, 20.0)},
-            "integer": ("m",)},
-}
-
-UNIT = {"segW": "µm", "segL": "µm", "segments": "-", "m": "-", "l": "µm", "fw": "µm"}
-
-
-def kind_of(inst_name):
-    """按实例名前缀判类型：R* 电阻 / C* 电容 / NM|PM 晶体管 / 其它跳过。"""
-    n = str(inst_name)
-    if n[:1] in ("R", "r"):
-        return "R"
-    if n[:1] in ("C", "c"):
-        return "C"
-    if n.startswith(("NM", "PM", "nm", "pm")):
-        return "MOS"
-    return None
-
-
-def param_to_float(raw):
-    """'4u' / '1e-6' / '2' -> float（SI 数值）。"""
-    s = str(raw).strip().strip('"').strip("'")
-    mult = 1.0
-    for suf, m in (("meg", 1e6), ("k", 1e3), ("u", 1e-6), ("n", 1e-9),
-                   ("p", 1e-12), ("f", 1e-15), ("m", 1e-3)):
-        if s.lower().endswith(suf):
-            mult = m
-            s = s[: -len(suf)]
-            break
-    return float(s) * mult
-
-
-def format_like_schematic(raw):
-    """把原始值原样返回（赛方格式里保留 '4u' 这种写法最稳妥）。"""
-    return str(raw).strip().strip('"').strip("'")
 
 
 # ---------------------------------------------------------------------------
-# 真机导出
+# 导出
 # ---------------------------------------------------------------------------
 def export_from_cv(lib, cell, view):
-    """返回 [(symbol, raw_value, kind, param)]。"""
+    """返回 [(symbol, raw_value, kind, param)]，schema 见 EXPORT_SCHEMA。"""
     if ae is None:
         raise RuntimeError("未导入 pyAether")
     ae.emyInitAether("-adv")
@@ -111,7 +72,7 @@ def export_from_cv(lib, cell, view):
             kind = kind_of(inst.name)
             if kind is None:
                 continue
-            for p in KIND_SPEC[kind]["params"]:
+            for p in EXPORT_SCHEMA[kind]:
                 try:
                     raw = ae.aeEmyInstGetParameter(p, inst)
                 except Exception as e:
@@ -119,7 +80,7 @@ def export_from_cv(lib, cell, view):
                     continue
                 if raw is None or str(raw).strip() == "":
                     continue
-                rows.append(("%s_%s" % (inst.name, p), format_like_schematic(raw), kind, p))
+                rows.append(("%s_%s" % (inst.name, p), str(raw).strip().strip('"'), kind, p))
     finally:
         try:
             ae.dbCloseCV(cv)
@@ -129,12 +90,12 @@ def export_from_cv(lib, cell, view):
 
 
 def mock_rows():
-    """本地验证用的小电路：2 MOS + 1 R + 1 C。"""
+    """本地验证用的小电路：2 MOS + 1 R + 1 C（按真实 schema：3+3+2+1 = 9 个变量）。"""
     return [
         ("NM0_m", "8", "MOS", "m"), ("NM0_l", "1u", "MOS", "l"), ("NM0_fw", "4u", "MOS", "fw"),
         ("PM0_m", "2", "MOS", "m"), ("PM0_l", "4u", "MOS", "l"), ("PM0_fw", "4u", "MOS", "fw"),
         ("R0_segW", "2u", "R", "segW"), ("R0_segL", "25u", "R", "segL"),
-        ("C0_m", "1", "C", "m"), ("C0_l", "20u", "C", "l"), ("C0_fw", "20u", "C", "fw"),
+        ("C0_l", "20u", "C", "l"),
     ]
 
 
@@ -143,45 +104,54 @@ def mock_rows():
 # ---------------------------------------------------------------------------
 def write_outputs(rows, out_dir, out_name, source_note):
     os.makedirs(out_dir, exist_ok=True)
-    # 1) 赛方格式（与 case1_params_0.txt / extractcdfVal_0.txt 一致）
     param_path = os.path.join(out_dir, out_name)
     with io.open(param_path, "w", encoding="utf-8", newline="\n") as f:
-        for sym, raw, _kind, _p in rows:
+        for sym, raw, _k, _p in rows:
             f.write('"parameter","%s","%s"\n' % (sym, raw))
 
-    # 2) 增强元数据
     meta = []
     for sym, raw, kind, p in rows:
         inst = sym[: -(len(p) + 1)]
-        lo, hi = KIND_SPEC[kind]["bounds"][p]
-        try:
-            val = param_to_float(raw)
-            val_um = val * 1e6 if p in ("segW", "segL", "l", "fw") else val
-        except Exception:
-            val_um = None
-        meta.append({
-            "symbol": sym, "inst": inst, "param": p, "kind": kind,
-            "raw": raw, "value_um": val_um,
-            "unit": UNIT.get(p, ""),
-            "min": lo, "max": hi,
-            "type": "integer" if p in KIND_SPEC[kind]["integer"] else "continuous",
-        })
-    with io.open(os.path.join(out_dir, "params_meta.json"), "w", encoding="utf-8") as f:
-        json.dump({"source": source_note, "n_vars": len(meta), "variables": meta},
-                  f, ensure_ascii=False, indent=1)
+        lo, hi, is_int = bounds_for(kind, p)
+        val_um = None
+        if p not in ("m", "segments", "multi"):
+            try:
+                val_um = param_to_float(raw)
+            except ValueError:
+                pass
+        else:
+            try:
+                val_um = float(raw)
+            except ValueError:
+                pass
+        meta.append({"symbol": sym, "inst": inst, "param": p, "kind": kind,
+                     "raw": raw, "value_um": val_um, "unit": UNIT.get(p, ""),
+                     "min": lo, "max": hi, "type": "integer" if is_int else "continuous"})
 
-    # 3) 人读表格
-    by_kind = {}
-    by_param = {}
+    with io.open(os.path.join(out_dir, "params_meta.json"), "w", encoding="utf-8") as f:
+        json.dump({"source": source_note, "n_vars": len(meta), "schema": EXPORT_SCHEMA,
+                   "variables": meta}, f, ensure_ascii=False, indent=1)
+
+    by_kind, by_param = {}, {}
     for m in meta:
         by_kind[m["kind"]] = by_kind.get(m["kind"], 0) + 1
         by_param[m["param"]] = by_param.get(m["param"], 0) + 1
+    # 越界检查（很重要：优化空间必须落在评分器的 clamp 内）
+    out_of_range = []
+    for m in meta:
+        if m["value_um"] is None:
+            continue
+        if not (m["min"] - 1e-12 <= m["value_um"] <= m["max"] + 1e-12):
+            out_of_range.append((m["symbol"], m["value_um"], m["min"], m["max"]))
+
     lines = [
         "# 待优化变量（参数化脚本导出）", "",
         "- 来源：%s" % source_note,
         "- 变量总数：**%d**" % len(meta),
-        "- 按器件类型：%s" % ", ".join("%s=%d" % (k, v) for k, v in sorted(by_kind.items())),
-        "- 按参数类型：%s" % ", ".join("%s=%d" % (k, v) for k, v in sorted(by_param.items())),
+        "- 按器件类型：%s" % ", ".join("%s=%d" % kv for kv in sorted(by_kind.items())),
+        "- 按参数类型：%s" % ", ".join("%s=%d" % kv for kv in sorted(by_param.items())),
+        "- schema：MOS=%s / C=%s / R=%s" % (EXPORT_SCHEMA["MOS"], EXPORT_SCHEMA["C"], EXPORT_SCHEMA["R"]),
+        "- 越界变量：%d" % len(out_of_range),
         "", "| 变量 | 器件 | 参数 | 当前值 | 单位 | 下界 | 上界 | 类型 |",
         "|---|---|---|---|---|---|---|---|",
     ]
@@ -195,9 +165,13 @@ def write_outputs(rows, out_dir, out_name, source_note):
     print("==== 导出 %d 个待优化变量 -> %s ====" % (len(meta), param_path))
     print("     器件类型分布: %s" % dict(sorted(by_kind.items())))
     print("     参数类型分布: %s" % dict(sorted(by_param.items())))
+    if out_of_range:
+        print("     ⚠️ 有 %d 个变量超出评分器 clamp（会被 score.py 夹住）:" % len(out_of_range))
+        for s, v, lo, hi in out_of_range[:8]:
+            print("        %s = %s 不在 [%s, %s]" % (s, v, lo, hi))
     print("     元数据: %s" % os.path.join(out_dir, "params_meta.json"))
     print("     表格  : %s" % os.path.join(out_dir, "params_table.md"))
-    return meta
+    return meta, out_of_range
 
 
 def main(argv=None):
@@ -207,12 +181,14 @@ def main(argv=None):
     ap.add_argument("--ae_view", default=DEFAULTS["ae_view"])
     ap.add_argument("--out_dir", default=DEFAULTS["out_dir"])
     ap.add_argument("--out_name", default=DEFAULTS["out_name"])
+    ap.add_argument("--expect", type=int, default=DEFAULTS["expect"],
+                    help="期望变量数（Public=105；Hidden 不同，只作提示）")
     ap.add_argument("--mock", action="store_true", help="本地验证（假数据，不需要 PyAether）")
     a = ap.parse_args(argv)
 
     if a.mock:
         rows = mock_rows()
-        note = "mock（假电路：NM0/PM0/R0/C0）"
+        note = "mock（假电路：NM0/PM0/R0/C0，按真实 schema）"
     else:
         if ae is None:
             print("ERROR: 未导入 pyAether；请在服务器上 source setup.bash 后运行，或加 --mock",
@@ -229,14 +205,12 @@ def main(argv=None):
         print("ERROR: 没有导出任何变量（检查器件名前缀是否为 R/C/NM/PM）", file=sys.stderr)
         return 4
 
-    meta = write_outputs(rows, a.out_dir, a.out_name, note)
+    meta, out_of_range = write_outputs(rows, a.out_dir, a.out_name, note)
 
-    # 与模块二的 105 个符号口径对照（只做提示，不做断言：Hidden 电路规模不同）
-    n_mos = sum(1 for m in meta if m["kind"] == "MOS")
-    if n_mos:
-        print("     提示: 本次导出 %d 个 MOS 变量；Public 电路模块二口径为 105 个符号（含 R/C）"
-              % n_mos)
-    return 0
+    if not a.mock and a.expect and len(meta) != a.expect:
+        print("     ⚠️ 变量数 %d 与期望 %d 不同：Public 电路应为 %d；"
+              "Hidden 电路规模不同属正常。" % (len(meta), a.expect, a.expect))
+    return 0 if not out_of_range else 1
 
 
 if __name__ == "__main__":

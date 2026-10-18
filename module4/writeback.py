@@ -43,6 +43,11 @@ try:
 except Exception:                       # pragma: no cover
     ae = None
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from m4_common import (EXPORT_SCHEMA, kind_of, param_to_float,
+                       parse_param_line, read_param_file, split_inst_param,
+                       write_param_file)
+
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -57,53 +62,7 @@ PARAM_KINDS = ("segW", "segL", "l", "m", "fw", "segments")
 # ---------------------------------------------------------------------------
 # 参数读写（与 sim_engine.py 保持一致的多格式解析）
 # ---------------------------------------------------------------------------
-def split_inst_param(name):
-    i = name.rfind("_")
-    return (name[:i], name[i + 1:]) if i > 0 else (name, "")
-
-
-def parse_param_line(line):
-    s = line.strip()
-    if not s or s.startswith(("#", "//")):
-        return None
-    if "=" in s and not s.startswith(('"', "parameter")):
-        k, _, v = s.partition("=")
-        return (k.strip(), v.strip().strip('"').strip("'")) if k.strip() else None
-    fields = [f.strip().strip('"').strip("'") for f in s.split(",")]
-    if len(fields) >= 3 and fields[0].lower() == "parameter":
-        return (fields[1], fields[2])
-    if len(fields) >= 2:
-        return (fields[0], fields[1])
-    return None
-
-
-def read_param_file(path):
-    out = {}
-    with io.open(path, "r", encoding="utf-8", errors="replace") as f:
-        for line in f:
-            kv = parse_param_line(line)
-            if kv:
-                out[kv[0]] = kv[1]
-    return out
-
-
-def write_param_file(path, params):
-    with io.open(path, "w", encoding="utf-8", newline="\n") as f:
-        for name in params:
-            f.write('"parameter","%s","%s"\n' % (name, params[name]))
-
-
-def to_float(raw):
-    s = str(raw).strip().strip('"').strip("'")
-    mult = 1.0
-    for suf, m in (("meg", 1e6), ("k", 1e3), ("u", 1e-6), ("n", 1e-9),
-                   ("p", 1e-12), ("f", 1e-15), ("m", 1e-3)):
-        if s.lower().endswith(suf):
-            mult = m
-            s = s[: -len(suf)]
-            break
-    return float(s) * mult
-
+# 参数读写/单位换算统一由 m4_common 提供
 
 # ---------------------------------------------------------------------------
 # 平台操作
@@ -186,7 +145,7 @@ def apply_and_verify(cv, params, verbose=True):
             continue
         got = actual.get(name)
         try:
-            if abs(to_float(got) - to_float(want)) > 1e-9 * max(1.0, abs(to_float(want))):
+            if abs(param_to_float(got) - param_to_float(want)) > 1e-9 * max(1.0, abs(param_to_float(want))):
                 mismatched.append((name, want, got))
         except Exception:
             mismatched.append((name, want, got))
@@ -239,7 +198,7 @@ def run_mock(a):
         target.set(inst, p, v)
         got = target.get(p, MockInst(inst))
         try:
-            if abs(to_float(got) - to_float(v)) > 1e-9 * max(1.0, abs(to_float(v))):
+            if abs(param_to_float(got) - param_to_float(v)) > 1e-9 * max(1.0, abs(param_to_float(v))):
                 mismatched.append((n, v, got))
         except Exception:
             mismatched.append((n, v, got))
@@ -294,13 +253,22 @@ def run_real(a):
 
     target_cv = None
     if not a.in_place:
-        target_cv = try_copy_view(src_cv, a.out_view)
+        # 目标视图若已存在（例如在 Aether 里手工拷过），直接写入它，避免依赖拷贝接口
+        try:
+            existing = ae.dbOpenCV(a.ae_lib, a.ae_cell, a.out_view)
+        except Exception:
+            existing = None
+        if existing:
+            print("==== 目标视图已存在，直接写入：%s ====" % a.out_view)
+            target_cv = existing
+        else:
+            target_cv = try_copy_view(src_cv, a.out_view)
         if target_cv is None:
             ae.dbCloseCV(src_cv)
             print("\nERROR: 没能创建新视图 `%s`（平台缺少可用的 cellview 拷贝接口）。" % a.out_view,
                   file=sys.stderr)
             print("       为保护原图，已中止。可选做法：", file=sys.stderr)
-            print("       1) 在 Aether 里手动把 schematic 复制成 %s，再运行本脚本并加 --target_view %s"
+            print("       1) 在 Aether 里手动把 schematic 复制成视图 %s，再运行本脚本（会自动识别该视图）"
                   % (a.out_view, a.out_view), file=sys.stderr)
             print("       2) 确认要直接改原图，加 --in_place", file=sys.stderr)
             return 4
