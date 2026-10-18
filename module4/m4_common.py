@@ -185,6 +185,16 @@ def param_to_float(raw):
     raise ValueError("不认识的长度单位: %r" % unit)
 
 
+def to_num(value):
+    """把 emyString / 数字 / 字符串统一转 float。
+
+    服务器实测（2026-10-18）：`ae.aeEmyInstGetParameter()` 返回的是 SWIG 包装的
+    `emyString`，直接 `float(emyString)` 会 TypeError: "float() argument must be
+    a string or a number, not 'emyString'"。必须先 str()。赛方上游代码也是这么做的。
+    """
+    return float(str(value).strip())
+
+
 def dimensionless(raw):
     """无量纲值（m / segments / multi）-> float。"""
     return float(str(raw).strip().strip('"').strip("'"))

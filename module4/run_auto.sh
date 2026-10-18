@@ -76,14 +76,14 @@ NOFIX_ARG=(); [ "${M4_NO_FIX:-0}" = "1" ] && NOFIX_ARG=(--no_fix_paths)
 case "$MODE" in
 fix-paths)
     info "只修复 MDE 旧路径（P0-8）"
-    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${MOCK_ARG[@]}" --fix_paths_only
+    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${MOCK_ARG[@]+"${MOCK_ARG[@]}"}" --fix_paths_only
     rc=$?
     [ $rc -eq 0 ] && info "有文件被修复（原文件已备份为 *.m4bak）" || warn "没有文件需要修复（退出码 $rc）"
     exit 0
     ;;
 params)
     info "参数化：导出待优化变量 -> $OUT_DIR/params"
-    "$PYTHON" "$SCRIPT_DIR/param_extract.py" "${COMMON[@]}" "${MOCK_ARG[@]}" \
+    "$PYTHON" "$SCRIPT_DIR/param_extract.py" "${COMMON[@]}" "${MOCK_ARG[@]+"${MOCK_ARG[@]}"}" \
         --out_dir "$OUT_DIR/params" || die "参数化失败"
     exit 0
     ;;
@@ -93,7 +93,7 @@ sim|smoke|full)
     info "模式=$MODE  参数=$SIZES  输出=$OUT_DIR"
     info "第 1 步：修复 MDE 旧路径 + 调 MDE 跑 PVT + 提取指标"
     T0=$(date +%s)
-    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${MOCK_ARG[@]}" "${NOFIX_ARG[@]}" \
+    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${MOCK_ARG[@]+"${MOCK_ARG[@]}"}" "${NOFIX_ARG[@]+"${NOFIX_ARG[@]}"}" \
         --param_file "$SIZES" --out_dir "$OUT_DIR" || die "仿真引擎失败"
     T1=$(date +%s)
     [ -f "$OUT_DIR/metrics.md" ] || die "没有生成 metrics.md"
@@ -111,7 +111,7 @@ sim|smoke|full)
     if [ "$MODE" = "full" ]; then
         info "第 2 步：把尺寸反标到原理图（目标视图 $OUT_VIEW）"
         "$PYTHON" "$SCRIPT_DIR/writeback.py" --ae_lib "$AE_LIB" --ae_cell "$AE_CELL" \
-            --ae_view "$AE_VIEW" --out_view "$OUT_VIEW" "${MOCK_ARG[@]}" \
+            --ae_view "$AE_VIEW" --out_view "$OUT_VIEW" "${MOCK_ARG[@]+"${MOCK_ARG[@]}"}" \
             --param_file "$SIZES" --out_dir "$OUT_DIR" \
             || warn "反标未完全成功，详见 $OUT_DIR/writeback_verify.txt"
     fi
@@ -128,7 +128,7 @@ opt)
         --best_param_file "$OUT_DIR/${AE_LIB}_best_params.txt" \
         --output_path "$OUT_DIR/results" || die "优化失败"
     info "第 2 步：用最优参数跑一次完整 PVT 验证"
-    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${NOFIX_ARG[@]}" \
+    "$PYTHON" "$SCRIPT_DIR/sim_engine.py" "${COMMON[@]}" "${NOFIX_ARG[@]+"${NOFIX_ARG[@]}"}" \
         --param_file "$OUT_DIR/${AE_LIB}_best_params.txt" --out_dir "$OUT_DIR/verify" \
         || die "验证仿真失败"
     ;;

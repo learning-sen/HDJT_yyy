@@ -215,6 +215,35 @@ def main():
         top_import = any(l.startswith("import pyAether") for l in src.splitlines())
         check("T10b 无顶层 import pyAether: %s" % name, not top_import)
 
+    # ---------- T11 emyString 兼容（服务器实测坑：float(emyString) 会 TypeError）----------
+    class FakeEmyString(object):
+        """模拟 SWIG 包装的 emyString：不能直接 float()，只能 str()。"""
+
+        def __init__(self, s):
+            self._s = s
+
+        def __float__(self):
+            raise TypeError("float() argument must be a string or a number, not 'FakeEmyString'")
+
+        def __str__(self):
+            return self._s
+
+    try:
+        ok_num = common.to_num(FakeEmyString("10")) == 10.0
+    except Exception as e:
+        ok_num = False
+        print("       to_num 异常: %s" % e)
+    check("T11a to_num 能吃 emyString（先 str 再 float）", ok_num)
+    try:
+        ok_len = abs(common.param_to_float(FakeEmyString("4u")) - 4.0) < 1e-12
+    except Exception as e:
+        ok_len = False
+        print("       param_to_float 异常: %s" % e)
+    check("T11b param_to_float 能吃 emyString", ok_len)
+    src_sim = io.open(os.path.join(MOD4, "sim_engine.py"), encoding="utf-8").read()
+    check("T11c sim_engine 面积计算已全部走 str()",
+          "def _get(param):" in src_sim and "to_num(_get(" in src_sim)
+
     print()
     if _fail:
         print("❌ 失败 %d 项: %s" % (len(_fail), _fail))

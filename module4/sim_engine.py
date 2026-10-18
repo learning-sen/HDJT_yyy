@@ -46,7 +46,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, bounds_for, dimensionless, fix_sim_paths,
                        kind_of, param_to_float, parse_param_line, read_param_file,
-                       schema_check, split_inst_param, write_param_file)
+                       schema_check, split_inst_param, to_num, write_param_file)
 
 from m4_common import setup_stdio
 
@@ -156,21 +156,24 @@ def calc_area_from_cv(cv):
     total, detail = 0.0, []
     for inst in cv.instances:
         name = str(inst.name)
+        # 注意：aeEmyInstGetParameter 返回 SWIG 的 emyString，必须先 str() 才能转数字
+        def _get(param):
+            return str(ae.aeEmyInstGetParameter(param, inst)).strip()
         try:
             if name[:1] in ("R", "r"):
-                segw = param_to_float(ae.aeEmyInstGetParameter("segW", inst))
-                segl = param_to_float(ae.aeEmyInstGetParameter("segL", inst))
-                segs = float(ae.aeEmyInstGetParameter("segments", inst))
+                segw = param_to_float(_get("segW"))
+                segl = param_to_float(_get("segL"))
+                segs = to_num(_get("segments"))
                 a = segw * segl * segs * 2.0
             elif name[:1] in ("C", "c"):
-                fw = param_to_float(ae.aeEmyInstGetParameter("fw", inst))
-                l = param_to_float(ae.aeEmyInstGetParameter("l", inst))
-                m = float(ae.aeEmyInstGetParameter("m", inst))
+                fw = param_to_float(_get("fw"))
+                l = param_to_float(_get("l"))
+                m = to_num(_get("m"))
                 a = fw * l * m
             elif name.startswith(("PM", "NM")):
-                fw = param_to_float(ae.aeEmyInstGetParameter("fw", inst))
-                l = param_to_float(ae.aeEmyInstGetParameter("l", inst))
-                m = float(ae.aeEmyInstGetParameter("m", inst))
+                fw = param_to_float(_get("fw"))
+                l = param_to_float(_get("l"))
+                m = to_num(_get("m"))
                 a = fw * l * m * 1.5
             else:
                 continue
