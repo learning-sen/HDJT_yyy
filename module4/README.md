@@ -100,3 +100,32 @@ python module4/tests/selftest_module4.py
 - 真实 schema = MOS 3 / 电容 1 / 电阻 2（共 105）；
 - `pythone` 由 `setup.bash` 提供；不 source 会拿不到 license；
 - OPA 当前只有 `schematic` / `symbol` 两个视图。
+
+## 八、真机验证记录（2026-10-18，服务器 edauser32@eda202601）
+
+### 8.1 五个脚本的真机结果
+
+| # | 脚本 | 真机命令 | 结果 |
+|---|---|---|---|
+| 1 | `param_extract.py` | `--ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic` | ✅ **105 个变量**；MOS=87 / R=12 / C=6；参数分布 `fw29 m29 l35 segL6 segW6`；越界 0 |
+| 2 | `netlist_export.py` | 同上，`--out_dir ~/m4_net` | ✅ 顶层端口来自 **`cv.terminals`**（9 个）；真实器件 **41**（29 MOS + 6 R + 6 C）；**9 个 `PIN0~PIN8` 端口占位**（master `ipin/iopin`，0 端子）已剔除 |
+| 3 | `sim_engine.py` | 同上 + `--param_file case1_params_0.txt` | ✅ 六项指标与官方 `run_sim_case1.sh` **完全一致**（UGB 7.64114e6 / PM 73.1725 / Gain 29.4006 / GM −15.0247 / I_OPA 1.568mA / Area 11299.2） |
+| 4 | `writeback.py` | `--out_view schematic_var_best` | ✅ 视图创建成功；**`dbCopyCellView(设计对象, lib, cell, view)`** 是正确签名；参数落盘独立验证：写入 `0.55u` → 重开读回 `550n` → 恢复 `2u` |
+| 5 | `run_auto.sh` | `--smoke` | ⏳ 待跑（本机无 bash，需在服务器验证分支逻辑） |
+
+### 8.2 真机踩到并已修掉的坑
+
+| 坑 | 现象 | 修法 |
+|---|---|---|
+| `dbCheckAndSaveDesign` 返回 False | 在 `dbCopyCellView` **返回的句柄**上写参数，保存失败 | 拷贝后**关闭句柄 → 重新 `dbOpenCV` 打开新视图** → 再写 → 保存（重开后 check&save 变 True） |
+| `dbCopyCellView` 参数类型 | `argument 1 of type 'emyDesign const *'` | 候选签名把 `(设计对象, lib, cell, view)` 放第一位 |
+| 端口占位混入器件统计 | `PIN0~PIN8`（ipin/iopin，0 端子）被算成 OTHER | 归类为 `PORT`，从器件列表剔除并单列 `n_port_placeholders` |
+| 中文日志变 `\uXXXX` | 服务器 locale 为 C | `m4_common.setup_stdio()` 强制 UTF-8 |
+| `import pyAether` 占 license | 自检也检出 `PY_AETHER` | 惰性加载（`--mock`/自检全程不 import） |
+
+### 8.3 顺带确立的基线（供模块三/报告引用）
+
+- 初始解（`case1_params_0.txt`）跑官方评分器：**Total score 78.273 / 100**
+  （PM/GM/Gain/I_OPA 各 10 满分；UGB 0.573/15；Area 17.70/25；时间 20/20）
+- 剩余空间：**UGB +14.43、Area +7.30**（PM/GM/Gain/I_OPA 已满，别弄坏）
+- 单次全 PVT 仿真 `T_eval ≈ 18.4 s`（含进程启动 + pyAether 初始化）

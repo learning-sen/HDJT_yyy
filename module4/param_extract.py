@@ -39,6 +39,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, UNIT, bounds_for, kind_of, param_to_float)
+from m4_common import setup_stdio
+
+setup_stdio()
 
 ae = None            # 惰性加载：只有真机模式才 import pyAether
                      # （import pyAether 会加载 OpenAccess 并检出一个 license，

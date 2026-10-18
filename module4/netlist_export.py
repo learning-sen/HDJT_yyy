@@ -33,6 +33,11 @@ import json
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from m4_common import setup_stdio
+
+setup_stdio()
+
 ae = None            # 惰性加载：只有真机模式才 import pyAether
                      # （import pyAether 会加载 OpenAccess 并检出一个 license，
                      #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
@@ -95,8 +100,14 @@ def read_param(inst, p):
         return None
 
 
+PORT_MASTERS = ("ipin", "iopin", "opin", "ioport", "io_pin")
+
+
 def classify(master, n_terms):
     m = (master or "").lower()
+    # 端口占位实例（实测 PIN0~PIN8 为 ipin/iopin，0 个端子）：不是器件
+    if any(m.startswith(p) for p in PORT_MASTERS):
+        return "PORT"
     if "mos" in m or n_terms == 4:
         return "MOS"
     if "res" in m:
@@ -174,6 +185,9 @@ def mock_devices():
         {"name": "C0", "master": "cap_mim", "kind": "C",
          "terms": [("1", "net1"), ("2", "gnd")],
          "params": {"m": "1", "l": "20u", "fw": "20u"}},
+        # 端口占位实例（真实电路里 PIN0~PIN8 就长这样：0 个端子，不是器件）
+        {"name": "PIN0", "master": "ipin", "kind": "PORT", "terms": [], "params": {}},
+        {"name": "PIN1", "master": "iopin", "kind": "PORT", "terms": [], "params": {}},
     ], DEFAULTS["ports"].split()
 
 
@@ -221,10 +235,14 @@ def write_outputs(devices, ports, out_dir, source_note):
     with io.open(nl_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(emit_netlist(devices, ports))
 
+    placeholders = [d for d in devices if d["kind"] == "PORT"]
+    devices = [d for d in devices if d["kind"] != "PORT"]
     conn = {
         "source": source_note,
         "ports": ports,
         "n_devices": len(devices),
+        "n_port_placeholders": len(placeholders),
+        "port_placeholders": [{"name": d["name"], "master": d["master"]} for d in placeholders],
         "by_kind": {},
         "devices": [],
     }
@@ -255,7 +273,8 @@ def write_outputs(devices, ports, out_dir, source_note):
     # 自校验：MOS 必须 4 端子、R/C 必须 2 端子
     bad = [d["name"] for d in devices if d["kind"] == "MOS" and len(d["terms"]) != 4]
     bad += [d["name"] for d in devices if d["kind"] in ("R", "C") and len(d["terms"]) != 2]
-    print("==== 导出 %d 个器件 -> %s ====" % (len(devices), nl_path))
+    print("==== 导出 %d 个器件（另有 %d 个端口占位实例已剔除）-> %s ===="
+          % (len(devices), len(placeholders), nl_path))
     print("     类型分布: %s" % dict(sorted(conn["by_kind"].items())))
     print("     连接关系: %s" % os.path.join(out_dir, "connectivity.json"))
     if bad:

@@ -55,6 +55,10 @@ from m4_common import (EXPORT_SCHEMA, kind_of, param_to_float,
                        parse_param_line, read_param_file, split_inst_param,
                        write_param_file)
 
+from m4_common import setup_stdio
+
+setup_stdio()
+
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -98,8 +102,9 @@ def try_copy_view(cv, out_view):
     """尝试把 cv 拷成新 view。返回新 cv 或 None（接口不可用时）。"""
     lib, cell = cv.libName, cv.cellName
     candidates = [
-        ("dbCopyCellView", (lib, cell, cv.viewName, out_view)),
+        # 实测（2026-10-18）：第一个参数必须是设计对象 emyDesign const*，不是字符串
         ("dbCopyCellView", (cv, lib, cell, out_view)),
+        ("dbCopyCellView", (lib, cell, cv.viewName, out_view)),
         ("dbCopyCV", (cv, out_view)),
         ("dbCopyCV", (lib, cell, cv.viewName, out_view)),
         ("dbCopyDesign", (cv, out_view)),
@@ -112,7 +117,17 @@ def try_copy_view(cv, out_view):
             ret = fn(*args)
             if ret:
                 print("==== 视图拷贝成功：%s -> %s（用 %s）====" % (cv.viewName, out_view, fname))
-                return ret if hasattr(ret, "instances") else ae.dbOpenCV(lib, cell, out_view)
+                # 实测坑：dbCopyCellView 返回的句柄不可编辑/保存（dbCheckAndSaveDesign -> False）。
+                # 关掉它，重新打开新视图，才是可编辑的 cellview。
+                try:
+                    if ret is not None and hasattr(ret, "instances"):
+                        ae.dbCloseCV(ret)
+                except Exception:
+                    pass
+                fresh = ae.dbOpenCV(lib, cell, out_view)
+                if fresh:
+                    print("==== 已重新打开新视图（可编辑）：%s/%s/%s ====" % (lib, cell, out_view))
+                return fresh
         except Exception as e:
             print("  (尝试 %s 失败: %s)" % (fname, e))
     return None
@@ -143,7 +158,9 @@ def apply_and_verify(cv, params, verbose=True):
     except Exception as e:
         failed.append(("<save>", "dbCheckAndSaveDesign: %s" % e))
     if verbose:
-        print("==== 写入 %d 个参数，失败 %d 个，保存结果 %s ====" % (len(params), len(failed), save_res))
+        print("==== 写入 %d 个参数，失败 %d 个，check&save=%s ====" % (len(params), len(failed), save_res))
+        if not save_res:
+            print("     （check&save 返回 False 不一定代表失败；以'重开后读回'为准）")
 
     actual = read_back(cv, params)
     mismatched = []

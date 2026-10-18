@@ -19,6 +19,7 @@ import io
 import os
 import re
 import shutil
+import sys
 
 # ---------------------------------------------------------------------------
 # 变量边界：严格对齐 score.py::read_parameters()（队友 P0-3 实测值）
@@ -63,6 +64,19 @@ def load_aether():
         import pyAether                       # 只有走到这里才会检 license
         _AETHER = pyAether
     return _AETHER
+
+
+def setup_stdio():
+    """强制 stdout/stderr 用 UTF-8。
+
+    服务器默认 locale 是 C/POSIX，Python 3.9 会把中文输出成 \\uXXXX 转义，
+    日志没法直接读。这里在脚本入口调用一次即可。
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
 
 
 def aether_loaded():

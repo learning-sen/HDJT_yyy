@@ -48,6 +48,10 @@ from m4_common import (EXPORT_SCHEMA, bounds_for, dimensionless, fix_sim_paths,
                        kind_of, param_to_float, parse_param_line, read_param_file,
                        schema_check, split_inst_param, write_param_file)
 
+from m4_common import setup_stdio
+
+setup_stdio()
+
 ae = None            # 惰性加载：只有真机模式才 import pyAether
                      # （import pyAether 会加载 OpenAccess 并检出一个 license，
                      #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）

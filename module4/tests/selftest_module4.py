@@ -166,7 +166,9 @@ def main():
     for fn in ("export.netlist", "connectivity.json", "connectivity.md"):
         check("T6b 产物 %s" % fn, os.path.exists(os.path.join(ne_out, fn)))
     conn = json.load(io.open(os.path.join(ne_out, "connectivity.json"), encoding="utf-8"))
-    check("T6c 器件数=6", conn["n_devices"] == 6, "%d" % conn["n_devices"])
+    check("T6c 器件数=6（2 个 PIN 占位已剔除）", conn["n_devices"] == 6, "%d" % conn["n_devices"])
+    check("T6f 端口占位被单列统计", conn.get("n_port_placeholders") == 2,
+          "%s" % conn.get("n_port_placeholders"))
     m2parser_path = os.path.join(REPO, "module2", "agent", "netlist_parser.py")
     if not os.path.exists(m2parser_path):
         print("[SKIP] T6d 跨模块验证：本机没有 module2/agent/netlist_parser.py"
