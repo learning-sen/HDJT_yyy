@@ -131,3 +131,15 @@ python module4/tests/selftest_module4.py
   （PM/GM/Gain/I_OPA 各 10 满分；UGB 0.573/15；Area 17.70/25；时间 20/20）
 - 剩余空间：**UGB +14.43、Area +7.30**（PM/GM/Gain/I_OPA 已满，别弄坏）
 - 单次全 PVT 仿真 `T_eval ≈ 18.4 s`（含进程启动 + pyAether 初始化）
+
+### 8.4 结论（2026-10-18）
+
+**5/5 真机通过。** 与赛方评分器的交叉验证：我们的 `sim_engine.py` 与官方
+`run_sim_case1.sh` 六项指标**逐项一致**（含面积 11299.2 µm²），
+估算分 58.27/80 加上时间分 20 = **78.27/100**，与官方 `score.py` 给出的一致。
+
+- 5 个 PyAether 接口全部确认：`cv.terminals`（端口）、实例 `cellName`（master）、
+  `ae.MdeSession.open/netlistAndRun/saveResultsToDir`、`dbCopyCellView(设计对象, lib, cell, view)`、
+  `cdfSetParam` + `dbCheckAndSaveDesign`（须在 `dbOpenCV` 打开的视图上）。
+- 仍有 3 个**非接口**类不确定项（不影响运行）：`result.name()` 命名格式随运行变化、
+  PVT 角数由 MDE view 决定、`segments` 参数是否所有电阻都有。
