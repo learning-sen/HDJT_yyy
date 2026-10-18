@@ -38,15 +38,26 @@ import json
 import os
 import sys
 
-try:
-    import pyAether as ae
-except Exception:                       # pragma: no cover
-    ae = None
+ae = None            # 惰性加载：只有真机模式才 import pyAether
+                     # （import pyAether 会加载 OpenAccess 并检出一个 license，
+                     #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
 
+
+def _load_ae():
+    """真机模式才加载 pyAether；返回模块对象。"""
+    global ae
+    if ae is None:
+        from m4_common import load_aether
+        ae = load_aether()
+    return ae
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, kind_of, param_to_float,
                        parse_param_line, read_param_file, split_inst_param,
                        write_param_file)
+
+from m4_common import setup_stdio
+
+setup_stdio()
 
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
@@ -91,8 +102,9 @@ def try_copy_view(cv, out_view):
     """尝试把 cv 拷成新 view。返回新 cv 或 None（接口不可用时）。"""
     lib, cell = cv.libName, cv.cellName
     candidates = [
-        ("dbCopyCellView", (lib, cell, cv.viewName, out_view)),
+        # 实测（2026-10-18）：第一个参数必须是设计对象 emyDesign const*，不是字符串
         ("dbCopyCellView", (cv, lib, cell, out_view)),
+        ("dbCopyCellView", (lib, cell, cv.viewName, out_view)),
         ("dbCopyCV", (cv, out_view)),
         ("dbCopyCV", (lib, cell, cv.viewName, out_view)),
         ("dbCopyDesign", (cv, out_view)),
@@ -105,7 +117,17 @@ def try_copy_view(cv, out_view):
             ret = fn(*args)
             if ret:
                 print("==== 视图拷贝成功：%s -> %s（用 %s）====" % (cv.viewName, out_view, fname))
-                return ret if hasattr(ret, "instances") else ae.dbOpenCV(lib, cell, out_view)
+                # 实测坑：dbCopyCellView 返回的句柄不可编辑/保存（dbCheckAndSaveDesign -> False）。
+                # 关掉它，重新打开新视图，才是可编辑的 cellview。
+                try:
+                    if ret is not None and hasattr(ret, "instances"):
+                        ae.dbCloseCV(ret)
+                except Exception:
+                    pass
+                fresh = ae.dbOpenCV(lib, cell, out_view)
+                if fresh:
+                    print("==== 已重新打开新视图（可编辑）：%s/%s/%s ====" % (lib, cell, out_view))
+                return fresh
         except Exception as e:
             print("  (尝试 %s 失败: %s)" % (fname, e))
     return None
@@ -136,7 +158,9 @@ def apply_and_verify(cv, params, verbose=True):
     except Exception as e:
         failed.append(("<save>", "dbCheckAndSaveDesign: %s" % e))
     if verbose:
-        print("==== 写入 %d 个参数，失败 %d 个，保存结果 %s ====" % (len(params), len(failed), save_res))
+        print("==== 写入 %d 个参数，失败 %d 个，check&save=%s ====" % (len(params), len(failed), save_res))
+        if not save_res:
+            print("     （check&save 返回 False 不一定代表失败；以'重开后读回'为准）")
 
     actual = read_back(cv, params)
     mismatched = []
@@ -233,8 +257,11 @@ def run_mock(a):
 # 真机
 # ---------------------------------------------------------------------------
 def run_real(a):
-    if ae is None:
-        print("ERROR: 未导入 pyAether。请在服务器上运行，或用 --mock 验证逻辑。", file=sys.stderr)
+    try:
+        _load_ae()
+    except Exception as e:
+        print("ERROR: 未导入 pyAether（%s）。请在服务器上运行，或用 --mock 验证逻辑。"
+              % e, file=sys.stderr)
         return 2
     params = read_param_file(a.param_file)
     if not params:

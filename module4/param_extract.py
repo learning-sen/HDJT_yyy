@@ -39,12 +39,22 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, UNIT, bounds_for, kind_of, param_to_float)
+from m4_common import setup_stdio
 
-try:
-    import pyAether as ae
-except Exception:                       # pragma: no cover
-    ae = None
+setup_stdio()
 
+ae = None            # 惰性加载：只有真机模式才 import pyAether
+                     # （import pyAether 会加载 OpenAccess 并检出一个 license，
+                     #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
+
+
+def _load_ae():
+    """真机模式才加载 pyAether；返回模块对象。"""
+    global ae
+    if ae is None:
+        from m4_common import load_aether
+        ae = load_aether()
+    return ae
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -60,6 +70,7 @@ DEFAULTS = {
 # ---------------------------------------------------------------------------
 def export_from_cv(lib, cell, view):
     """返回 [(symbol, raw_value, kind, param)]，schema 见 EXPORT_SCHEMA。"""
+    _load_ae()
     if ae is None:
         raise RuntimeError("未导入 pyAether")
     ae.emyInitAether("-adv")
@@ -190,9 +201,11 @@ def main(argv=None):
         rows = mock_rows()
         note = "mock（假电路：NM0/PM0/R0/C0，按真实 schema）"
     else:
-        if ae is None:
-            print("ERROR: 未导入 pyAether；请在服务器上 source setup.bash 后运行，或加 --mock",
-                  file=sys.stderr)
+        try:
+            _load_ae()
+        except Exception as e:
+            print("ERROR: 未导入 pyAether（%s）；请在服务器上 source setup.bash 后运行，"
+                  "或加 --mock" % e, file=sys.stderr)
             return 2
         try:
             rows = export_from_cv(a.ae_lib, a.ae_cell, a.ae_view)

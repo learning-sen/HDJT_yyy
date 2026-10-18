@@ -24,6 +24,7 @@
 | **`[P0-3]` 边界对齐 `score.py` 的 clamp** | `score.py::read_parameters` 按参数名分别 clamp，不是统一 0.13..20 | `m4_common.bounds_for()`：`fw` 0.15..50、`segW` 0.42..10、`segL` 5..100、电容 `l` 4..30、其它 `l` 0.13..20、`m` 整数 1..100 |
 | **`[P0-4]` 导出 schema 对齐真实 105** | 实测 `case1_params_0.txt`：105 = MOS 29×3 + 电容 6×1(**只有 `l`**) + 电阻 6×2 | `param_extract.py` 按 `EXPORT_SCHEMA` 导出；`sim_engine.py` 遇到不该出现的参数（如电容 `fw/m`）会提示 |
 | **反标兼容"目标视图已存在"** | OPA 目前只有 `schematic` 与 `symbol` 两个 view | `writeback.py`：若 `--out_view` 已存在就直接写入；否则尝试平台拷贝接口，失败则中止并提示（不偷改原图） |
+| **pyAether 惰性加载** | 服务器实测：`import pyAether` 会加载 OpenAccess 并检出 `PY_AETHER` license | 四个脚本改为按需加载；`--mock`/自检/纯解析路径**不占 license**（共享服务器上很重要） |
 | **`run_auto.sh` 环境自检 + 新模式** | 实测：`pythone` 不是系统命令，不 `source setup.bash` 会既找不到解释器也拿不到 license | 新增 `--smoke`（冒烟四查）、`--params`、`--fix-paths`；启动时检查 `pythone` 与 `LM_LICENSE_FILE` 并给出提示 |
 
 ## 三、一条龙用法（服务器上，**每个新终端先 `source setup.bash`**）
@@ -74,11 +75,12 @@ bash module4/run_auto.sh --full <sizes.txt> ./m4_out
 python module4/tests/selftest_module4.py
 ```
 
-共 **53 项**：三种参数格式解析、单位换算、`[P0-3]` 六组边界、`[P0-4]` schema 识别、
+共 **60 项**（服务器上只有 `module4/` 时，T6d 跨模块验证会 `[SKIP]`，其余全过）：三种参数格式解析、单位换算、`[P0-3]` 六组边界、`[P0-4]` schema 识别、
 `[P0-8]` 旧路径重定向（含"目标不存在则不改"+备份）、`--mock` 全链路、反标读回校验、
 参数化导出 schema、连接关系导出，以及**跨模块验证**（模块四导出的网表能被模块二
 `parse_netlist()` 正确解析出 6 个器件）。
 
+> 自检**不消耗 license**：pyAether 是惰性加载，`--mock` 与自检全程不会 `import pyAether`（有 T10 断言）。
 > ⚠️ `run_auto.sh` **未在本地执行**（本机没有 bash/WSL）。上服务器先跑 `bash -n run_auto.sh`
 > 做语法检查，再用 `--smoke`（假数据/真机均可）验证分支逻辑。
 
@@ -98,3 +100,46 @@ python module4/tests/selftest_module4.py
 - 真实 schema = MOS 3 / 电容 1 / 电阻 2（共 105）；
 - `pythone` 由 `setup.bash` 提供；不 source 会拿不到 license；
 - OPA 当前只有 `schematic` / `symbol` 两个视图。
+
+## 八、真机验证记录（2026-10-18，服务器 edauser32@eda202601）
+
+### 8.1 五个脚本的真机结果
+
+| # | 脚本 | 真机命令 | 结果 |
+|---|---|---|---|
+| 1 | `param_extract.py` | `--ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic` | ✅ **105 个变量**；MOS=87 / R=12 / C=6；参数分布 `fw29 m29 l35 segL6 segW6`；越界 0 |
+| 2 | `netlist_export.py` | 同上，`--out_dir ~/m4_net` | ✅ 顶层端口来自 **`cv.terminals`**（9 个）；真实器件 **41**（29 MOS + 6 R + 6 C）；**9 个 `PIN0~PIN8` 端口占位**（master `ipin/iopin`，0 端子）已剔除 |
+| 3 | `sim_engine.py` | 同上 + `--param_file case1_params_0.txt` | ✅ 六项指标与官方 `run_sim_case1.sh` **完全一致**（UGB 7.64114e6 / PM 73.1725 / Gain 29.4006 / GM −15.0247 / I_OPA 1.568mA / Area 11299.2） |
+| 4 | `writeback.py` | `--out_view schematic_var_best` | ✅ 视图创建成功；**`dbCopyCellView(设计对象, lib, cell, view)`** 是正确签名；参数落盘独立验证：写入 `0.55u` → 重开读回 `550n` → 恢复 `2u` |
+| 5 | `run_auto.sh` | `--smoke <params> ~/m4_smoke` | ✅ 冒烟四查全部输出；`T_eval = 18 s`；六项指标与官方一致（面积 bug 见 8.2 已修） |
+
+### 8.2 真机踩到并已修掉的坑
+
+| 坑 | 现象 | 修法 |
+|---|---|---|
+| `dbCheckAndSaveDesign` 返回 False | 在 `dbCopyCellView` **返回的句柄**上写参数，保存失败 | 拷贝后**关闭句柄 → 重新 `dbOpenCV` 打开新视图** → 再写 → 保存（重开后 check&save 变 True） |
+| `dbCopyCellView` 参数类型 | `argument 1 of type 'emyDesign const *'` | 候选签名把 `(设计对象, lib, cell, view)` 放第一位 |
+| 端口占位混入器件统计 | `PIN0~PIN8`（ipin/iopin，0 端子）被算成 OTHER | 归类为 `PORT`，从器件列表剔除并单列 `n_port_placeholders` |
+| 中文日志变 `\uXXXX` | 服务器 locale 为 C | `m4_common.setup_stdio()` 强制 UTF-8 |
+| `import pyAether` 占 license | 自检也检出 `PY_AETHER` | 惰性加载（`--mock`/自检全程不 import） |
+| **`aeEmyInstGetParameter` 返回 `emyString`** | `float(emyString)` → `TypeError: float() argument must be a string or a number, not 'emyString'`，面积被跳过 → `Total_Area = 0` | 一律先 `str()` 再转数字（`m4_common.to_num()`），有 T11 回归测试 |
+| **老 bash（<4.4）下 `set -u` 展开空数组** | `run_auto.sh: MOCK_ARG[@]: unbound variable` | 用 `"${ARR[@]+"${ARR[@]}"}"` 可移植写法 |
+
+### 8.3 顺带确立的基线（供模块三/报告引用）
+
+- 初始解（`case1_params_0.txt`）跑官方评分器：**Total score 78.273 / 100**
+  （PM/GM/Gain/I_OPA 各 10 满分；UGB 0.573/15；Area 17.70/25；时间 20/20）
+- 剩余空间：**UGB +14.43、Area +7.30**（PM/GM/Gain/I_OPA 已满，别弄坏）
+- 单次全 PVT 仿真 `T_eval ≈ 18.4 s`（含进程启动 + pyAether 初始化）
+
+### 8.4 结论（2026-10-18）
+
+**5/5 真机通过。** 与赛方评分器的交叉验证：我们的 `sim_engine.py` 与官方
+`run_sim_case1.sh` 六项指标**逐项一致**（含面积 11299.2 µm²），
+估算分 58.27/80 加上时间分 20 = **78.27/100**，与官方 `score.py` 给出的一致。
+
+- 5 个 PyAether 接口全部确认：`cv.terminals`（端口）、实例 `cellName`（master）、
+  `ae.MdeSession.open/netlistAndRun/saveResultsToDir`、`dbCopyCellView(设计对象, lib, cell, view)`、
+  `cdfSetParam` + `dbCheckAndSaveDesign`（须在 `dbOpenCV` 打开的视图上）。
+- 仍有 3 个**非接口**类不确定项（不影响运行）：`result.name()` 命名格式随运行变化、
+  PVT 角数由 MDE view 决定、`segments` 参数是否所有电阻都有。

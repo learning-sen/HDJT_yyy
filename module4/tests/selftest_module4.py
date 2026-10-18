@@ -51,19 +51,26 @@ def load(path, name):
 
 
 def make_case1_params(tmpdir):
-    syms = []
-    for line in io.open(TEMPLATE, encoding="utf-8"):
-        line = line.strip()
-        if not line or line.startswith("//") or "=" not in line:
-            continue
-        syms.append(line.split("=")[0].strip())
-    vals = {"fw": "4u", "l": "1u", "m": "2", "segL": "25u", "segW": "2u",
-            "w": "10u", "multi": "1", "seg": "1", "nf": "1"}
+    """自治地生成一份符合真实 schema 的 105 个变量参数文件（**不依赖 module2**）。
+
+    真实口径：MOS 29×3(m,l,fw) + 电阻 6×2(segL,segW) + 电容 6×1(l) = 105。
+    这样自检在服务器上（只有 module4/）也能完整跑。
+    """
+    mos = ["NM%d" % i for i in range(16)] + ["PM%d" % i for i in range(13)]   # 29
+    res = ["R0", "R1", "R2", "R3", "R5", "R6"]                                # 6
+    cap = ["C0", "C2", "C3", "C4", "C5", "C11"]                               # 6
+    rows = []
+    for d in mos:
+        rows += [(d + "_m", "2"), (d + "_l", "1u"), (d + "_fw", "4u")]
+    for d in res:
+        rows += [(d + "_segL", "25u"), (d + "_segW", "2u")]
+    for d in cap:
+        rows += [(d + "_l", "20u")]
     path = os.path.join(tmpdir, "case1_params_0.txt")
     with io.open(path, "w", encoding="utf-8") as f:
-        for s in syms:
-            f.write('"parameter","%s","%s"\n' % (s, vals.get(s.rsplit("_", 1)[-1], "1")))
-    return path, len(syms)
+        for name, val in rows:
+            f.write('"parameter","%s","%s"\n' % (name, val))
+    return path, len(rows)
 
 
 def main():
@@ -159,15 +166,22 @@ def main():
     for fn in ("export.netlist", "connectivity.json", "connectivity.md"):
         check("T6b 产物 %s" % fn, os.path.exists(os.path.join(ne_out, fn)))
     conn = json.load(io.open(os.path.join(ne_out, "connectivity.json"), encoding="utf-8"))
-    check("T6c 器件数=6", conn["n_devices"] == 6, "%d" % conn["n_devices"])
-    try:
-        sys.path.insert(0, os.path.join(REPO, "module2", "agent"))
-        import netlist_parser as m2parser
-        circ = m2parser.parse_netlist(os.path.join(ne_out, "export.netlist"))
-        n_dev = len(getattr(circ, "devices", {}) or getattr(circ, "devices_list", []))
-        check("T6d 模块二能解析导出网表", n_dev == 6, "读到 %d 个器件" % n_dev)
-    except Exception as e:
-        check("T6d 模块二能解析导出网表", False, "异常: %s" % e)
+    check("T6c 器件数=6（2 个 PIN 占位已剔除）", conn["n_devices"] == 6, "%d" % conn["n_devices"])
+    check("T6f 端口占位被单列统计", conn.get("n_port_placeholders") == 2,
+          "%s" % conn.get("n_port_placeholders"))
+    m2parser_path = os.path.join(REPO, "module2", "agent", "netlist_parser.py")
+    if not os.path.exists(m2parser_path):
+        print("[SKIP] T6d 跨模块验证：本机没有 module2/agent/netlist_parser.py"
+              "（服务器上只有 module4 时属预期；本地已跑过）")
+    else:
+        try:
+            sys.path.insert(0, os.path.join(REPO, "module2", "agent"))
+            import netlist_parser as m2parser
+            circ = m2parser.parse_netlist(os.path.join(ne_out, "export.netlist"))
+            n_dev = len(getattr(circ, "devices", {}) or getattr(circ, "devices_list", []))
+            check("T6d 模块二能解析导出网表", n_dev == 6, "读到 %d 个器件" % n_dev)
+        except Exception as e:
+            check("T6d 模块二能解析导出网表", False, "异常: %s" % e)
 
     # ---------- T7 fix_sim_paths（P0-8）----------
     root = os.path.join(tmp, "fakecase")
@@ -186,6 +200,49 @@ def main():
     check("T7b 重定向到当前目录 hes_release", os.path.join(root, rel).replace(os.sep, "/") in txt.replace(os.sep, "/"))
     check("T7c 目标不存在的路径保持原样", dead_path in txt)
     check("T7d 原文件已备份", os.path.exists(os.path.join(setting_dir, "setting.m4bak")))
+
+    # ---------- T10 惰性加载：--mock 绝不能 import pyAether（否则白占 license）----------
+    import argparse as _ap
+    ns = _ap.Namespace(ae_lib="2026_EDA_case1", ae_cell="OPA", ae_view="schematic",
+                       mde_cell="OPA_loopgain", mde_view="spe_state1_Corner",
+                       param_file=param_path, out_dir=os.path.join(tmp, "lazy_out"),
+                       mock_area=5000.0, mock=True, no_fix_paths=True,
+                       fix_paths_only=False, dry_run=False)
+    sim.run_mock(ns)
+    check("T10a --mock 不加载 pyAether（不占 license）", sim.ae is None, "ae=%r" % (sim.ae,))
+    for name in ("sim_engine", "param_extract", "netlist_export", "writeback"):
+        src = io.open(os.path.join(MOD4, name + ".py"), encoding="utf-8").read()
+        top_import = any(l.startswith("import pyAether") for l in src.splitlines())
+        check("T10b 无顶层 import pyAether: %s" % name, not top_import)
+
+    # ---------- T11 emyString 兼容（服务器实测坑：float(emyString) 会 TypeError）----------
+    class FakeEmyString(object):
+        """模拟 SWIG 包装的 emyString：不能直接 float()，只能 str()。"""
+
+        def __init__(self, s):
+            self._s = s
+
+        def __float__(self):
+            raise TypeError("float() argument must be a string or a number, not 'FakeEmyString'")
+
+        def __str__(self):
+            return self._s
+
+    try:
+        ok_num = common.to_num(FakeEmyString("10")) == 10.0
+    except Exception as e:
+        ok_num = False
+        print("       to_num 异常: %s" % e)
+    check("T11a to_num 能吃 emyString（先 str 再 float）", ok_num)
+    try:
+        ok_len = abs(common.param_to_float(FakeEmyString("4u")) - 4.0) < 1e-12
+    except Exception as e:
+        ok_len = False
+        print("       param_to_float 异常: %s" % e)
+    check("T11b param_to_float 能吃 emyString", ok_len)
+    src_sim = io.open(os.path.join(MOD4, "sim_engine.py"), encoding="utf-8").read()
+    check("T11c sim_engine 面积计算已全部走 str()",
+          "def _get(param):" in src_sim and "to_num(_get(" in src_sim)
 
     print()
     if _fail:

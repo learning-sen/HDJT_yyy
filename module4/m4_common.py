@@ -19,6 +19,7 @@ import io
 import os
 import re
 import shutil
+import sys
 
 # ---------------------------------------------------------------------------
 # 变量边界：严格对齐 score.py::read_parameters()（队友 P0-3 实测值）
@@ -42,6 +43,45 @@ EXPORT_SCHEMA = {
 UNIT = {"m": "-", "segments": "-", "l": "µm", "fw": "µm", "segW": "µm", "segL": "µm"}
 
 INTEGER_PARAMS = ("m", "segments", "multi")
+
+# ---------------------------------------------------------------------------
+# pyAether 惰性加载
+# ---------------------------------------------------------------------------
+_AETHER = None
+
+
+def load_aether():
+    """按需导入 pyAether。
+
+    **为什么必须惰性**：在九天服务器上 `import pyAether` 会加载 OpenAccess 并
+    检出 `PY_AETHER` license（实测输出 `Load OA TCL shared library` /
+    `LC_Check out license PY_AETHER version 1.0`）。因此 `--mock`、纯解析、
+    自检等不需要平台的路径**绝不能**触发它，否则会白占一个 license 名额，
+    影响同组正在跑仿真的任务。
+    """
+    global _AETHER
+    if _AETHER is None:
+        import pyAether                       # 只有走到这里才会检 license
+        _AETHER = pyAether
+    return _AETHER
+
+
+def setup_stdio():
+    """强制 stdout/stderr 用 UTF-8。
+
+    服务器默认 locale 是 C/POSIX，Python 3.9 会把中文输出成 \\uXXXX 转义，
+    日志没法直接读。这里在脚本入口调用一次即可。
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
+def aether_loaded():
+    """是否已加载（便于测试断言"mock 模式没碰 pyAether"）。"""
+    return _AETHER is not None
 
 
 def kind_of(inst_name):
@@ -143,6 +183,16 @@ def param_to_float(raw):
     if unit in ("f", "fm"):
         return num * 1e-9
     raise ValueError("不认识的长度单位: %r" % unit)
+
+
+def to_num(value):
+    """把 emyString / 数字 / 字符串统一转 float。
+
+    服务器实测（2026-10-18）：`ae.aeEmyInstGetParameter()` 返回的是 SWIG 包装的
+    `emyString`，直接 `float(emyString)` 会 TypeError: "float() argument must be
+    a string or a number, not 'emyString'"。必须先 str()。赛方上游代码也是这么做的。
+    """
+    return float(str(value).strip())
 
 
 def dimensionless(raw):

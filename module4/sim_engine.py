@@ -46,14 +46,24 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, bounds_for, dimensionless, fix_sim_paths,
                        kind_of, param_to_float, parse_param_line, read_param_file,
-                       schema_check, split_inst_param, write_param_file)
+                       schema_check, split_inst_param, to_num, write_param_file)
 
-try:
-    import pyAether as ae
-except Exception:                       # pragma: no cover
-    ae = None
+from m4_common import setup_stdio
+
+setup_stdio()
+
+ae = None            # 惰性加载：只有真机模式才 import pyAether
+                     # （import pyAether 会加载 OpenAccess 并检出一个 license，
+                     #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
 
 
+def _load_ae():
+    """真机模式才加载 pyAether；返回模块对象。"""
+    global ae
+    if ae is None:
+        from m4_common import load_aether
+        ae = load_aether()
+    return ae
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -146,21 +156,24 @@ def calc_area_from_cv(cv):
     total, detail = 0.0, []
     for inst in cv.instances:
         name = str(inst.name)
+        # 注意：aeEmyInstGetParameter 返回 SWIG 的 emyString，必须先 str() 才能转数字
+        def _get(param):
+            return str(ae.aeEmyInstGetParameter(param, inst)).strip()
         try:
             if name[:1] in ("R", "r"):
-                segw = param_to_float(ae.aeEmyInstGetParameter("segW", inst))
-                segl = param_to_float(ae.aeEmyInstGetParameter("segL", inst))
-                segs = float(ae.aeEmyInstGetParameter("segments", inst))
+                segw = param_to_float(_get("segW"))
+                segl = param_to_float(_get("segL"))
+                segs = to_num(_get("segments"))
                 a = segw * segl * segs * 2.0
             elif name[:1] in ("C", "c"):
-                fw = param_to_float(ae.aeEmyInstGetParameter("fw", inst))
-                l = param_to_float(ae.aeEmyInstGetParameter("l", inst))
-                m = float(ae.aeEmyInstGetParameter("m", inst))
+                fw = param_to_float(_get("fw"))
+                l = param_to_float(_get("l"))
+                m = to_num(_get("m"))
                 a = fw * l * m
             elif name.startswith(("PM", "NM")):
-                fw = param_to_float(ae.aeEmyInstGetParameter("fw", inst))
-                l = param_to_float(ae.aeEmyInstGetParameter("l", inst))
-                m = float(ae.aeEmyInstGetParameter("m", inst))
+                fw = param_to_float(_get("fw"))
+                l = param_to_float(_get("l"))
+                m = to_num(_get("m"))
                 a = fw * l * m * 1.5
             else:
                 continue
@@ -223,6 +236,7 @@ def save_design(cv):
 # 主流程
 # ---------------------------------------------------------------------------
 def run_simulation(a):
+    _load_ae()
     if ae is None:
         raise RuntimeError("未导入 pyAether：请在服务器上（source setup.bash 后）运行")
     out_dir = a.out_dir
@@ -434,9 +448,11 @@ def main(argv=None):
     if a.mock:
         run_mock(a)
         return 0
-    if ae is None:
-        print("ERROR: 未导入 pyAether。请在服务器上 source setup.bash 后运行，"
-              "或加 --mock 在本地验证链路。", file=sys.stderr)
+    try:
+        _load_ae()
+    except Exception as e:
+        print("ERROR: 未导入 pyAether（%s）。请在服务器上 source setup.bash 后运行，"
+              "或加 --mock 在本地验证链路。" % e, file=sys.stderr)
         return 2
     if a.dry_run:
         if not a.no_fix_paths:
