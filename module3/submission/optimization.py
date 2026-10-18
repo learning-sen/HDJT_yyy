@@ -1468,10 +1468,18 @@ def _patched_run_de(self, reduced_params, max_iter=None, pop_size=None, time_lim
     except Exception as e:
         print('\n==== DE 异常退出（保留当前最优）: %s ====' % e, flush=True)
 
-    # ---- P4-b：收尾再写一次，确保文件存在且为最优 ----
+    # ---- P4-b：收尾兜底（[P0-20] 修 bug）----
+    # 旧写法：无条件再 extract_params 一次 -> 从**当前电路图**（= 最后一个候选）
+    # 重读，把已经写好的最优解覆盖掉。实跑事故：iter 246 的 Gain=45.18dB/Area=7768
+    # 被覆盖成最后一个点的 Gain=36.47dB/Area=8438，白丢 1.5 分且增益跌破 40dB 线。
+    # 新写法：文件已存在就绝不覆盖（每次 new best 时已经写过）。
     try:
-        if getattr(self, 'best_fitness', float('inf')) < float('inf'):
+        if not os.path.exists(self.best_param_file):
             extract_params(self.ae_lib, self.ae_cell, self.ae_view, self.best_param_file)
+            print('WARN: [P0-20] best_param_file 原本不存在，按当前参数兜底写出', flush=True)
+        else:
+            print('==== [P0-20] best_param_file 已存在，收尾不覆盖（保护最优解）====',
+                  flush=True)
     except Exception as e:
         print('WARN: 收尾写 best_param_file 失败: %s' % e, flush=True)
     print('==== TOTAL: %.1fs, iters=%d, best_param_file=%s(存在=%s) ===='
