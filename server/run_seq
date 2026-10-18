@@ -1,0 +1,3 @@
+pythone  get_PM0_G_S_case1.py
+./run_get_best_size_case1.sh
+./run_sim_case1.sh

@@ -1,0 +1,79 @@
+[INFO] Analyzing filename: eda_2026_case_1.tar.gz
+[INFO] Set to case1 parameters: AE_LIB=2026_EDA_case1, INPUT_PARAM_FILE=case1_params_0.txt
+[WARNING] Parameter file does not exist: /app/input/res/command.txt, using default parameters
+[INFO] Starting optimization environment setup...
+[INFO] Compressed file: eda_2026_case_1.tar.gz
+[INFO] Output directory: ./2026_EDA_case1_output
+[INFO] Scoring script: ./score.py
+[INFO] Optimization script: optimization.py
+[INFO] Time limit: 10800 seconds (3 hours)
+[INFO] Circuit under test: 2026_EDA_case1
+[INFO] UGB  baseline: 200000000.0
+[INFO] AREA baseline: 8000.0
+[INFO] TIME baseline: 7200.0
+[INFO] Creating output directory: ./2026_EDA_case1_output
+[INFO] Extracting file...
+[SUCCESS] File extraction completed
+[INFO] Compressed file base name: eda_2026_case_1
+[INFO] Using unique subdirectory: ./2026_EDA_case1_output/eda_2025_case_1
+[INFO] Copying scoring script to working directory...
+[SUCCESS] Scoring script copied successfully
+[INFO] Copying test circuits to working directory...
+[SUCCESS] Test circuits copied successfully
+[INFO] Changing to working directory: ./2026_EDA_case1_output/eda_2025_case_1
+[INFO] Starting optimization script monitoring...
+[INFO] Starting optimization script: optimization.py
+[INFO] Using taskset to limit CPU cores: 1-10
+[INFO] Start command: taskset -c 1-10 pythone "optimization.py" --ae_lib "2026_EDA_case1" --ae_cell "OPA" --ae_view "schematic" --mde_cell "OPA_loopgain" --mde_view "spe_state1_Corner" --param_file "case1_params_0.txt" --best_param_file "2026_EDA_case1_best_params.txt"
+[INFO] Using setsid to create independent process group
+[INFO] Optimization process PID: 31063
+[INFO] Process Group ID (PGID): 31063
+.........
+[SUCCESS] Optimization script ended normally
+[INFO] Execution duration: 00:00:14 (14 seconds)
+[INFO] Timed out: No
+
+[INFO] Optimization script execution completed, starting scoring program...
+[INFO] Execution command: pythone score.py --ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic --mde_cell OPA_loopgain --mde_view spe_state1_Corner --best_param_file 2026_EDA_case1_best_params.txt --output_path ./case_results --output_file output.log --calc_score --ugb_base 200000000.0 --area_base 8000.0 --time_base 7200.0 --execution_time 14
+
+OpenAccess 2.2 is loaded from /home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/openaccess/lib/linux_rhel60_64/opt
+Load OA TCL shared library (1) successfully.
+
+Load initialize file 'emyLibInit.tcl' for library 'analog'.
+Load initialize file 'emyLibInit.tcl' for library 'amsLib'.
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/netlist_procedure.tbc
+Load initialize file 'emyLibInit.tcl' for library '013um_PDK'.
+LC_Check out license PY_AETHER version 1.0...
+LC_Check out license DM version 1.0...
+
+                         Empyrean AetherADV
+              Version 2025.09.sp2, Build on 02/02/2026
+                        For [linux26-x86_64]
+                      Copyright (c) 2009-2026
+                    Empyrean Technology Co.,Ltd.
+                        ALL RIGHTS RESERVED
+
+Load setting file '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/aether.ini'.
+Load '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/display.drf'.
+Load 'display.drf'.
+Warning: Unable to open library 2026_EDA_case2 at path /home/edauser32/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score/2026_EDA_case1_output/eda_2025_case_1/2026_EDA_case2: Invalid Lib Path.
+create new dir: ./case_results
+Best param file not exists!!!!
+==============================
+       score result           
+------------------------------
+PM score      : 0.0000
+GM score      : 0.0000
+Gain score    : 0.0000
+I_OPA score   : 0.0000
+UGB score     : 0.0000
+Area score    : 0.0000
+Time score    : 0.0000
+------------------------------
+Total score   : 0.0000
+
+
+[SUCCESS] Scoring program execution completed
+./run_score.sh: line 539: cd: /app/program/: No such file or directory
+[INFO] Working directory: ./2026_EDA_case1_output/eda_2025_case_1
+[INFO] Please check the above directory for result files

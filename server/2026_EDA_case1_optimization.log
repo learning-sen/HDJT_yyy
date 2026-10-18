@@ -1,0 +1,56 @@
+OpenAccess 2.2 is loaded from /home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/openaccess/lib/linux_rhel60_64/opt
+Load OA TCL shared library (1) successfully.
+
+Load initialize file 'emyLibInit.tcl' for library 'analog'.
+Load initialize file 'emyLibInit.tcl' for library 'amsLib'.
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/netlist_procedure.tbc
+Load initialize file 'emyLibInit.tcl' for library '013um_PDK'.
+LC_Check out license PY_AETHER version 1.0...
+LC_Check out license DM version 1.0...
+
+                         Empyrean AetherADV
+              Version 2025.09.sp2, Build on 02/02/2026
+                        For [linux26-x86_64]
+                      Copyright (c) 2009-2026
+                    Empyrean Technology Co.,Ltd.
+                        ALL RIGHTS RESERVED
+
+Load setting file '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/aether.ini'.
+Load '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/display.drf'.
+Load 'display.drf'.
+Warning: Unable to open library 2026_EDA_case2 at path /home/edauser32/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score/2026_EDA_case1_output/eda_2025_case_1/2026_EDA_case2: Invalid Lib Path.
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license MDE_L2 version 1.0...
+==== Read 105 parameters successfully, param file: case1_params_0.txt ====
+
+==== Found 0 dummy device parameters
+==== Using 105 parameters for optimization
+
+create new dir: ./results
+
+==== Starting Differential Evolution Optimization ====
+Initial population size: 31500 (initialized around the initial design point)
+
+==== Optimization Begin ====
+pop_size: 300, max_iter: 100, params_num: 105
+Design save result: True
+
+==== total area:  8392.0
+
+==== iter 1 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 1 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 1 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score/2026_EDA_case1_output/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist fails.
+
+==== iter 1 Begin simulate ====
+
+==== iter 1 Simulation failed. Reason: Failed to launch a simulation run, reason: "File does not exist: /home/eda_2025/EDA_2025_Empyrean_lab_start/hes_release/models/spectre/spe_demo.scs.".
+
+
+=== Optimization interrupted by user ===
+'Phase_Margin'
+Best solution found at iteration 0
+Best parameters saved to: 

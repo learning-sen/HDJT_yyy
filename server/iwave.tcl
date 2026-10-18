@@ -1,0 +1,1 @@
+set_dock_widget_visible false
