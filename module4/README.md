@@ -24,6 +24,7 @@
 | **`[P0-3]` 边界对齐 `score.py` 的 clamp** | `score.py::read_parameters` 按参数名分别 clamp，不是统一 0.13..20 | `m4_common.bounds_for()`：`fw` 0.15..50、`segW` 0.42..10、`segL` 5..100、电容 `l` 4..30、其它 `l` 0.13..20、`m` 整数 1..100 |
 | **`[P0-4]` 导出 schema 对齐真实 105** | 实测 `case1_params_0.txt`：105 = MOS 29×3 + 电容 6×1(**只有 `l`**) + 电阻 6×2 | `param_extract.py` 按 `EXPORT_SCHEMA` 导出；`sim_engine.py` 遇到不该出现的参数（如电容 `fw/m`）会提示 |
 | **反标兼容"目标视图已存在"** | OPA 目前只有 `schematic` 与 `symbol` 两个 view | `writeback.py`：若 `--out_view` 已存在就直接写入；否则尝试平台拷贝接口，失败则中止并提示（不偷改原图） |
+| **pyAether 惰性加载** | 服务器实测：`import pyAether` 会加载 OpenAccess 并检出 `PY_AETHER` license | 四个脚本改为按需加载；`--mock`/自检/纯解析路径**不占 license**（共享服务器上很重要） |
 | **`run_auto.sh` 环境自检 + 新模式** | 实测：`pythone` 不是系统命令，不 `source setup.bash` 会既找不到解释器也拿不到 license | 新增 `--smoke`（冒烟四查）、`--params`、`--fix-paths`；启动时检查 `pythone` 与 `LM_LICENSE_FILE` 并给出提示 |
 
 ## 三、一条龙用法（服务器上，**每个新终端先 `source setup.bash`**）
@@ -74,11 +75,12 @@ bash module4/run_auto.sh --full <sizes.txt> ./m4_out
 python module4/tests/selftest_module4.py
 ```
 
-共 **53 项**：三种参数格式解析、单位换算、`[P0-3]` 六组边界、`[P0-4]` schema 识别、
+共 **60 项**（服务器上只有 `module4/` 时，T6d 跨模块验证会 `[SKIP]`，其余全过）：三种参数格式解析、单位换算、`[P0-3]` 六组边界、`[P0-4]` schema 识别、
 `[P0-8]` 旧路径重定向（含"目标不存在则不改"+备份）、`--mock` 全链路、反标读回校验、
 参数化导出 schema、连接关系导出，以及**跨模块验证**（模块四导出的网表能被模块二
 `parse_netlist()` 正确解析出 6 个器件）。
 
+> 自检**不消耗 license**：pyAether 是惰性加载，`--mock` 与自检全程不会 `import pyAether`（有 T10 断言）。
 > ⚠️ `run_auto.sh` **未在本地执行**（本机没有 bash/WSL）。上服务器先跑 `bash -n run_auto.sh`
 > 做语法检查，再用 `--smoke`（假数据/真机均可）验证分支逻辑。
 

@@ -48,12 +48,18 @@ from m4_common import (EXPORT_SCHEMA, bounds_for, dimensionless, fix_sim_paths,
                        kind_of, param_to_float, parse_param_line, read_param_file,
                        schema_check, split_inst_param, write_param_file)
 
-try:
-    import pyAether as ae
-except Exception:                       # pragma: no cover
-    ae = None
+ae = None            # 惰性加载：只有真机模式才 import pyAether
+                     # （import pyAether 会加载 OpenAccess 并检出一个 license，
+                     #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
 
 
+def _load_ae():
+    """真机模式才加载 pyAether；返回模块对象。"""
+    global ae
+    if ae is None:
+        from m4_common import load_aether
+        ae = load_aether()
+    return ae
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -223,6 +229,7 @@ def save_design(cv):
 # 主流程
 # ---------------------------------------------------------------------------
 def run_simulation(a):
+    _load_ae()
     if ae is None:
         raise RuntimeError("未导入 pyAether：请在服务器上（source setup.bash 后）运行")
     out_dir = a.out_dir
@@ -434,9 +441,11 @@ def main(argv=None):
     if a.mock:
         run_mock(a)
         return 0
-    if ae is None:
-        print("ERROR: 未导入 pyAether。请在服务器上 source setup.bash 后运行，"
-              "或加 --mock 在本地验证链路。", file=sys.stderr)
+    try:
+        _load_ae()
+    except Exception as e:
+        print("ERROR: 未导入 pyAether（%s）。请在服务器上 source setup.bash 后运行，"
+              "或加 --mock 在本地验证链路。" % e, file=sys.stderr)
         return 2
     if a.dry_run:
         if not a.no_fix_paths:

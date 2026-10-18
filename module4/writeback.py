@@ -38,11 +38,18 @@ import json
 import os
 import sys
 
-try:
-    import pyAether as ae
-except Exception:                       # pragma: no cover
-    ae = None
+ae = None            # 惰性加载：只有真机模式才 import pyAether
+                     # （import pyAether 会加载 OpenAccess 并检出一个 license，
+                     #   --mock / 纯解析路径绝不能碰，否则在共享服务器上白占名额）
 
+
+def _load_ae():
+    """真机模式才加载 pyAether；返回模块对象。"""
+    global ae
+    if ae is None:
+        from m4_common import load_aether
+        ae = load_aether()
+    return ae
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, kind_of, param_to_float,
                        parse_param_line, read_param_file, split_inst_param,
@@ -233,8 +240,11 @@ def run_mock(a):
 # 真机
 # ---------------------------------------------------------------------------
 def run_real(a):
-    if ae is None:
-        print("ERROR: 未导入 pyAether。请在服务器上运行，或用 --mock 验证逻辑。", file=sys.stderr)
+    try:
+        _load_ae()
+    except Exception as e:
+        print("ERROR: 未导入 pyAether（%s）。请在服务器上运行，或用 --mock 验证逻辑。"
+              % e, file=sys.stderr)
         return 2
     params = read_param_file(a.param_file)
     if not params:

@@ -43,6 +43,32 @@ UNIT = {"m": "-", "segments": "-", "l": "µm", "fw": "µm", "segW": "µm", "segL
 
 INTEGER_PARAMS = ("m", "segments", "multi")
 
+# ---------------------------------------------------------------------------
+# pyAether 惰性加载
+# ---------------------------------------------------------------------------
+_AETHER = None
+
+
+def load_aether():
+    """按需导入 pyAether。
+
+    **为什么必须惰性**：在九天服务器上 `import pyAether` 会加载 OpenAccess 并
+    检出 `PY_AETHER` license（实测输出 `Load OA TCL shared library` /
+    `LC_Check out license PY_AETHER version 1.0`）。因此 `--mock`、纯解析、
+    自检等不需要平台的路径**绝不能**触发它，否则会白占一个 license 名额，
+    影响同组正在跑仿真的任务。
+    """
+    global _AETHER
+    if _AETHER is None:
+        import pyAether                       # 只有走到这里才会检 license
+        _AETHER = pyAether
+    return _AETHER
+
+
+def aether_loaded():
+    """是否已加载（便于测试断言"mock 模式没碰 pyAether"）。"""
+    return _AETHER is not None
+
 
 def kind_of(inst_name):
     """按实例名判器件类型：R* -> R，C* -> C，NM*/PM* -> MOS，其它 None。"""
