@@ -24,7 +24,11 @@ from docx.shared import Cm, Pt, RGBColor
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "Submission" / "00_技术报告"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-OUT = OUT_DIR / "技术报告_20261019_v2.docx"
+# 可用命令行参数指定输出文件名（默认 v2）；这样目标文件被 Word 占用时可另存，
+# 不会因为 Windows 文件锁让整次构建失败。
+import sys as _sys
+
+OUT = OUT_DIR / (_sys.argv[1] if len(_sys.argv) > 1 else "技术报告_20261019_v2.docx")
 
 TITLE_FONT = "黑体"
 BODY_FONT = "宋体"
@@ -253,7 +257,6 @@ toc = [
     ("11", "结论与后续工作"),
     ("A", "附录 A　交付物清单与复现命令"),
     ("B", "附录 B　指标口径与单位约定"),
-    ("C", "附录 C　术语表"),
 ]
 for no, name in toc:
     p = doc.add_paragraph()
@@ -820,21 +823,6 @@ table(doc,
       widths=[3.0, 5.4, 1.8, 5.8])
 para(doc, "单位归一化规则统一如下：长度用 µm（1 nm = 0.001 µm），电流用 mA，频率用 MHz，"
           "增益与裕度用 dB，角度用 deg，面积用 µm²。")
-
-h1(doc, "附录 C　术语表")
-table(doc,
-      ["术语", "说明"],
-      [
-          ("Spec", "设计规格，即性能指标集合"),
-          ("PVT", "Process（工艺）/ Voltage（电压）/ Temperature（温度）三种条件的组合"),
-          ("CMFB", "共模反馈（Common-Mode Feedback）"),
-          ("Corner", "工艺角，如 TT / FF / SS"),
-          ("MDE", "九天平台的仿真配置与执行环境"),
-          ("反标", "把优化得到的最优尺寸写回电路图（schematic_var_best 视图）"),
-          ("CoT", "Chain-of-Thought，推理链，本项目中以 JSONL 日志形式落盘"),
-          ("Dummy 器件", "电气上无效、仅用于匹配/版图一致性的器件"),
-      ],
-      widths=[3.2, 13.0])
 
 doc.save(str(OUT))
 print(f"[OK] 已生成：{OUT}")
