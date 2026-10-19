@@ -1,0 +1,64 @@
+// Export from PyAether schematic by module4/netlist_export.py
+////////////////////////////////////////
+// Type     : spectre
+// Tool     : module4/netlist_export.py
+////////////////////////////////////////
+
+simulator lang = spectre
+
+global 0
+
+subckt EXPORTED (IREF VCM VOUTP SUB VOUTN VINN VDDA GNDA VINP)
+PM0 (net6 net6 VDDA VDDA) p_mos_a l=4u w=4u m=2
+PM1 (net37 net6 VDDA VDDA) p_mos_a l=4u w=32u m=10
+PM2 (net0 vcmfb VDDA VDDA) p_mos_a l=2u w=160u m=10
+PM3 (net8 vcmfb VDDA VDDA) p_mos_a l=2u w=160u m=10
+PM4 (net13 net6 VDDA VDDA) p_mos_a l=4u w=16u m=10
+PM5 (net5 net5 VDDA VDDA) p_mos_a l=4u w=4u m=10
+PM6 (vcmfb net5 VDDA VDDA) p_mos_a l=4u w=4u m=10
+NM5 (net8 IREF net44 SUB) n_mos_a l=2u w=16u m=2
+PM8 (net3 VCM net13 VDDA) p_mos_a l=2u w=48u m=10
+NM0 (IREF IREF net53 SUB) n_mos_a l=2u w=2u m=2
+NM1 (net6 IREF net32 SUB) n_mos_a l=2u w=2u m=2
+NM2 (net53 net53 GNDA SUB) n_mos_a l=2u w=2u m=2
+NM3 (net32 net53 GNDA SUB) n_mos_a l=2u w=2u m=2
+// SKIP PIN0 () ipin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+PM9 (net4 VINP net37 VDDA) p_mos_a l=2u w=8u m=4
+PM10 (net44 VINN net37 VDDA) p_mos_a l=2u w=8u m=4
+NM4 (net0 IREF net4 SUB) n_mos_a l=2u w=16u m=2
+NM6 (net4 net53 GNDA SUB) n_mos_a l=2u w=16u m=4
+NM7 (net44 net53 GNDA SUB) n_mos_a l=2u w=16u m=4
+PM7 (VOUTP net0 VDDA VDDA) p_mos_a l=2u w=16u m=10
+PM11 (VOUTN net8 VDDA VDDA) p_mos_a l=2u w=16u m=10
+NM8 (VOUTP net53 GNDA GNDA) n_mos_a l=2u w=16u m=10
+NM9 (VOUTN net53 GNDA GNDA) n_mos_a l=2u w=16u m=10
+PM12 (net52 outaverage net13 VDDA) p_mos_a l=2u w=48u m=10
+NM10 (net5 IREF net3 SUB) n_mos_a l=2u w=2u m=10
+NM11 (vcmfb IREF net52 SUB) n_mos_a l=2u w=2u m=10
+NM12 (net3 net53 GNDA SUB) n_mos_a l=2u w=8u m=10
+NM13 (net52 net53 GNDA SUB) n_mos_a l=2u w=8u m=10
+C2 (VOUTP outaverage) cap_mim m=1 l=30u fw=20u c=17.76f
+R0 (outaverage VOUTP) res_p_poly m=1 segL=74u segW=420n segments=10 l=740u w=420n r=525.376K
+R5 (net11 net11) res_n_poly m=1 segL=25u segW=10u segments=1 l=25u w=10u r=839.583
+// SKIP PIN3 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+// SKIP PIN2 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+C3 (outaverage VOUTN) cap_mim m=1 l=30u fw=20u c=17.76f
+C4 (net11 net11) cap_mim m=1 l=20u fw=10u c=5.92f
+R2 (net7 net8) res_p_poly m=1 segL=25u segW=10u segments=1 l=25u w=10u r=641.305
+C0 (VOUTN net7) cap_mim m=2 l=30u fw=30u c=26.64f
+C11 (VOUTP net17) cap_mim m=2 l=30u fw=30u c=26.64f
+// SKIP PIN8 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+// SKIP PIN7 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+R1 (net17 net0) res_p_poly m=1 segL=25u segW=10u segments=1 l=25u w=10u r=641.305
+// SKIP PIN1 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+// SKIP PIN6 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+// SKIP PIN5 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+R3 (VOUTN outaverage) res_p_poly m=1 segL=74u segW=420n segments=10 l=740u w=420n r=525.376K
+// SKIP PIN4 () iopin \u2014\u2014 \u7aef\u5b50\u6570 0\uff0c\u672a\u5206\u7c7b
+NM14 (VOUTP IREF VOUTP SUB) n_mos_a l=2u w=2u m=10
+NM15 (VOUTN IREF VOUTN SUB) n_mos_a l=2u w=2u m=10
+R6 (net12 net12) res_n_poly m=1 segL=25u segW=10u segments=1 l=25u w=10u r=839.583
+C5 (net12 net12) cap_mim m=1 l=20u fw=10u c=5.92f
+ends EXPORTED
+
+// \u7edf\u8ba1: 50 \u4e2a\u5668\u4ef6

@@ -1,0 +1,116 @@
+# 待优化变量（参数化脚本导出）
+
+- 来源：`2026_EDA_case1 / OPA / schematic`（服务器真机导出）
+- 变量总数：**105**
+- 按器件类型：C=6, MOS=87, R=12
+- 按参数类型：fw=29, l=35, m=29, segL=6, segW=6
+- schema：MOS=('m', 'l', 'fw') / C=('l',) / R=('segW', 'segL')
+- 越界变量：0
+
+| 变量 | 器件 | 参数 | 当前值 | 单位 | 下界 | 上界 | 类型 |
+|---|---|---|---|---|---|---|---|
+| PM0_m | PM0 | m | 2 | - | 1 | 100 | integer |
+| PM0_l | PM0 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM0_fw | PM0 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM1_m | PM1 | m | 10 | - | 1 | 100 | integer |
+| PM1_l | PM1 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM1_fw | PM1 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM2_m | PM2 | m | 10 | - | 1 | 100 | integer |
+| PM2_l | PM2 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM2_fw | PM2 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM3_m | PM3 | m | 10 | - | 1 | 100 | integer |
+| PM3_l | PM3 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM3_fw | PM3 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM4_m | PM4 | m | 10 | - | 1 | 100 | integer |
+| PM4_l | PM4 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM4_fw | PM4 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM5_m | PM5 | m | 10 | - | 1 | 100 | integer |
+| PM5_l | PM5 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM5_fw | PM5 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM6_m | PM6 | m | 10 | - | 1 | 100 | integer |
+| PM6_l | PM6 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM6_fw | PM6 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM5_m | NM5 | m | 2 | - | 1 | 100 | integer |
+| NM5_l | NM5 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM5_fw | NM5 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM8_m | PM8 | m | 10 | - | 1 | 100 | integer |
+| PM8_l | PM8 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM8_fw | PM8 | fw | 8u | µm | 0.15 | 50.0 | continuous |
+| NM0_m | NM0 | m | 2 | - | 1 | 100 | integer |
+| NM0_l | NM0 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM0_fw | NM0 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM1_m | NM1 | m | 2 | - | 1 | 100 | integer |
+| NM1_l | NM1 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM1_fw | NM1 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM2_m | NM2 | m | 2 | - | 1 | 100 | integer |
+| NM2_l | NM2 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM2_fw | NM2 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM3_m | NM3 | m | 2 | - | 1 | 100 | integer |
+| NM3_l | NM3 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM3_fw | NM3 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| PM9_m | PM9 | m | 4 | - | 1 | 100 | integer |
+| PM9_l | PM9 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM9_fw | PM9 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM10_m | PM10 | m | 4 | - | 1 | 100 | integer |
+| PM10_l | PM10 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM10_fw | PM10 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM4_m | NM4 | m | 2 | - | 1 | 100 | integer |
+| NM4_l | NM4 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM4_fw | NM4 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM6_m | NM6 | m | 4 | - | 1 | 100 | integer |
+| NM6_l | NM6 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM6_fw | NM6 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM7_m | NM7 | m | 4 | - | 1 | 100 | integer |
+| NM7_l | NM7 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM7_fw | NM7 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM7_m | PM7 | m | 10 | - | 1 | 100 | integer |
+| PM7_l | PM7 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM7_fw | PM7 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM11_m | PM11 | m | 10 | - | 1 | 100 | integer |
+| PM11_l | PM11 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM11_fw | PM11 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM8_m | NM8 | m | 10 | - | 1 | 100 | integer |
+| NM8_l | NM8 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM8_fw | NM8 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| NM9_m | NM9 | m | 10 | - | 1 | 100 | integer |
+| NM9_l | NM9 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM9_fw | NM9 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM12_m | PM12 | m | 10 | - | 1 | 100 | integer |
+| PM12_l | PM12 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM12_fw | PM12 | fw | 8u | µm | 0.15 | 50.0 | continuous |
+| NM10_m | NM10 | m | 10 | - | 1 | 100 | integer |
+| NM10_l | NM10 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM10_fw | NM10 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM11_m | NM11 | m | 10 | - | 1 | 100 | integer |
+| NM11_l | NM11 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM11_fw | NM11 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM12_m | NM12 | m | 10 | - | 1 | 100 | integer |
+| NM12_l | NM12 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM12_fw | NM12 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM13_m | NM13 | m | 10 | - | 1 | 100 | integer |
+| NM13_l | NM13 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM13_fw | NM13 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| C2_l | C2 | l | 30u | µm | 4.0 | 30.0 | continuous |
+| R0_segW | R0 | segW | 420n | µm | 0.42 | 10.0 | continuous |
+| R0_segL | R0 | segL | 74u | µm | 5.0 | 100.0 | continuous |
+| R5_segW | R5 | segW | 10u | µm | 0.42 | 10.0 | continuous |
+| R5_segL | R5 | segL | 25u | µm | 5.0 | 100.0 | continuous |
+| C3_l | C3 | l | 30u | µm | 4.0 | 30.0 | continuous |
+| C4_l | C4 | l | 20u | µm | 4.0 | 30.0 | continuous |
+| R2_segW | R2 | segW | 10u | µm | 0.42 | 10.0 | continuous |
+| R2_segL | R2 | segL | 25u | µm | 5.0 | 100.0 | continuous |
+| C0_l | C0 | l | 30u | µm | 4.0 | 30.0 | continuous |
+| C11_l | C11 | l | 30u | µm | 4.0 | 30.0 | continuous |
+| R1_segW | R1 | segW | 10u | µm | 0.42 | 10.0 | continuous |
+| R1_segL | R1 | segL | 25u | µm | 5.0 | 100.0 | continuous |
+| R3_segW | R3 | segW | 420n | µm | 0.42 | 10.0 | continuous |
+| R3_segL | R3 | segL | 74u | µm | 5.0 | 100.0 | continuous |
+| NM14_m | NM14 | m | 10 | - | 1 | 100 | integer |
+| NM14_l | NM14 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM14_fw | NM14 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| NM15_m | NM15 | m | 10 | - | 1 | 100 | integer |
+| NM15_l | NM15 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| NM15_fw | NM15 | fw | 2u | µm | 0.15 | 50.0 | continuous |
+| R6_segW | R6 | segW | 10u | µm | 0.42 | 10.0 | continuous |
+| R6_segL | R6 | segL | 25u | µm | 5.0 | 100.0 | continuous |
+| C5_l | C5 | l | 20u | µm | 4.0 | 30.0 | continuous |

@@ -1,0 +1,28 @@
+{
+ "param_file": "/home/edauser32/EDA_2026_Empyrean_lab_start/case1_params_0.txt",
+ "ae": {
+  "lib": "2026_EDA_case1",
+  "cell": "OPA",
+  "view": "schematic"
+ },
+ "mde": {
+  "cell": "OPA_loopgain",
+  "view": "spe_state1_Corner"
+ },
+ "n_params": 105,
+ "result_name": "Results1080",
+ "path_fix": {
+  "scanned": 122,
+  "modified": 0
+ },
+ "peak_mem_mb": 512.4,
+ "metrics_worst_case": {
+  "Phase_Margin": 73.1725,
+  "Gain_Margin": -15.0247,
+  "I_OPA": 0.00156799,
+  "Gain_db": 29.4006,
+  "UGB": 7641140.0
+ },
+ "area_um2": 11299.2,
+ "verdict": {}
+}

@@ -1,0 +1,170 @@
+{
+ "source": "module4_交付物\\3_pvt\\raw\\Results1080_transpose.csv",
+ "n_corners": 9,
+ "rows": [
+  {
+   "corner": "Nominal",
+   "process": "tt",
+   "vdd": 1.8,
+   "temp": 27.0,
+   "Gain_db": 42.8995,
+   "UGB": 12540100.0,
+   "Phase_Margin": 74.762,
+   "Gain_Margin": -15.8157,
+   "I_OPA": 0.00154046
+  },
+  {
+   "corner": "C1_0",
+   "process": "ff",
+   "vdd": 1.62,
+   "temp": -40.0,
+   "Gain_db": 41.6674,
+   "UGB": 15959400.0,
+   "Phase_Margin": 73.1725,
+   "Gain_Margin": -15.4998,
+   "I_OPA": 0.00152552
+  },
+  {
+   "corner": "C1_1",
+   "process": "ff",
+   "vdd": 1.62,
+   "temp": 125.0,
+   "Gain_db": 33.0196,
+   "UGB": 10072900.0,
+   "Phase_Margin": 74.51,
+   "Gain_Margin": -16.1593,
+   "I_OPA": 0.00151177
+  },
+  {
+   "corner": "C1_2",
+   "process": "ff",
+   "vdd": 1.98,
+   "temp": -40.0,
+   "Gain_db": 45.905,
+   "UGB": 17537800.0,
+   "Phase_Margin": 73.4591,
+   "Gain_Margin": -15.0604,
+   "I_OPA": 0.00155274
+  },
+  {
+   "corner": "C1_3",
+   "process": "ff",
+   "vdd": 1.98,
+   "temp": 125.0,
+   "Gain_db": 42.3455,
+   "UGB": 11810600.0,
+   "Phase_Margin": 73.791,
+   "Gain_Margin": -15.0247,
+   "I_OPA": 0.00153524
+  },
+  {
+   "corner": "C1_4",
+   "process": "ss",
+   "vdd": 1.62,
+   "temp": -40.0,
+   "Gain_db": 35.4128,
+   "UGB": 12095500.0,
+   "Phase_Margin": 75.1069,
+   "Gain_Margin": -17.8271,
+   "I_OPA": 0.00153656
+  },
+  {
+   "corner": "C1_5",
+   "process": "ss",
+   "vdd": 1.62,
+   "temp": 125.0,
+   "Gain_db": 29.4006,
+   "UGB": 7641140.0,
+   "Phase_Margin": 77.4888,
+   "Gain_Margin": -18.1629,
+   "I_OPA": 0.00151584
+  },
+  {
+   "corner": "C1_6",
+   "process": "ss",
+   "vdd": 1.98,
+   "temp": -40.0,
+   "Gain_db": 46.4404,
+   "UGB": 14377900.0,
+   "Phase_Margin": 75.8799,
+   "Gain_Margin": -16.4806,
+   "I_OPA": 0.00156799
+  },
+  {
+   "corner": "C1_7",
+   "process": "ss",
+   "vdd": 1.98,
+   "temp": 125.0,
+   "Gain_db": 42.5941,
+   "UGB": 9487810.0,
+   "Phase_Margin": 76.127,
+   "Gain_Margin": -16.3781,
+   "I_OPA": 0.00154652
+  }
+ ],
+ "worst_case": {
+  "Gain_db": 29.4006,
+  "UGB": 7641140.0,
+  "Phase_Margin": 73.1725,
+  "Gain_Margin": -15.0247,
+  "I_OPA": 0.00156799
+ },
+ "coverage": {
+  "工艺角 TT": true,
+  "工艺角 FF": true,
+  "工艺角 SS": true,
+  "低温 −40℃": true,
+  "高温 125℃": true,
+  "标称电压与 ±10%": true,
+  "常温 27℃（Nominal）": true
+ },
+ "seen": {
+  "process": [
+   "ff",
+   "ss",
+   "tt"
+  ],
+  "temp": [
+   -40.0,
+   27.0,
+   125.0
+  ],
+  "vdd": [
+   1.62,
+   1.8,
+   1.98
+  ]
+ },
+ "cross_check": [
+  [
+   "Gain_db",
+   29.4006,
+   29.4006,
+   "一致 ✅"
+  ],
+  [
+   "UGB",
+   7641140.0,
+   7641140.0,
+   "一致 ✅"
+  ],
+  [
+   "Phase_Margin",
+   73.1725,
+   73.1725,
+   "一致 ✅"
+  ],
+  [
+   "Gain_Margin",
+   -15.0247,
+   -15.0247,
+   "一致 ✅"
+  ],
+  [
+   "I_OPA",
+   0.00156799,
+   0.00156799,
+   "一致 ✅"
+  ]
+ ]
+}

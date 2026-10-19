@@ -1,0 +1,91 @@
+total 36
+-rw-rw-r--. 1 edauser32 edauser32  305 Oct 19 19:15 algorithm_stats.json
+-rw-rw-r--. 1 edauser32 edauser32  491 Oct 19 19:15 algorithm_stats.md
+-rw-rw-r--. 1 edauser32 edauser32  222 Oct 19 19:15 metrics.csv
+-rw-rw-r--. 1 edauser32 edauser32 1630 Oct 19 19:15 metrics.json
+-rw-rw-r--. 1 edauser32 edauser32 1269 Oct 19 19:15 metrics.md
+-rw-rw-r--. 1 edauser32 edauser32  664 Oct 19 19:15 per_corner.csv
+-rw-rw-r--. 1 edauser32 edauser32 2816 Oct 19 19:15 per_corner.json
+-rw-rw-r--. 1 edauser32 edauser32 1754 Oct 19 19:15 per_corner.md
+-rw-rw-r--. 1 edauser32 edauser32 2941 Oct 19 19:15 pvt_report.md
+===== PVT ???? =====
+# \u5168 PVT \u4eff\u771f\u9a8c\u8bc1\u62a5\u544a
+
+> \u7531 `module4/report_gen.py` \u81ea\u52a8\u751f\u6210\uff1b\u6570\u636e\u6e90\u4e3a `sim_engine.py` \u7684\u771f\u5b9e\u4eff\u771f\u7ed3\u679c\u3002
+> \u6307\u6807\u53e3\u5f84\uff1aPM/Gain/UGB \u53d6\u6240\u6709 PVT \u89d2\u7684 **Min**\uff0cGM/I_OPA \u53d6 **Max**\uff08\u4e0e\u8d5b\u65b9 `score.py` \u4e00\u81f4\uff09\u3002
+
+## 1. \u57fa\u672c\u4fe1\u606f
+
+| \u9879 | \u5185\u5bb9 |
+|---|---|
+| \u7535\u8def | `2026_EDA_case1 / OPA / schematic` |
+| MDE | `OPA_loopgain / spe_state1_Corner` |
+| \u53c2\u6570\u6587\u4ef6 | `/home/edauser32/EDA_2026_Empyrean_lab_start/case1_params_0.txt`\uff08105 \u4e2a\u7b26\u53f7\uff09 |
+| \u7ed3\u679c\u540d | `Results1080` |
+| \u65e7\u8def\u5f84\u4fee\u590d | \u626b\u63cf 122 \u4e2a\u6587\u4ef6\uff0c\u6539\u52a8 0 \u4e2a |
+
+## 2. \u4f18\u5316\u524d\u540e\u5bf9\u6bd4
+
+| \u6307\u6807 | \u521d\u59cb\u89e3 | \u6700\u4f18\u89e3 | \u53d8\u5316 |
+|---|---|---|---|
+| PM (deg) | \u2014 | 73.1725 | \u2014 |
+| GM (dB) | \u2014 | -15.0247 | \u2014 |
+| DC Gain (dB) | \u2014 | 29.4006 | \u2014 |
+| UGB (Hz) | \u2014 | 7.641e+06 | \u2014 |
+| I_OPA (A) | \u2014 | 0.0016 | \u2014 |
+| Total_Area (µm²) | \u2014 | 11299.2 | \u2014 |
+
+## 3. \u6700\u574f\u60c5\u51b5\u6307\u6807\u4e0e\u8fbe\u6807\u5224\u5b9a
+
+| \u6307\u6807 | \u6700\u574f\u503c | \u95e8\u9650 | \u5224\u5b9a |
+|---|---|---|---|
+| PM | 73.1725 | \u2265 50 deg | \u2705 |
+| GM | -15.0247 | \u2264 -10 dB | \u2705 |
+| I_OPA | 0.0016 | \u2264 0.003 A | \u2705 |
+| Gain | 29.4006 | \u2265 20 dB | \u2705 |
+| Total_Area | 11299.2 µm² | \u2264 8000 \u6ee1\u5206 | \u26a0\ufe0f |
+
+- \u4f30\u7b97\u5f97\u5206\uff08\u4e0d\u542b\u65f6\u95f4\u5206\uff09\uff1a**58.27 / 80**
+- \u4e09\u6761\u786c\u7ea6\u675f\uff1a\u5168\u90e8\u6ee1\u8db3 \u2705
+
+## 4. \u5168 PVT \u9010\u89d2\u660e\u7ec6
+
+| corner | process | temp | vdd | Phase_Margin | Gain_Margin | Gain_db | UGB | I_OPA |
+|---|---|---|---|---|---|---|---|---|
+| Nominal | tt | 27.0 | 1.8 | 74.762 | -15.8157 | 42.8995 | 12540100.0 | 0.00154046 |
+| C1_0 | ff | -40.0 | 1.62 | 73.1725 | -15.4998 | 41.6674 | 15959400.0 | 0.00152552 |
+| C1_1 | ff | 125.0 | 1.62 | 74.51 | -16.1593 | 33.0196 | 10072900.0 | 0.00151177 |
+| C1_2 | ff | -40.0 | 1.98 | 73.4591 | -15.0604 | 45.905 | 17537800.0 | 0.00155274 |
+| C1_3 | ff | 125.0 | 1.98 | 73.791 | -15.0247 | 42.3455 | 11810600.0 | 0.00153524 |
+| C1_4 | ss | -40.0 | 1.62 | 75.1069 | -17.8271 | 35.4128 | 12095500.0 | 0.00153656 |
+| C1_5 | ss | 125.0 | 1.62 | 77.4888 | -18.1629 | 29.4006 | 7641140.0 | 0.00151584 |
+| C1_6 | ss | -40.0 | 1.98 | 75.8799 | -16.4806 | 46.4404 | 14377900.0 | 0.00156799 |
+| C1_7 | ss | 125.0 | 1.98 | 76.127 | -16.3781 | 42.5941 | 9487810.0 | 0.00154652 |
+
+### 4.1 \u5168\u573a\u666f\u8986\u76d6\u68c0\u67e5\uff08\u8d5b\u9898 6.2 \u7b2c 5 \u9879\uff09
+
+| \u8981\u6c42 | \u662f\u5426\u8986\u76d6 |
+|---|---|
+| \u5de5\u827a\u89d2 TT | \u2705 |
+| \u5de5\u827a\u89d2 FF | \u2705 |
+| \u5de5\u827a\u89d2 SS | \u2705 |
+| \u9ad8\u6e29 125\u2103 | \u2705 |
+| \u4f4e\u6e29 \u221240\u2103 | \u2705 |
+| \u7535\u538b ±10% | \u274c \u9700\u8865\u8dd1 |
+
+## 5. \u4eff\u771f\u6ce2\u5f62
+
+- `03_bode_nominal.png`
+
+  ![](shots/03_bode_nominal.png)
+
+## 6. \u4ee3\u7801\u8d28\u91cf\u4e0e\u7b97\u6cd5\u6027\u80fd
+
+> \u26a0\ufe0f \u672a\u63d0\u4f9b\u4f18\u5316\u65e5\u5fd7\uff08`--opt_log`\uff09\uff0c\u65e0\u6cd5\u6c47\u603b\u8bc4\u4f30\u6b21\u6570/\u8017\u65f6/\u5185\u5b58\u3002
+
+## 7. \u7ed3\u8bba
+
+\u6700\u4f18\u5c3a\u5bf8\u5728\u5168\u90e8 PVT \u89d2\u4e0b\u6ee1\u8db3\u786c\u7ea6\u675f\uff1b
+\u6700\u574f\u60c5\u51b5 DC Gain = 29.4006 dB\u3001UGB = 7.641e+06 Hz\u3001Area = 11299.2 µm²\u3002
+
+\u540e\u7eed\u53ef\u7ee7\u7eed\u63d0\u5347\uff1aUGB\uff08\u8ddd\u6ee1\u5206\u57fa\u7ebf 2e+08 Hz \u8fd8\u5dee 26.17 \u500d\uff09\uff1b\u9762\u79ef\uff08\u8ddd\u6ee1\u5206 8000 µm² \u8fd8\u5dee 29.2%\uff09\u3002

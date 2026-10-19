@@ -1,0 +1,41 @@
+total 32
+-rw-rw-r--. 1 edauser32 edauser32  2709 Oct 19 19:15 extractcdfVal_0.txt
+-rw-rw-r--. 1 edauser32 edauser32 20454 Oct 19 19:15 params_meta.json
+-rw-rw-r--. 1 edauser32 edauser32  6380 Oct 19 19:15 params_table.md
+=== 105 ?? CSV ? 8 ? ===
+"parameter","PM0_m","2"
+"parameter","PM0_l","4u"
+"parameter","PM0_fw","4u"
+"parameter","PM1_m","10"
+"parameter","PM1_l","4u"
+"parameter","PM1_fw","4u"
+"parameter","PM2_m","10"
+"parameter","PM2_l","2u"
+=== ????? 25 ? ===
+# \u5f85\u4f18\u5316\u53d8\u91cf\uff08\u53c2\u6570\u5316\u811a\u672c\u5bfc\u51fa\uff09
+
+- \u6765\u6e90\uff1a2026_EDA_case1/OPA/schematic
+- \u53d8\u91cf\u603b\u6570\uff1a**105**
+- \u6309\u5668\u4ef6\u7c7b\u578b\uff1aC=6, MOS=87, R=12
+- \u6309\u53c2\u6570\u7c7b\u578b\uff1afw=29, l=35, m=29, segL=6, segW=6
+- schema\uff1aMOS=('m', 'l', 'fw') / C=('l',) / R=('segW', 'segL')
+- \u8d8a\u754c\u53d8\u91cf\uff1a0
+
+| \u53d8\u91cf | \u5668\u4ef6 | \u53c2\u6570 | \u5f53\u524d\u503c | \u5355\u4f4d | \u4e0b\u754c | \u4e0a\u754c | \u7c7b\u578b |
+|---|---|---|---|---|---|---|---|
+| PM0_m | PM0 | m | 2 | - | 1 | 100 | integer |
+| PM0_l | PM0 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM0_fw | PM0 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM1_m | PM1 | m | 10 | - | 1 | 100 | integer |
+| PM1_l | PM1 | l | 4u | µm | 0.13 | 20.0 | continuous |
+| PM1_fw | PM1 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM2_m | PM2 | m | 10 | - | 1 | 100 | integer |
+| PM2_l | PM2 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM2_fw | PM2 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM3_m | PM3 | m | 10 | - | 1 | 100 | integer |
+| PM3_l | PM3 | l | 2u | µm | 0.13 | 20.0 | continuous |
+| PM3_fw | PM3 | fw | 4u | µm | 0.15 | 50.0 | continuous |
+| PM4_m | PM4 | m | 10 | - | 1 | 100 | integer |
+| PM4_l | PM4 | l | 4u | µm | 0.13 | 20.0 | continuous |
+=== ????? ===
+20454 /home/edauser32/m4_deliverables/1_params/params_meta.json
