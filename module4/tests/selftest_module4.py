@@ -298,6 +298,13 @@ def main():
     check("T14d 输出含全场景覆盖检查", "全场景覆盖检查" in ce_md)
     check("T14e 输出含与 summary 的交叉校验", "交叉校验" in ce_md)
 
+    # ---------- T15 漏 import 的回归检查（真机踩过：archive_waves 用了 shutil 却没 import）----------
+    for name in ("sim_engine", "writeback", "report_gen", "stats", "corner_extract",
+                 "param_extract", "netlist_export"):
+        src = io.open(os.path.join(MOD4, name + ".py"), encoding="utf-8").read()
+        if "shutil." in src:
+            check("T15 %s 用到 shutil 且已 import" % name, "import shutil" in src)
+
     print()
     if _fail:
         print("❌ 失败 %d 项: %s" % (len(_fail), _fail))
