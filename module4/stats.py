@@ -43,6 +43,7 @@ PAT_MEM_RU = re.compile(r"ru_maxrss\s*[=:]\s*(\d+)")
 PAT_ITER = re.compile(r"\biter\s+(\d+)\b", re.I)
 PAT_TOTAL = re.compile(r"TOTAL:\s*([\d.]+)\s*s", re.I)
 PAT_DUR = re.compile(r"Execution duration:\s*(\d+:\d+:\d+)")
+PAT_ELAPSED = re.compile(r"Elapsed \(wall clock\) time[^\\n]*?:\s*([\d:.]+)")
 PAT_TEVAL = re.compile(r"t_eval=([\d.]+)s", re.I)
 PAT_NPARAM = re.compile(r"n_param=(\d+)")
 PAT_BUDGET = re.compile(r"budget=([\d.]+)s")
@@ -73,6 +74,15 @@ def collect(paths, metrics_path=""):
         if m:
             h, mi, s = (int(x) for x in m[-1].split(":"))
             total = h * 3600 + mi * 60 + s
+    if total is None:
+        # /usr/bin/time -v 的格式：Elapsed (wall clock) time (h:mm:ss or m:ss): 0:18.27
+        m = PAT_ELAPSED.findall(text)
+        if m:
+            try:
+                nums = [float(x) for x in m[-1].split(":")]
+                total = sum(v * (60 ** (len(nums) - 1 - i)) for i, v in enumerate(nums))
+            except ValueError:
+                total = None
     st["总运行时间(s)"] = total
 
     m = PAT_TEVAL.findall(text)

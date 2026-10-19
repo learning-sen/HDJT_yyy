@@ -290,10 +290,16 @@ def main(argv=None):
     L.append("## 5. 仿真波形")
     L.append("")
     if waves:
+        base_dir = os.path.dirname(os.path.abspath(a.out))
         for w in waves:
+            ap = os.path.abspath(w)
+            try:
+                shown = os.path.relpath(ap, base_dir)     # 相对报告自身的路径，便于整体拷走
+            except Exception:
+                shown = ap
             L.append("- `%s`" % os.path.basename(w))
             L.append("")
-            L.append("  ![](%s)" % w)
+            L.append("  ![](%s)" % shown.replace(os.sep, "/"))
             L.append("")
     else:
         L.append("> ⚠️ 未提供波形图（`--wave_dir`）。需要环路增益/相位 vs 频率的 Bode 图。")
