@@ -10,8 +10,8 @@
     lib/*.py                确定性工具实现（解析/识别/约减等）
 
 用法：
-    export QWEN_API_KEY=sk-xxx          # Linux/macOS
-    set QWEN_API_KEY=sk-xxx             # Windows
+    export DASHSCOPE_API_KEY=sk-xxx     # Linux/macOS（亦兼容 QWEN_API_KEY）
+    set DASHSCOPE_API_KEY=sk-xxx        # Windows
 
     python agent.py spec      --input requirement.txt --out spec_case1.json
     python agent.py topology  --netlist OPA_loopgain.netlist --outdir output
