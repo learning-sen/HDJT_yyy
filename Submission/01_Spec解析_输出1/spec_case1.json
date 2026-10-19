@@ -1,0 +1,65 @@
+{
+  "design_type": "fully_differential_opamp_with_cmfb",
+  "constraints": [
+    {
+      "name": "DC_Gain",
+      "op": ">=",
+      "value": 40.0,
+      "unit": "dB",
+      "type": "hard",
+      "priority": 2
+    },
+    {
+      "name": "Phase_Margin",
+      "op": ">=",
+      "value": 50.0,
+      "unit": "deg",
+      "type": "hard",
+      "priority": 1
+    },
+    {
+      "name": "Gain_Margin",
+      "op": "<=",
+      "value": -10.0,
+      "unit": "dB",
+      "type": "hard",
+      "priority": 1
+    },
+    {
+      "name": "I_OPA",
+      "op": "<=",
+      "value": 3.0,
+      "unit": "mA",
+      "type": "hard",
+      "priority": 1
+    }
+  ],
+  "objectives": [
+    {
+      "name": "Power",
+      "direction": "minimize",
+      "unit": "mW",
+      "priority": 3
+    },
+    {
+      "name": "DC_Gain",
+      "direction": "maximize",
+      "unit": "dB",
+      "priority": 1
+    },
+    {
+      "name": "UGB",
+      "direction": "maximize",
+      "unit": "MHz",
+      "priority": 2
+    },
+    {
+      "name": "Area",
+      "direction": "minimize",
+      "unit": "um^2",
+      "priority": 3
+    }
+  ],
+  "pvt_condition": "all_corners",
+  "worst_case": true
+}

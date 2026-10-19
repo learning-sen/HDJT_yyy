@@ -1,0 +1,6 @@
+Gain_db 4.58547e+01
+UGB 1.38412e+07
+Phase_Margin 6.11983e+01
+Gain_Margin -1.08368e+01
+I_OPA 8.38762e-04
+Total_Area 8361.080575

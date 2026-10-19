@@ -1,0 +1,1243 @@
+{
+  "stats": {
+    "subckt": "OPA",
+    "ports": [
+      "IREF",
+      "GNDA",
+      "SUB",
+      "VCM",
+      "VDDA",
+      "VINN",
+      "VINP",
+      "VOUTN",
+      "VOUTP"
+    ],
+    "n_instances": 59,
+    "n_instances_collapsed": 41,
+    "n_segmented_collapsed": 2,
+    "n_mos": 29,
+    "by_kind": {
+      "cap": 6,
+      "mos": 29,
+      "res": 6
+    },
+    "by_type": {
+      "active_load": 1,
+      "bias_branch": 1,
+      "cmfb": 1,
+      "current_mirror": 4,
+      "dummy": 4,
+      "input_pair": 2,
+      "matching_pair": 13,
+      "segmented_device": 2
+    },
+    "n_variables_before": 105,
+    "n_variables_raw": 141,
+    "n_size_params_raw": 153,
+    "n_fixed_params": 12,
+    "n_nets": 45,
+    "vdd_nets": [
+      "GNDA",
+      "SUB",
+      "VDDA"
+    ],
+    "n_isolated_devices": 4,
+    "isolated_devices": [
+      "C4",
+      "C5",
+      "R5",
+      "R6"
+    ],
+    "n_inert_devices": 4,
+    "inert_devices": [
+      "C4",
+      "C5",
+      "R5",
+      "R6"
+    ],
+    "n_symmetry_pairs": 12,
+    "n_heuristic_groups": 1
+  },
+  "modules": [
+    {
+      "id": "CM1",
+      "type": "current_mirror",
+      "devices": [
+        "NM2",
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3"
+      ],
+      "reference_device": "NM2",
+      "mirrored_devices": [
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3"
+      ],
+      "polarity": "nmos",
+      "shared_gate_net": "net53",
+      "shared_source_net": "GNDA",
+      "confidence": 3,
+      "evidence": "同型(nmos)；栅极同接 net53；源极同接 GNDA；NM2 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM2",
+      "type": "current_mirror",
+      "devices": [
+        "PM5",
+        "PM6"
+      ],
+      "reference_device": "PM5",
+      "mirrored_devices": [
+        "PM6"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "net5",
+      "shared_source_net": "VDDA",
+      "confidence": 3,
+      "evidence": "同型(pmos)；栅极同接 net5；源极同接 VDDA；PM5 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM3",
+      "type": "current_mirror",
+      "devices": [
+        "PM0",
+        "PM4",
+        "PM1"
+      ],
+      "reference_device": "PM0",
+      "mirrored_devices": [
+        "PM4",
+        "PM1"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "net6",
+      "shared_source_net": "VDDA",
+      "confidence": 3,
+      "evidence": "同型(pmos)；栅极同接 net6；源极同接 VDDA；PM0 栅漏短接 -> 参考管",
+      "notes": ""
+    },
+    {
+      "id": "CM4",
+      "type": "current_mirror",
+      "devices": [
+        "PM3",
+        "PM2"
+      ],
+      "reference_device": "PM3",
+      "mirrored_devices": [
+        "PM2"
+      ],
+      "polarity": "pmos",
+      "shared_gate_net": "vcmfb",
+      "shared_source_net": "VDDA",
+      "confidence": 2,
+      "evidence": "同型(pmos)；栅极同接 vcmfb；源极同接 VDDA；组内无二极管连接，取 PM3 为参考管",
+      "notes": ""
+    },
+    {
+      "id": "IP1",
+      "type": "input_pair",
+      "role": "auxiliary",
+      "devices": [
+        "PM12",
+        "PM8"
+      ],
+      "polarity": "pmos",
+      "shared_source_net": "net13",
+      "gate_nets": [
+        "outaverage",
+        "VCM"
+      ],
+      "drain_nets": [
+        "net52",
+        "net3"
+      ],
+      "gate_nets_are_input_ports": false,
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "confidence": 2,
+      "evidence": "同型(pmos)同尺寸(同 model p_mos_a / 同 multi 6)；源极同接 net13（尾节点）；栅极分别接 outaverage / VCM（非输入端口，判为辅助差分对）；漏极分别接 net52 / net3；-> 差分两臂必须尺寸一致，做尺寸绑定",
+      "notes": "非主输入对（如共模反馈误差放大器），仍需尺寸匹配"
+    },
+    {
+      "id": "IP2",
+      "type": "input_pair",
+      "role": "main",
+      "devices": [
+        "PM10",
+        "PM9"
+      ],
+      "polarity": "pmos",
+      "shared_source_net": "net37",
+      "gate_nets": [
+        "VINN",
+        "VINP"
+      ],
+      "drain_nets": [
+        "net44",
+        "net4"
+      ],
+      "gate_nets_are_input_ports": true,
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "confidence": 3,
+      "evidence": "同型(pmos)同尺寸(同 model p_mos_a / 同 multi 2)；源极同接 net37（尾节点）；栅极分别接 VINN / VINP（差分输入端口）；漏极分别接 net44 / net4；-> 差分两臂必须尺寸一致，做尺寸绑定",
+      "notes": ""
+    },
+    {
+      "id": "AL1",
+      "type": "active_load",
+      "devices": [
+        "NM7",
+        "NM6"
+      ],
+      "source_mirror": "CM1",
+      "connection_net": [
+        "net4",
+        "net44"
+      ],
+      "confidence": 2,
+      "evidence": "电流镜 CM1 的器件；漏极接在输入对管漏极节点 ['net4', 'net44'] 上；以有源器件替代电阻作负载，提高增益",
+      "notes": ""
+    },
+    {
+      "id": "MP1",
+      "type": "matching_pair",
+      "devices": [
+        "NM15",
+        "NM14"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM15",
+        "NM14"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(1)；对称两臂（栅极同接 IREF、源极同接 VOUTN，漏极分别接 VOUTN / VOUTP）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP2",
+      "type": "matching_pair",
+      "devices": [
+        "PM11",
+        "PM7"
+      ],
+      "kind": "mos",
+      "polarity": "pmos",
+      "match_rule": "differential_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "PM11",
+        "PM7"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(p_mos_a)、同 multi(4)；差分两臂（栅极分别接 net8 / net0，尾节点 VDDA）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP3",
+      "type": "matching_pair",
+      "devices": [
+        "PM3",
+        "PM2"
+      ],
+      "kind": "mos",
+      "polarity": "pmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "PM3",
+        "PM2"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(p_mos_a)、同 multi(40)；对称两臂（栅极同接 vcmfb、源极同接 VDDA，漏极分别接 net8 / net0）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP4",
+      "type": "matching_pair",
+      "devices": [
+        "R6",
+        "R5"
+      ],
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "R6",
+        "R5"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(res_n_poly)、同 multi(1)；两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP5",
+      "type": "matching_pair",
+      "devices": [
+        "R1",
+        "R2"
+      ],
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "R1",
+        "R2"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(res_p_poly)、同 multi(1)；两端器件对称臂（端子 ['net0', 'net17'] / ['net8', 'net7']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP6",
+      "type": "matching_pair",
+      "devices": [
+        "C5",
+        "C4"
+      ],
+      "kind": "cap",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "C5",
+        "C4"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(1)；两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP7",
+      "type": "matching_pair",
+      "devices": [
+        "C11",
+        "C0"
+      ],
+      "kind": "cap",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "C11",
+        "C0"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(2)；两端器件对称臂（端子 ['net17', 'VOUTP'] / ['net7', 'VOUTN']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP8",
+      "type": "matching_pair",
+      "devices": [
+        "C3",
+        "C2"
+      ],
+      "kind": "cap",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "C3",
+        "C2"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(cap_mim)、同 multi(1)；两端器件对称臂（端子 ['VOUTN', 'outaverage'] / ['outaverage', 'VOUTP']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP9",
+      "type": "matching_pair",
+      "devices": [
+        "R0",
+        "R3"
+      ],
+      "kind": "res",
+      "polarity": "-",
+      "match_rule": "symmetric_arms",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "R0",
+        "R3"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(res_p_poly)、同 multi(1)；两端器件对称臂（端子 ['VOUTP', 'outaverage'] / ['VOUTN', 'outaverage']）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP10",
+      "type": "matching_pair",
+      "devices": [
+        "NM9",
+        "NM8"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM9",
+        "NM8"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 VOUTN / VOUTP）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP11",
+      "type": "matching_pair",
+      "devices": [
+        "NM7",
+        "NM6"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM7",
+        "NM6"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 net44 / net4）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP12",
+      "type": "matching_pair",
+      "devices": [
+        "NM4",
+        "NM5"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "symmetry_wl",
+      "bind_params": [
+        "l",
+        "w",
+        "m",
+        "segL",
+        "segW",
+        "seg"
+      ],
+      "group_members": [
+        "NM4",
+        "NM5"
+      ],
+      "group_size": 2,
+      "confidence": 3,
+      "evidence": "同 model(n_mos_a)、同 multi(4)；对称两臂（栅极同接 IREF、源极同接 net4，漏极分别接 net0 / net8）；在差分端口对换下互为镜像（WL 颜色细化 + 全局自同构校验通过）；-> 版图匹配要求尺寸绑定，只保留一个基准变量",
+      "notes": ""
+    },
+    {
+      "id": "MP13",
+      "type": "matching_pair",
+      "devices": [
+        "NM12",
+        "NM13"
+      ],
+      "kind": "mos",
+      "polarity": "nmos",
+      "match_rule": "same_branch",
+      "detector": "structure_heuristic",
+      "bind_params": [
+        "l"
+      ],
+      "base_device": "NM12",
+      "group_members": [
+        "NM12",
+        "NM13"
+      ],
+      "group_size": 2,
+      "confidence": 2,
+      "evidence": "同 model(n_mos_a)、同 multi(4)、同一镜像支路（源极同接 GNDA、栅极同接 net53，共 2 只）；由连接结构（图分析）判为匹配结构 -> 只绑 L（镜像比由 w/m 表达），只保留一个基准变量",
+      "notes": "镜像支路匹配：镜像比通过 w/m 的比例表达，w/m 保持自由"
+    },
+    {
+      "id": "DM1",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
+      "devices": [
+        "R6"
+      ],
+      "kind": "res",
+      "confidence": 3,
+      "evidence": "两端器件 R6 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
+    },
+    {
+      "id": "DM2",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
+      "devices": [
+        "R5"
+      ],
+      "kind": "res",
+      "confidence": 3,
+      "evidence": "两端器件 R5 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
+    },
+    {
+      "id": "DM3",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
+      "devices": [
+        "C5"
+      ],
+      "kind": "cap",
+      "confidence": 3,
+      "evidence": "两端器件 C5 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
+    },
+    {
+      "id": "DM4",
+      "type": "dummy",
+      "dummy_subtype": "electrically_inert",
+      "devices": [
+        "C4"
+      ],
+      "kind": "cap",
+      "confidence": 3,
+      "evidence": "两端器件 C4 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响；所在连通分量不接触任何对外端口或电源地网，与主电路无电气连接 -> 不参与电路功能，剔除其全部优化变量（器件保留在约减后网表中，尺寸按原值固定）",
+      "notes": "变量已剔除；器件本身未从网表删除，保证电路等价"
+    },
+    {
+      "id": "CMFB1",
+      "type": "cmfb",
+      "devices": [
+        "NM11",
+        "PM12",
+        "PM8",
+        "PM6",
+        "PM3",
+        "PM2",
+        "C3",
+        "C2",
+        "R0",
+        "R3"
+      ],
+      "cmfb_nets": [
+        "VCM",
+        "outaverage",
+        "vcmfb"
+      ],
+      "sense_divider": [
+        [
+          "R0",
+          "R3",
+          "outaverage",
+          "VOUTP",
+          "VOUTN"
+        ]
+      ],
+      "confidence": 3,
+      "evidence": "检测到共模相关节点: ['VCM', 'outaverage', 'vcmfb']；共模取样分压网络 R0 / R3：分别从输出 VOUTP 与 VOUTN 取样，在 outaverage 取平均；取样节点 outaverage 送入 PM12 的栅极；涉及器件 10 个：['NM11', 'PM12', 'PM8', 'PM6', 'PM3', 'PM2', 'C3', 'C2', 'R0', 'R3']；作用：稳定全差分输出的共模电平",
+      "notes": ""
+    },
+    {
+      "id": "BIAS1",
+      "type": "bias_branch",
+      "devices": [
+        "NM0",
+        "NM1",
+        "NM10",
+        "NM11",
+        "NM14",
+        "NM15",
+        "NM4",
+        "NM5",
+        "PM2",
+        "PM3",
+        "PM8"
+      ],
+      "bias_nets": [
+        "IREF",
+        "VCM",
+        "vcmfb"
+      ],
+      "confidence": 2,
+      "evidence": "偏置节点 ['IREF', 'VCM', 'vcmfb'] 直接驱动 11 个器件（栅极或独立源），构成参考偏置支路",
+      "notes": ""
+    },
+    {
+      "id": "SEG1",
+      "type": "segmented_device",
+      "devices": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "base_device": "R0",
+      "segment_count": 9,
+      "confidence": 3,
+      "evidence": "器件 R0 被自动拆分为 9 段串联（后缀 _<n>_res_gen）；参数完全相同（同一物理器件的分段实现）；-> 应视为**一个**器件，只保留一组变量",
+      "notes": ""
+    },
+    {
+      "id": "SEG2",
+      "type": "segmented_device",
+      "devices": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "base_device": "R3",
+      "segment_count": 9,
+      "confidence": 3,
+      "evidence": "器件 R3 被自动拆分为 9 段串联（后缀 _<n>_res_gen）；参数完全相同（同一物理器件的分段实现）；-> 应视为**一个**器件，只保留一组变量",
+      "notes": ""
+    }
+  ],
+  "decision_log": [
+    {
+      "rule": "collapse_segmented",
+      "targets": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "reason": "自动分段器件 R0 由 1 个基准器件 + 9 个自动生成段（共 10 段串联）折叠为 1 个逻辑器件（2 个外部端点 ['VOUTP', 'outaverage']）"
+    },
+    {
+      "rule": "collapse_segmented",
+      "targets": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "reason": "自动分段器件 R3 由 1 个基准器件 + 9 个自动生成段（共 10 段串联）折叠为 1 个逻辑器件（2 个外部端点 ['VOUTN', 'outaverage']）"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "NM13",
+        "NM12",
+        "NM9",
+        "NM8",
+        "NM7",
+        "NM6",
+        "NM3",
+        "NM2"
+      ],
+      "reason": "同型(nmos)；栅极同接 net53；源极同接 GNDA；NM2 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM6",
+        "PM5"
+      ],
+      "reason": "同型(pmos)；栅极同接 net5；源极同接 VDDA；PM5 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM4",
+        "PM1",
+        "PM0"
+      ],
+      "reason": "同型(pmos)；栅极同接 net6；源极同接 VDDA；PM0 栅漏短接 -> 参考管"
+    },
+    {
+      "rule": "current_mirror",
+      "targets": [
+        "PM3",
+        "PM2"
+      ],
+      "reason": "同型(pmos)；栅极同接 vcmfb；源极同接 VDDA；组内无二极管连接，取 PM3 为参考管"
+    },
+    {
+      "rule": "differential_pair",
+      "targets": [
+        "PM12",
+        "PM8"
+      ],
+      "reason": "共尾节点 net13、双栅 outaverage/VCM、双漏 net52/net3 -> 辅助差分对"
+    },
+    {
+      "rule": "differential_pair",
+      "targets": [
+        "PM10",
+        "PM9"
+      ],
+      "reason": "共尾节点 net37、双栅 VINN/VINP、双漏 net44/net4 -> 主差分对"
+    },
+    {
+      "rule": "active_load",
+      "targets": [
+        "NM7",
+        "NM6"
+      ],
+      "reason": "漏极接输入对管漏极 -> 承担负载功能"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM15",
+        "NM14"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 IREF、源极同接 VOUTN，漏极分别接 VOUTN / VOUTP），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "PM11",
+        "PM7"
+      ],
+      "reason": "差分对称校验通过 -> 差分两臂（栅极分别接 net8 / net0，尾节点 VDDA），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "PM10",
+        "PM9"
+      ],
+      "reason": "差分对称校验通过 -> 差分两臂（栅极分别接 VINN / VINP，尾节点 net37），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "PM3",
+        "PM2"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 vcmfb、源极同接 VDDA，漏极分别接 net8 / net0），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R6",
+        "R5"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R1",
+        "R2"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net0', 'net17'] / ['net8', 'net7']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C5",
+        "C4"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net12', 'net12'] / ['net11', 'net11']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C11",
+        "C0"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['net17', 'VOUTP'] / ['net7', 'VOUTN']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "C3",
+        "C2"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['VOUTN', 'outaverage'] / ['outaverage', 'VOUTP']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "R0",
+        "R3"
+      ],
+      "reason": "差分对称校验通过 -> 两端器件对称臂（端子 ['VOUTP', 'outaverage'] / ['VOUTN', 'outaverage']），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM9",
+        "NM8"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 VOUTN / VOUTP），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM7",
+        "NM6"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 net53、源极同接 GNDA，漏极分别接 net44 / net4），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_pair",
+      "targets": [
+        "NM4",
+        "NM5"
+      ],
+      "reason": "差分对称校验通过 -> 对称两臂（栅极同接 IREF、源极同接 net4，漏极分别接 net0 / net8），尺寸绑定只保留一组变量"
+    },
+    {
+      "rule": "matching_group",
+      "targets": [
+        "NM12",
+        "NM13"
+      ],
+      "reason": "同一镜像支路（源极同接 GNDA、栅极同接 net53，共 2 只） -> 只绑 L（镜像比由 w/m 表达）"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "R6"
+      ],
+      "reason": "两端器件 R6 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "R5"
+      ],
+      "reason": "两端器件 R5 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "C5"
+      ],
+      "reason": "两端器件 C5 的两个端子都接在同一网 net12：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "dummy",
+      "targets": [
+        "C4"
+      ],
+      "reason": "两端器件 C4 的两个端子都接在同一网 net11：两端电压恒为 0 -> 电流恒为 0 -> 对任何仿真结果都没有影响 -> 剔除其全部优化变量"
+    },
+    {
+      "rule": "cmfb",
+      "targets": [
+        "VCM",
+        "outaverage",
+        "vcmfb"
+      ],
+      "reason": "存在共模检测节点/分压网络，判为共模反馈结构"
+    },
+    {
+      "rule": "bias_branch",
+      "targets": [
+        "NM15",
+        "NM14",
+        "NM11",
+        "NM10",
+        "NM4",
+        "NM1",
+        "NM0",
+        "NM5",
+        "PM8",
+        "PM3",
+        "PM2"
+      ],
+      "reason": "由偏置端口 ['IREF', 'VCM', 'vcmfb'] 驱动"
+    },
+    {
+      "rule": "segmented_device",
+      "targets": [
+        "R0",
+        "R0_2_res_gen",
+        "R0_3_res_gen",
+        "R0_4_res_gen",
+        "R0_5_res_gen",
+        "R0_6_res_gen",
+        "R0_7_res_gen",
+        "R0_8_res_gen",
+        "R0_9_res_gen",
+        "R0_10_res_gen"
+      ],
+      "reason": "同一物理器件被拆成 9 段，只保留一组变量"
+    },
+    {
+      "rule": "segmented_device",
+      "targets": [
+        "R3",
+        "R3_2_res_gen",
+        "R3_3_res_gen",
+        "R3_4_res_gen",
+        "R3_5_res_gen",
+        "R3_6_res_gen",
+        "R3_7_res_gen",
+        "R3_8_res_gen",
+        "R3_9_res_gen",
+        "R3_10_res_gen"
+      ],
+      "reason": "同一物理器件被拆成 9 段，只保留一组变量"
+    }
+  ],
+  "device_roles": {
+    "C0": [
+      "matching_pair"
+    ],
+    "C11": [
+      "matching_pair"
+    ],
+    "C2": [
+      "cmfb",
+      "matching_pair"
+    ],
+    "C3": [
+      "cmfb",
+      "matching_pair"
+    ],
+    "C4": [
+      "dummy",
+      "matching_pair"
+    ],
+    "C5": [
+      "dummy",
+      "matching_pair"
+    ],
+    "NM0": [
+      "bias_branch"
+    ],
+    "NM1": [
+      "bias_branch"
+    ],
+    "NM10": [
+      "bias_branch"
+    ],
+    "NM11": [
+      "bias_branch",
+      "cmfb"
+    ],
+    "NM12": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM13": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM14": [
+      "bias_branch",
+      "matching_pair"
+    ],
+    "NM15": [
+      "bias_branch",
+      "matching_pair"
+    ],
+    "NM2": [
+      "current_mirror"
+    ],
+    "NM3": [
+      "current_mirror"
+    ],
+    "NM4": [
+      "bias_branch",
+      "matching_pair"
+    ],
+    "NM5": [
+      "bias_branch",
+      "matching_pair"
+    ],
+    "NM6": [
+      "active_load",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM7": [
+      "active_load",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM8": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "NM9": [
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM0": [
+      "current_mirror"
+    ],
+    "PM1": [
+      "current_mirror"
+    ],
+    "PM10": [
+      "input_pair"
+    ],
+    "PM11": [
+      "matching_pair"
+    ],
+    "PM12": [
+      "cmfb",
+      "input_pair"
+    ],
+    "PM2": [
+      "bias_branch",
+      "cmfb",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM3": [
+      "bias_branch",
+      "cmfb",
+      "current_mirror",
+      "matching_pair"
+    ],
+    "PM4": [
+      "current_mirror"
+    ],
+    "PM5": [
+      "current_mirror"
+    ],
+    "PM6": [
+      "cmfb",
+      "current_mirror"
+    ],
+    "PM7": [
+      "matching_pair"
+    ],
+    "PM8": [
+      "bias_branch",
+      "cmfb",
+      "input_pair"
+    ],
+    "PM9": [
+      "input_pair"
+    ],
+    "R0": [
+      "cmfb",
+      "matching_pair",
+      "segmented_device"
+    ],
+    "R0_10_res_gen": [
+      "segmented_device"
+    ],
+    "R0_2_res_gen": [
+      "segmented_device"
+    ],
+    "R0_3_res_gen": [
+      "segmented_device"
+    ],
+    "R0_4_res_gen": [
+      "segmented_device"
+    ],
+    "R0_5_res_gen": [
+      "segmented_device"
+    ],
+    "R0_6_res_gen": [
+      "segmented_device"
+    ],
+    "R0_7_res_gen": [
+      "segmented_device"
+    ],
+    "R0_8_res_gen": [
+      "segmented_device"
+    ],
+    "R0_9_res_gen": [
+      "segmented_device"
+    ],
+    "R1": [
+      "matching_pair"
+    ],
+    "R2": [
+      "matching_pair"
+    ],
+    "R3": [
+      "cmfb",
+      "matching_pair",
+      "segmented_device"
+    ],
+    "R3_10_res_gen": [
+      "segmented_device"
+    ],
+    "R3_2_res_gen": [
+      "segmented_device"
+    ],
+    "R3_3_res_gen": [
+      "segmented_device"
+    ],
+    "R3_4_res_gen": [
+      "segmented_device"
+    ],
+    "R3_5_res_gen": [
+      "segmented_device"
+    ],
+    "R3_6_res_gen": [
+      "segmented_device"
+    ],
+    "R3_7_res_gen": [
+      "segmented_device"
+    ],
+    "R3_8_res_gen": [
+      "segmented_device"
+    ],
+    "R3_9_res_gen": [
+      "segmented_device"
+    ],
+    "R5": [
+      "dummy",
+      "matching_pair"
+    ],
+    "R6": [
+      "dummy",
+      "matching_pair"
+    ]
+  },
+  "warnings": []
+}

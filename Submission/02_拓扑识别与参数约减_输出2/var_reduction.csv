@@ -1,0 +1,54 @@
+﻿变量名,参数,类型,单位,涉及器件,合并来源,说明
+C0_l,l,continuous,m,C0|C11,C0_l|C11_l,共享(symmetry)
+C2_l,l,continuous,m,C2|C3,C2_l|C3_l,共享(symmetry)
+NM0_fw,w,continuous,m,NM0,NM0_fw,独立变量
+NM0_l,l,continuous,m,NM0,NM0_l,独立变量
+NM0_m,m,integer,-,NM0,NM0_m,独立变量
+NM1_fw,w,continuous,m,NM1,NM1_fw,独立变量
+NM1_l,l,continuous,m,NM1|NM4|NM5|NM10|NM11,NM1_l|NM4_l|NM5_l|NM10_l|NM11_l,共享(arm_match/symmetry)
+NM1_m,m,integer,-,NM1,NM1_m,独立变量
+NM2_fw,w,continuous,m,NM2|NM3|NM6|NM7|NM8|NM9|NM12|NM13,NM2_fw|NM3_fw|NM6_fw|NM7_fw|NM8_fw|NM9_fw|NM12_fw|NM13_fw,共享(arm_match/symmetry)
+NM2_l,l,continuous,m,NM2|NM3|NM6|NM7|NM8|NM9|NM12|NM13,NM2_l|NM3_l|NM6_l|NM7_l|NM8_l|NM9_l|NM12_l|NM13_l,共享(arm_match/symmetry)
+NM2_m,m,integer,-,NM2,NM2_m,独立变量
+NM3_m,m,integer,-,NM3,NM3_m,独立变量
+NM4_fw,w,continuous,m,NM4|NM5,NM4_fw|NM5_fw,共享(symmetry)
+NM4_m,m,integer,-,NM4|NM5,NM4_m|NM5_m,共享(symmetry)
+NM6_m,m,integer,-,NM6|NM7,NM6_m|NM7_m,共享(symmetry)
+NM8_m,m,integer,-,NM8|NM9,NM8_m|NM9_m,共享(symmetry)
+NM10_fw,w,continuous,m,NM10|NM11,NM10_fw|NM11_fw,共享(arm_match)
+NM10_m,m,integer,-,NM10|NM11,NM10_m|NM11_m,共享(arm_match)
+NM12_m,m,integer,-,NM12|NM13,NM12_m|NM13_m,共享(arm_match)
+NM14_fw,w,continuous,m,NM14|NM15,NM14_fw|NM15_fw,共享(symmetry)
+NM14_l,l,continuous,m,NM14|NM15,NM14_l|NM15_l,共享(symmetry)
+NM14_m,m,integer,-,NM14|NM15,NM14_m|NM15_m,共享(symmetry)
+PM0_fw,w,continuous,m,PM0|PM1|PM4,PM0_fw|PM1_fw|PM4_fw,电流镜组共享 w/l
+PM0_l,l,continuous,m,PM0|PM1|PM4,PM0_l|PM1_l|PM4_l,电流镜组共享 w/l
+PM0_m,m,integer,-,PM0,PM0_m,独立变量
+PM1_m,m,integer,-,PM1,PM1_m,独立变量
+PM2_fw,w,continuous,m,PM2|PM3,PM2_fw|PM3_fw,共享(symmetry)
+PM2_l,l,continuous,m,PM2|PM3,PM2_l|PM3_l,共享(symmetry)
+PM2_m,m,integer,-,PM2|PM3,PM2_m|PM3_m,共享(symmetry)
+PM4_m,m,integer,-,PM4,PM4_m,独立变量
+PM5_fw,w,continuous,m,PM5|PM6,PM5_fw|PM6_fw,电流镜组共享 w/l
+PM5_l,l,continuous,m,PM5|PM6,PM5_l|PM6_l,电流镜组共享 w/l
+PM5_m,m,integer,-,PM5,PM5_m,独立变量
+PM6_m,m,integer,-,PM6,PM6_m,独立变量
+PM7_fw,w,continuous,m,PM7|PM11,PM7_fw|PM11_fw,共享(symmetry)
+PM7_l,l,continuous,m,PM7|PM11,PM7_l|PM11_l,共享(symmetry)
+PM7_m,m,integer,-,PM7|PM11,PM7_m|PM11_m,共享(symmetry)
+PM8_fw,w,continuous,m,PM8|PM12,PM8_fw|PM12_fw,共享(differential/auxiliary)
+PM8_l,l,continuous,m,PM8|PM12,PM8_l|PM12_l,共享(differential/auxiliary)
+PM8_m,m,integer,-,PM8|PM12,PM8_m|PM12_m,共享(differential/auxiliary)
+PM9_fw,w,continuous,m,PM9|PM10,PM9_fw|PM10_fw,共享(symmetry)
+PM9_l,l,continuous,m,PM9|PM10,PM9_l|PM10_l,共享(symmetry)
+PM9_m,m,integer,-,PM9|PM10,PM9_m|PM10_m,共享(symmetry)
+R0_segL,segL,continuous,m,R0|R0_2_res_gen|R0_3_res_gen|R0_4_res_gen|R0_5_res_gen|R0_6_res_gen|R0_7_res_gen|R0_8_res_gen|R0_9_res_gen|R0_10_res_gen|R3|R3_2_res_gen|R3_3_res_gen|R3_4_res_gen|R3_5_res_gen|R3_6_res_gen|R3_7_res_gen|R3_8_res_gen|R3_9_res_gen|R3_10_res_gen,R0_segL|R3_segL,共享(symmetry)
+R0_segW,segW,continuous,m,R0|R0_2_res_gen|R0_3_res_gen|R0_4_res_gen|R0_5_res_gen|R0_6_res_gen|R0_7_res_gen|R0_8_res_gen|R0_9_res_gen|R0_10_res_gen|R3|R3_2_res_gen|R3_3_res_gen|R3_4_res_gen|R3_5_res_gen|R3_6_res_gen|R3_7_res_gen|R3_8_res_gen|R3_9_res_gen|R3_10_res_gen,R0_segW|R3_segW,共享(symmetry)
+R1_segL,segL,continuous,m,R1|R2,R1_segL|R2_segL,共享(symmetry)
+R1_segW,segW,continuous,m,R1|R2,R1_segW|R2_segW,共享(symmetry)
+R6_segL,segL,fixed,-,R6,,Dummy 器件（电气无效），尺寸不参与优化
+R6_segW,segW,fixed,-,R6,,Dummy 器件（电气无效），尺寸不参与优化
+R5_segL,segL,fixed,-,R5,,Dummy 器件（电气无效），尺寸不参与优化
+R5_segW,segW,fixed,-,R5,,Dummy 器件（电气无效），尺寸不参与优化
+C5_l,l,fixed,-,C5,,Dummy 器件（电气无效），尺寸不参与优化
+C4_l,l,fixed,-,C4,,Dummy 器件（电气无效），尺寸不参与优化

@@ -1,0 +1,12 @@
+==============================
+       score result           
+------------------------------
+PM score      : 10.0000
+GM score      : 10.0000
+Gain score    : 10.0000
+I_OPA score   : 10.0000
+UGB score     : 1.0381
+Area score    : 23.9204
+Time score    : 20.0000
+------------------------------
+Total score   : 84.9584
