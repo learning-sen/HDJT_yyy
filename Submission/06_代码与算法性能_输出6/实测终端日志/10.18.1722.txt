@@ -1,0 +1,143 @@
+[edauser32@eda202601 EDA_2026_Empyrean_lab_start]$ cd ~/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ SMOKE=~/smoke
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ rm -rf "$SMOKE" && mkdir -p "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ tar -xzf eda_2026_case_1.tar.gz -C "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ PKG=$(ls -d "$SMOKE"/*/ | head -1)
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ OURS=~/optimization.py      # ???????????????????? 1.1
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ ls -l "$OURS"               # ? ???? No such file???????
+-rw-------. 1 edauser32 edauser32 59679 Oct 18 17:11 /home/edauser32/optimization.py
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp "$OURS" "$PKG/optimization.py"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp -rf circuits/* "$PKG"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cd "$PKG"
+[edauser32@eda202601 eda_2025_case_1]$ time pythone optimization.py \
+>   --ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic \
+>   --mde_cell OPA_loopgain --mde_view spe_state1_Corner \
+>   --param_file case1_params_0.txt \
+>   --best_param_file "$SMOKE/best_smoke.txt" \
+>   --set_params
+bash: pythone: command not found...
+Similar command is: 'python'
+
+real	0m0.013s
+user	0m0.006s
+sys	0m0.012s
+[edauser32@eda202601 eda_2025_case_1]$ # ? ??????????VNC ???????
+[edauser32@eda202601 eda_2025_case_1]$ source ~/EDA_2026_Empyrean_lab_start/setup.bash
+[edauser32@eda202601 eda_2025_case_1]$ which pythone          # ??????
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/bin/pythone
+[edauser32@eda202601 eda_2025_case_1]$ echo $LM_LICENSE_FILE  # ????
+59001@172.21.170.32
+[edauser32@eda202601 eda_2025_case_1]$ 
+[edauser32@eda202601 eda_2025_case_1]$ # ? ???????????
+[edauser32@eda202601 eda_2025_case_1]$ SMOKE=~/smoke
+[edauser32@eda202601 eda_2025_case_1]$ cd ~/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ 
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ # ? ???? + ?? + ?? circuits
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ rm -rf "$SMOKE" && mkdir -p "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ tar -xzf eda_2026_case_1.tar.gz -C "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ PKG=$(ls -d "$SMOKE"/*/ | head -1)
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp ~/optimization.py "$PKG/optimization.py"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp -rf circuits/* "$PKG"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cd "$PKG"
+[edauser32@eda202601 eda_2025_case_1]$ 
+[edauser32@eda202601 eda_2025_case_1]$ # ? ??
+[edauser32@eda202601 eda_2025_case_1]$ time pythone optimization.py \
+>   --ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic \
+>   --mde_cell OPA_loopgain --mde_view spe_state1_Corner \
+>   --param_file case1_params_0.txt \
+>   --best_param_file "$SMOKE/best_smoke.txt" \
+>   --set_params
+OpenAccess 2.2 is loaded from /home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/openaccess/lib/linux_rhel60_64/opt
+Load OA TCL shared library (1) successfully.
+
+Load initialize file 'emyLibInit.tcl' for library 'analog'.
+Load initialize file 'emyLibInit.tcl' for library 'amsLib'.
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/netlist_procedure.tbc
+Load initialize file 'emyLibInit.tcl' for library '013um_PDK'.
+LC_Check out license PY_AETHER version 1.0...
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task0/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task0/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task1/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task1/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task2/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task2/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task3/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task3/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task4/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task4/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task5/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task5/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task6/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task6/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task7/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task7/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task8/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task8/OPA_loopgain/spe_state1/setting
+==== [P0-8] \u6a21\u578b\u8def\u5f84\u4fee\u590d\u5b8c\u6210\uff1a\u626b\u63cf 40 \u4e2a\u5019\u9009\u6587\u4ef6\uff0c\u6539\u52a8 20 \u4e2a\uff08cwd=/home/edauser32/smoke/eda_2025_case_1\uff09====
+LC_Check out license DM version 1.0...
+
+                         Empyrean AetherADV
+              Version 2025.09.sp2, Build on 02/02/2026
+                        For [linux26-x86_64]
+                      Copyright (c) 2009-2026
+                    Empyrean Technology Co.,Ltd.
+                        ALL RIGHTS RESERVED
+
+Load setting file '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/aether.ini'.
+Load '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/display.drf'.
+Load 'display.drf'.
+Warning: Unable to open library 2026_EDA_case2 at path /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case2: Invalid Lib Path.
+==== [P0-3] Read 105 parameters (bounds aligned with score.py): case1_params_0.txt ====
+==== \u7ea6\u51cf\u914d\u7f6e\uff08\u6765\u81ea\u6a21\u5757\u4e8c\uff0c\u5df2\u6309\u672c\u7535\u8def\u8fc7\u6ee4\uff09====
+  dummy_devices    : R5,R6,C4,C5
+  symmetry_devices : (NM15,NM14),(PM11,PM7),(PM10,PM9),(PM3,PM2),(NM4,NM5),(NM6,NM7),(NM8,NM9),(NM10,NM11),(NM12,NM13),(PM8,PM12),(R1,R2),(R0,R3),(C0,C11),(C2,C3)
+==== [P0-3] Read 105 parameters (bounds aligned with score.py): case1_params_0.txt ====
+==== dummy params: 6 | \u5f85\u4f18\u5316\u53c2\u6570: 99 ====
+Parameter count reduced from 99 to 63
+create new dir: ./results
+
+==== SINGLE-EVAL MODE\uff08\u53ea\u8bc4\u4f30\u4e00\u6b21\uff0c\u4e0d\u4f18\u5316\uff09====
+LC_Check out license PYAE_SE_BASIC version 1.0...
+Design save result: True
+LC_Check out license PYAE_SE_BASIC version 1.0...
+
+==== total area:  11299.2
+LC_Check out license MDE_L2 version 1.0...
+
+==== iter 1 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 1 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 1 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Simulation run started.
+Creating simulation netlist succeeds.
+
+==== iter 1 Begin simulate ====
+Simulation run started.
+
+==== iter 1 Simulation completed successfully ====
+==== iter 1 Succeeds in closing MDE ====
+
+==== iter 1 Result name: Results2
+LC_Check out license PYAE_SE_BASIC version 1.0...
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_1/params.txt ====
+
+========== Evaluation result of iter 1 ==========
+====== UGB          : 7641140.0 Hz
+====== Phase_Margin : 73.1725 deg
+====== Gain_db      : 29.4006 db
+====== Gain_Margin  : -15.0247 deg
+====== I_OPA        : 1.56799 mA
+====== Total_Area   : 11299.2 um^2
+
+==== scores: {'Gain_db': 29.4006, 'UGB': 7641140.0, 'Phase_Margin': 73.1725, 'Gain_Margin': -15.0247, 'I_OPA': 0.00156799, 'Total_Area': 11299.2} ====
+LC_Check out license PYAE_SE_BASIC version 1.0...
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_smoke.txt ====
+==== \u5df2\u5199\u51fa /home/edauser32/smoke/best_smoke.txt ====
+
+real	0m32.947s
+user	0m59.401s
+sys	0m26.875s
+[edauser32@eda202601 eda_2025_case_1]$ 

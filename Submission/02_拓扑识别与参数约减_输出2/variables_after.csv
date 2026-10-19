@@ -1,0 +1,62 @@
+﻿instance,device_kind,param,variable,var_type,lower,upper,unit,note
+C11,cap,l,C11_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+C3,cap,l,C3_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM0,mos,l,NM0_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM0,mos,w,NM0_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM0,mos,m,NM0_m,integer,1,20,,Multiplier m：1..20（整数）
+NM1,mos,l,NM1_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM1,mos,w,NM1_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM1,mos,m,NM1_m,integer,1,20,,Multiplier m：1..20（整数）
+NM10,mos,l,NM10_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM10,mos,w,NM10_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM10,mos,m,NM10_m,integer,1,20,,Multiplier m：1..20（整数）
+NM11,mos,l,NM11_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM11,mos,w,NM11_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM11,mos,m,NM11_m,integer,1,20,,Multiplier m：1..20（整数）
+NM12,mos,w,NM12_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM12,mos,m,NM12_m,integer,1,20,,Multiplier m：1..20（整数）
+NM13,mos,w,NM13_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM13,mos,m,NM13_m,integer,1,20,,Multiplier m：1..20（整数）
+NM15,mos,l,NM15_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM15,mos,w,NM15_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM15,mos,m,NM15_m,integer,1,20,,Multiplier m：1..20（整数）
+NM2,mos,l,NM2_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM2,mos,w,NM2_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM2,mos,m,NM2_m,integer,1,20,,Multiplier m：1..20（整数）
+NM3,mos,w,NM3_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM3,mos,m,NM3_m,integer,1,20,,Multiplier m：1..20（整数）
+NM4,mos,l,NM4_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+NM4,mos,w,NM4_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM4,mos,m,NM4_m,integer,1,20,,Multiplier m：1..20（整数）
+NM7,mos,w,NM7_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM7,mos,m,NM7_m,integer,1,20,,Multiplier m：1..20（整数）
+NM9,mos,w,NM9_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+NM9,mos,m,NM9_m,integer,1,20,,Multiplier m：1..20（整数）
+PM0,mos,l,PM0_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM0,mos,w,PM0_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM0,mos,m,PM0_m,integer,1,20,,Multiplier m：1..20（整数）
+PM1,mos,w,PM1_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM1,mos,m,PM1_m,integer,1,20,,Multiplier m：1..20（整数）
+PM10,mos,l,PM10_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM10,mos,w,PM10_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM10,mos,m,PM10_m,integer,1,20,,Multiplier m：1..20（整数）
+PM11,mos,l,PM11_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM11,mos,w,PM11_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM11,mos,m,PM11_m,integer,1,20,,Multiplier m：1..20（整数）
+PM12,mos,l,PM12_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM12,mos,w,PM12_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM12,mos,m,PM12_m,integer,1,20,,Multiplier m：1..20（整数）
+PM3,mos,l,PM3_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM3,mos,w,PM3_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM3,mos,m,PM3_m,integer,1,20,,Multiplier m：1..20（整数）
+PM4,mos,w,PM4_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM4,mos,m,PM4_m,integer,1,20,,Multiplier m：1..20（整数）
+PM5,mos,l,PM5_l,continuous,1.3e-07,1e-05,m,晶体管长度 L：0.13μm – 10μm
+PM5,mos,w,PM5_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM5,mos,m,PM5_m,integer,1,20,,Multiplier m：1..20（整数）
+PM6,mos,w,PM6_fw,continuous,1.3e-07,2e-05,m,晶体管宽度 W(fw)：0.13μm – 20μm
+PM6,mos,m,PM6_m,integer,1,20,,Multiplier m：1..20（整数）
+R0,res,segL,R0_segL,continuous,1.3e-07,2e-05,m,电阻段长 segL：0.13μm – 20μm
+R0,res,segW,R0_segW,continuous,1.3e-07,2e-05,m,电阻段宽 segW：0.13μm – 20μm
+R1,res,segL,R1_segL,continuous,1.3e-07,2e-05,m,电阻段长 segL：0.13μm – 20μm
+R1,res,segW,R1_segW,continuous,1.3e-07,2e-05,m,电阻段宽 segW：0.13μm – 20μm

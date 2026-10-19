@@ -1,0 +1,10 @@
+iter        : 202
+fitness     : -80.0
+score       : 80.0
+viol        : 0.0
+UGB         : 13841200.0
+Phase_Margin: 61.1983
+Gain_db     : 45.8547
+Gain_Margin : -10.8368
+I_OPA       : 0.000838762
+Total_Area  : 8361.080575

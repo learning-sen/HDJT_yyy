@@ -1,0 +1,890 @@
+[edauser32@eda202601 eda_2025_case_1]$ ls -l ~/optimization.py    # ?? 67024
+-rw-------. 1 edauser32 edauser32 67024 Oct 18 19:13 /home/edauser32/optimization.py
+[edauser32@eda202601 eda_2025_case_1]$ md5sum ~/optimization.py   # ?? 33f60874d156435fc65bd8435b69071b
+33f60874d156435fc65bd8435b69071b  /home/edauser32/optimization.py
+[edauser32@eda202601 eda_2025_case_1]$ cd ~/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ SMOKE=~/smoke
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ rm -rf "$SMOKE" && mkdir -p "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ tar -xzf eda_2026_case_1.tar.gz -C "$SMOKE"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ PKG=$(ls -d "$SMOKE"/*/ | head -1)
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp ~/optimization.py "$PKG/optimization.py"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cp -rf circuits/* "$PKG"
+[edauser32@eda202601 EDA_2026_Empyrean_score]$ cd "$PKG"
+[edauser32@eda202601 eda_2025_case_1]$ 
+[edauser32@eda202601 eda_2025_case_1]$ OPT_TIME_LIMIT=300 pythone optimization.py \
+>   --ae_lib 2026_EDA_case1 --ae_cell OPA --ae_view schematic \
+>   --mde_cell OPA_loopgain --mde_view spe_state1_Corner \
+>   --param_file case1_params_0.txt \
+>   --best_param_file "$SMOKE/best_pdf.txt" 2>&1 | tee ~/smoke_pdf.log
+OpenAccess 2.2 is loaded from /home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/openaccess/lib/linux_rhel60_64/opt
+Load OA TCL shared library (1) successfully.
+
+Load initialize file 'emyLibInit.tcl' for library 'analog'.
+Load initialize file 'emyLibInit.tcl' for library 'amsLib'.
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/netlist_procedure.tbc
+Load initialize file 'emyLibInit.tcl' for library '013um_PDK'.
+LC_Check out license PY_AETHER version 1.0...
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task0/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task0/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task1/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task1/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task2/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task2/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task3/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task3/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task4/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task4/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task5/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task5/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task6/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task6/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task7/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task7/OPA_loopgain/spe_state1/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task8/OPA_loopgain/spe_state1_Corner/setting
+[P0-8] \u4fee\u590d\u6a21\u578b\u8def\u5f84: ./2026_EDA_case1_task8/OPA_loopgain/spe_state1/setting
+==== [P0-8] \u6a21\u578b\u8def\u5f84\u4fee\u590d\u5b8c\u6210\uff1a\u626b\u63cf 40 \u4e2a\u5019\u9009\u6587\u4ef6\uff0c\u6539\u52a8 20 \u4e2a\uff08cwd=/home/edauser32/smoke/eda_2025_case_1\uff09====
+LC_Check out license DM version 1.0...
+
+                         Empyrean AetherADV
+              Version 2025.09.sp2, Build on 02/02/2026
+                        For [linux26-x86_64]
+                      Copyright (c) 2009-2026
+                    Empyrean Technology Co.,Ltd.
+                        ALL RIGHTS RESERVED
+
+Load setting file '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/aether.ini'.
+Load '/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/display.drf'.
+Load 'display.drf'.
+Warning: Unable to open library 2026_EDA_case2 at path /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case2: Invalid Lib Path.
+==== [P0-3] Read 105 parameters (bounds aligned with score.py): case1_params_0.txt ====
+==== \u7ea6\u51cf\u914d\u7f6e\uff08\u6765\u81ea\u6a21\u5757\u4e8c\uff0c\u5df2\u6309\u672c\u7535\u8def\u8fc7\u6ee4\uff09====
+  dummy_devices    : R5,R6,C4,C5
+  symmetry_devices : (NM15,NM14),(PM11,PM7),(PM10,PM9),(PM3,PM2),(NM4,NM5),(NM6,NM7),(NM8,NM9),(NM10,NM11),(NM12,NM13),(PM8,PM12),(R1,R2),(R0,R3),(C0,C11),(C2,C3)
+==== [P0-3] Read 105 parameters (bounds aligned with score.py): case1_params_0.txt ====
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license MDE_L2 version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+==== dummy params: 6 | \u5f85\u4f18\u5316\u53c2\u6570: 99 ====
+Parameter count reduced from 99 to 63
+create new dir: ./results
+Design save result: True
+
+==== total area:  9987.6
+
+==== total area:  9987.6
+
+==== iter 1 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 1 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 1 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 1 Begin simulate ====
+
+==== iter 1 Simulation completed successfully ====
+==== iter 1 Succeeds in closing MDE ====
+
+==== iter 1 Result name: Results112
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_1/params.txt ====
+
+========== Evaluation result of iter 1 ==========
+====== UGB          : 7641140.0 Hz
+====== Phase_Margin : 73.1725 deg
+====== Gain_db      : 29.4006 db
+====== Gain_Margin  : -15.0247 deg
+====== I_OPA        : 1.56799 mA
+====== Total_Area   : 9987.6 um^2
+
+==== iter 2 fitness -56.512285 (score 56.51, viol 0.00) PM=73.1725 GM=-15.0247 Gain=29.4006 UGB=7641140.0 I=0.00156799 Area=9987.6
+LC_Check out license PYAE_SE_BASIC version 1.0...
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 2 fitness -56.512285
+
+==== BUDGET: t_eval(first,\u542b\u9884\u70ed)=10.4s pop=20 maxiter=200 budget=240s n_param=63\uff08\u9760\u786c\u622a\u6b62\u6536\u5c3e\uff09====
+==== [P0-13] \u521d\u503c\u5c40\u90e8\u5316\uff1a\u76f8\u5bf9\u6270\u52a8 15% / \u6bcf\u6b21\u53ea\u52a8 25% \u7684\u53c2\u6570 ====
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+LC_Check out license PYAE_SE_BASIC version 1.0...
+Design save result: True
+
+==== total area:  9987.6
+
+==== total area:  9987.6
+
+==== iter 3 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 3 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 3 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 3 Begin simulate ====
+
+==== iter 3 Simulation completed successfully ====
+==== iter 3 Succeeds in closing MDE ====
+
+==== iter 3 Result name: Results114
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_3/params.txt ====
+
+========== Evaluation result of iter 3 ==========
+====== UGB          : 7641140.0 Hz
+====== Phase_Margin : 73.1725 deg
+====== Gain_db      : 29.4006 db
+====== Gain_Margin  : -15.0247 deg
+====== I_OPA        : 1.56799 mA
+====== Total_Area   : 9987.6 um^2
+
+==== iter 4 fitness -56.512285 (score 56.51, viol 0.00) PM=73.1725 GM=-15.0247 Gain=29.4006 UGB=7641140.0 I=0.00156799 Area=9987.6
+LC_Check out license PYAE_SE_BASIC version 1.0...
+Design save result: True
+
+==== total area:  9992.76
+
+==== total area:  9992.76
+
+==== iter 5 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 5 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 5 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 5 Begin simulate ====
+
+==== iter 5 Simulation completed successfully ====
+==== iter 5 Succeeds in closing MDE ====
+
+==== iter 5 Result name: Results116
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_5/params.txt ====
+
+========== Evaluation result of iter 5 ==========
+====== UGB          : 7322330.0 Hz
+====== Phase_Margin : 73.1233 deg
+====== Gain_db      : 31.0736 db
+====== Gain_Margin  : -14.6638 deg
+====== I_OPA        : 1.43848 mA
+====== Total_Area   : 9992.76 um^2
+
+==== iter 6 fitness -56.535913 (score 56.54, viol 0.00) PM=73.1233 GM=-14.6638 Gain=31.0736 UGB=7322330.0 I=0.00143848 Area=9992.76
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 6 fitness -56.535913
+Design save result: True
+
+==== total area:  9848.6535
+
+==== total area:  9848.6535
+
+==== iter 7 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 7 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 7 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 7 Begin simulate ====
+
+==== iter 7 Simulation completed successfully ====
+==== iter 7 Succeeds in closing MDE ====
+
+==== iter 7 Result name: Results118
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_7/params.txt ====
+
+========== Evaluation result of iter 7 ==========
+====== UGB          : 7443940.0 Hz
+====== Phase_Margin : 71.5951 deg
+====== Gain_db      : 30.6798 db
+====== Gain_Margin  : -15.0475 deg
+====== I_OPA        : 1.5303499999999999 mA
+====== Total_Area   : 9848.6535 um^2
+
+==== iter 8 fitness -56.718574 (score 56.72, viol 0.00) PM=71.5951 GM=-15.0475 Gain=30.6798 UGB=7443940.0 I=0.00153035 Area=9848.6535
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 8 fitness -56.718574
+Design save result: True
+
+==== total area:  9957.900000000001
+
+==== total area:  9957.900000000001
+
+==== iter 9 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 9 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 9 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 9 Begin simulate ====
+
+==== iter 9 Simulation completed successfully ====
+==== iter 9 Succeeds in closing MDE ====
+
+==== iter 9 Result name: Results120
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_9/params.txt ====
+
+========== Evaluation result of iter 9 ==========
+====== UGB          : 7533840.0 Hz
+====== Phase_Margin : 75.1514 deg
+====== Gain_db      : 25.744 db
+====== Gain_Margin  : -16.1641 deg
+====== I_OPA        : 1.8095299999999999 mA
+====== Total_Area   : 9957.900000000001 um^2
+
+==== iter 10 fitness -56.241686 (score 56.24, viol 0.00) PM=75.1514 GM=-16.1641 Gain=25.744 UGB=7533840.0 I=0.00180953 Area=9957.900000000001
+Design save result: True
+
+==== total area:  9917.191200000001
+
+==== total area:  9917.191200000001
+
+==== iter 11 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 11 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 11 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 11 Begin simulate ====
+
+==== iter 11 Simulation completed successfully ====
+==== iter 11 Succeeds in closing MDE ====
+
+==== iter 11 Result name: Results122
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_11/params.txt ====
+
+========== Evaluation result of iter 11 ==========
+====== UGB          : 7973770.0 Hz
+====== Phase_Margin : 72.1235 deg
+====== Gain_db      : 30.0201 db
+====== Gain_Margin  : -14.471 deg
+====== I_OPA        : 1.55933 mA
+====== Total_Area   : 9917.191200000001 um^2
+
+==== iter 12 fitness -56.743839 (score 56.74, viol 0.00) PM=72.1235 GM=-14.471 Gain=30.0201 UGB=7973770.0 I=0.00155933 Area=9917.191200000001
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 12 fitness -56.743839
+Design save result: True
+
+==== total area:  9933.993750000003
+
+==== total area:  9933.993750000003
+
+==== iter 13 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 13 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 13 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 13 Begin simulate ====
+
+==== iter 13 Simulation completed successfully ====
+==== iter 13 Succeeds in closing MDE ====
+
+==== iter 13 Result name: Results124
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_13/params.txt ====
+
+========== Evaluation result of iter 13 ==========
+====== UGB          : 7742970.0 Hz
+====== Phase_Margin : 72.5398 deg
+====== Gain_db      : 25.3702 db
+====== Gain_Margin  : -14.8164 deg
+====== I_OPA        : 1.78871 mA
+====== Total_Area   : 9933.993750000003 um^2
+
+==== iter 14 fitness -56.305390 (score 56.31, viol 0.00) PM=72.5398 GM=-14.8164 Gain=25.3702 UGB=7742970.0 I=0.00178871 Area=9933.993750000003
+Design save result: True
+
+==== total area:  10032.477250000002
+
+==== total area:  10032.477250000002
+
+==== iter 15 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 15 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 15 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 15 Begin simulate ====
+
+==== iter 15 Simulation completed successfully ====
+==== iter 15 Succeeds in closing MDE ====
+
+==== iter 15 Result name: Results126
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_15/params.txt ====
+
+========== Evaluation result of iter 15 ==========
+====== UGB          : 7607430.0 Hz
+====== Phase_Margin : 73.6649 deg
+====== Gain_db      : 28.0379 db
+====== Gain_Margin  : -15.3248 deg
+====== I_OPA        : 1.62642 mA
+====== Total_Area   : 10032.477250000002 um^2
+
+==== iter 16 fitness -56.346225 (score 56.35, viol 0.00) PM=73.6649 GM=-15.3248 Gain=28.0379 UGB=7607430.0 I=0.00162642 Area=10032.477250000002
+Design save result: True
+
+==== total area:  9916.345
+
+==== total area:  9916.345
+
+==== iter 17 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 17 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 17 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 17 Begin simulate ====
+
+==== iter 17 Simulation completed successfully ====
+==== iter 17 Succeeds in closing MDE ====
+
+==== iter 17 Result name: Results128
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_17/params.txt ====
+
+========== Evaluation result of iter 17 ==========
+====== UGB          : 7147090.0 Hz
+====== Phase_Margin : 74.023 deg
+====== Gain_db      : 24.8282 db
+====== Gain_Margin  : -15.6694 deg
+====== I_OPA        : 1.74345 mA
+====== Total_Area   : 9916.345 um^2
+
+==== iter 18 fitness -56.107475 (score 56.11, viol 0.00) PM=74.023 GM=-15.6694 Gain=24.8282 UGB=7147090.0 I=0.00174345 Area=9916.345
+Design save result: True
+
+==== total area:  10069.1118
+
+==== total area:  10069.1118
+
+==== iter 19 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 19 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 19 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 19 Begin simulate ====
+
+==== iter 19 Simulation completed successfully ====
+==== iter 19 Succeeds in closing MDE ====
+
+==== iter 19 Result name: Results130
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_19/params.txt ====
+
+========== Evaluation result of iter 19 ==========
+====== UGB          : 7179500.0 Hz
+====== Phase_Margin : 71.8122 deg
+====== Gain_db      : 25.6929 db
+====== Gain_Margin  : -14.4235 deg
+====== I_OPA        : 1.6023 mA
+====== Total_Area   : 10069.1118 um^2
+
+==== iter 20 fitness -55.998453 (score 56.00, viol 0.00) PM=71.8122 GM=-14.4235 Gain=25.6929 UGB=7179500.0 I=0.0016023 Area=10069.1118
+Design save result: True
+
+==== total area:  10027.247175000002
+
+==== total area:  10027.247175000002
+
+==== iter 21 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 21 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 21 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 21 Begin simulate ====
+
+==== iter 21 Simulation completed successfully ====
+==== iter 21 Succeeds in closing MDE ====
+
+==== iter 21 Result name: Results132
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_21/params.txt ====
+
+========== Evaluation result of iter 21 ==========
+====== UGB          : 7732150.0 Hz
+====== Phase_Margin : 72.5587 deg
+====== Gain_db      : 31.4184 db
+====== Gain_Margin  : -14.9009 deg
+====== I_OPA        : 1.5231999999999999 mA
+====== Total_Area   : 10027.247175000002 um^2
+
+==== iter 22 fitness -56.643417 (score 56.64, viol 0.00) PM=72.5587 GM=-14.9009 Gain=31.4184 UGB=7732150.0 I=0.0015232 Area=10027.247175000002
+Design save result: True
+
+==== total area:  10102.662975000001
+
+==== total area:  10102.662975000001
+
+==== iter 23 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 23 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 23 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 23 Begin simulate ====
+
+==== iter 23 Simulation completed successfully ====
+==== iter 23 Succeeds in closing MDE ====
+
+==== iter 23 Result name: Results134
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_23/params.txt ====
+
+========== Evaluation result of iter 23 ==========
+====== UGB          : 7269130.0 Hz
+====== Phase_Margin : 74.4602 deg
+====== Gain_db      : 29.1112 db
+====== Gain_Margin  : -15.4027 deg
+====== I_OPA        : 1.57876 mA
+====== Total_Area   : 10102.662975000001 um^2
+
+==== iter 24 fitness -56.242135 (score 56.24, viol 0.00) PM=74.4602 GM=-15.4027 Gain=29.1112 UGB=7269130.0 I=0.00157876 Area=10102.662975000001
+Design save result: True
+
+==== total area:  9878.970000000001
+
+==== total area:  9878.970000000001
+
+==== iter 25 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 25 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 25 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 25 Begin simulate ====
+
+==== iter 25 Simulation completed successfully ====
+==== iter 25 Succeeds in closing MDE ====
+
+==== iter 25 Result name: Results136
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_25/params.txt ====
+
+========== Evaluation result of iter 25 ==========
+====== UGB          : 7016130.0 Hz
+====== Phase_Margin : 73.5451 deg
+====== Gain_db      : 25.5851 db
+====== Gain_Margin  : -15.1479 deg
+====== I_OPA        : 1.55722 mA
+====== Total_Area   : 9878.970000000001 um^2
+
+==== iter 26 fitness -56.170737 (score 56.17, viol 0.00) PM=73.5451 GM=-15.1479 Gain=25.5851 UGB=7016130.0 I=0.00155722 Area=9878.970000000001
+Design save result: True
+
+==== total area:  9903.533000000001
+
+==== total area:  9903.533000000001
+
+==== iter 27 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 27 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 27 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 27 Begin simulate ====
+
+==== iter 27 Simulation completed successfully ====
+==== iter 27 Succeeds in closing MDE ====
+
+==== iter 27 Result name: Results138
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_27/params.txt ====
+
+========== Evaluation result of iter 27 ==========
+====== UGB          : 7584590.0 Hz
+====== Phase_Margin : 73.0204 deg
+====== Gain_db      : 29.7264 db
+====== Gain_Margin  : -14.7181 deg
+====== I_OPA        : 1.53912 mA
+====== Total_Area   : 9903.533000000001 um^2
+
+==== iter 28 fitness -56.621745 (score 56.62, viol 0.00) PM=73.0204 GM=-14.7181 Gain=29.7264 UGB=7584590.0 I=0.00153912 Area=9903.533000000001
+Design save result: True
+
+==== total area:  10195.163250000001
+
+==== total area:  10195.163250000001
+
+==== iter 29 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 29 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 29 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 29 Begin simulate ====
+
+==== iter 29 Simulation completed successfully ====
+==== iter 29 Succeeds in closing MDE ====
+
+==== iter 29 Result name: Results140
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_29/params.txt ====
+
+========== Evaluation result of iter 29 ==========
+====== UGB          : 8353300.0 Hz
+====== Phase_Margin : 71.5294 deg
+====== Gain_db      : 29.1315 db
+====== Gain_Margin  : -14.1965 deg
+====== I_OPA        : 1.65537 mA
+====== Total_Area   : 10195.163250000001 um^2
+
+==== iter 30 fitness -56.461140 (score 56.46, viol 0.00) PM=71.5294 GM=-14.1965 Gain=29.1315 UGB=8353300.0 I=0.00165537 Area=10195.163250000001
+Design save result: True
+
+==== total area:  9862.49875
+
+==== total area:  9862.49875
+
+==== iter 31 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 31 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 31 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 31 Begin simulate ====
+
+==== iter 31 Simulation completed successfully ====
+==== iter 31 Succeeds in closing MDE ====
+
+==== iter 31 Result name: Results142
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_31/params.txt ====
+
+========== Evaluation result of iter 31 ==========
+====== UGB          : 8431240.0 Hz
+====== Phase_Margin : 71.1567 deg
+====== Gain_db      : 31.9546 db
+====== Gain_Margin  : -13.9952 deg
+====== I_OPA        : 1.6038999999999999 mA
+====== Total_Area   : 9862.49875 um^2
+
+==== iter 32 fitness -57.093269 (score 57.09, viol 0.00) PM=71.1567 GM=-13.9952 Gain=31.9546 UGB=8431240.0 I=0.0016039 Area=9862.49875
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 32 fitness -57.093269
+Design save result: True
+
+==== total area:  10072.69725
+
+==== total area:  10072.69725
+
+==== iter 33 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 33 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 33 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 33 Begin simulate ====
+
+==== iter 33 Simulation completed successfully ====
+==== iter 33 Succeeds in closing MDE ====
+
+==== iter 33 Result name: Results144
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_33/params.txt ====
+
+========== Evaluation result of iter 33 ==========
+====== UGB          : 7136260.0 Hz
+====== Phase_Margin : 68.7423 deg
+====== Gain_db      : 23.4751 db
+====== Gain_Margin  : -13.142 deg
+====== I_OPA        : 1.53416 mA
+====== Total_Area   : 10072.69725 um^2
+
+==== iter 34 fitness -55.814903 (score 55.81, viol 0.00) PM=68.7423 GM=-13.142 Gain=23.4751 UGB=7136260.0 I=0.00153416 Area=10072.69725
+Design save result: True
+
+==== total area:  9835.056224999998
+
+==== total area:  9835.056224999998
+
+==== iter 35 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 35 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 35 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 35 Begin simulate ====
+
+==== iter 35 Simulation completed successfully ====
+==== iter 35 Succeeds in closing MDE ====
+
+==== iter 35 Result name: Results146
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_35/params.txt ====
+
+========== Evaluation result of iter 35 ==========
+====== UGB          : 7906060.0 Hz
+====== Phase_Margin : 73.1916 deg
+====== Gain_db      : 33.8474 db
+====== Gain_Margin  : -15.1138 deg
+====== I_OPA        : 1.45445 mA
+====== Total_Area   : 9835.056224999998 um^2
+
+==== iter 36 fitness -57.111625 (score 57.11, viol 0.00) PM=73.1916 GM=-15.1138 Gain=33.8474 UGB=7906060.0 I=0.00145445 Area=9835.056224999998
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 36 fitness -57.111625
+Design save result: True
+
+==== total area:  9911.712000000001
+
+==== total area:  9911.712000000001
+
+==== iter 37 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 37 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 37 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 37 Begin simulate ====
+
+==== iter 37 Simulation completed successfully ====
+==== iter 37 Succeeds in closing MDE ====
+
+==== iter 37 Result name: Results148
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_37/params.txt ====
+
+========== Evaluation result of iter 37 ==========
+====== UGB          : 7659790.0 Hz
+====== Phase_Margin : 72.6941 deg
+====== Gain_db      : 25.6696 db
+====== Gain_Margin  : -14.62 deg
+====== I_OPA        : 1.61452 mA
+====== Total_Area   : 9911.712000000001 um^2
+
+==== iter 38 fitness -56.330046 (score 56.33, viol 0.00) PM=72.6941 GM=-14.62 Gain=25.6696 UGB=7659790.0 I=0.00161452 Area=9911.712000000001
+Design save result: True
+
+==== total area:  9965.62
+
+==== total area:  9965.62
+
+==== iter 39 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 39 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 39 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 39 Begin simulate ====
+
+==== iter 39 Simulation completed successfully ====
+==== iter 39 Succeeds in closing MDE ====
+
+==== iter 39 Result name: Results150
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_39/params.txt ====
+
+========== Evaluation result of iter 39 ==========
+====== UGB          : 7208200.0 Hz
+====== Phase_Margin : 74.6343 deg
+====== Gain_db      : 28.8211 db
+====== Gain_Margin  : -15.5209 deg
+====== I_OPA        : 1.52316 mA
+====== Total_Area   : 9965.62 um^2
+
+==== iter 40 fitness -56.365441 (score 56.37, viol 0.00) PM=74.6343 GM=-15.5209 Gain=28.8211 UGB=7208200.0 I=0.00152316 Area=9965.62
+Design save result: True
+
+==== total area:  9853.1685
+
+==== total area:  9853.1685
+
+==== iter 41 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 41 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 41 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 41 Begin simulate ====
+
+==== iter 41 Simulation completed successfully ====
+==== iter 41 Succeeds in closing MDE ====
+
+==== iter 41 Result name: Results152
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_41/params.txt ====
+
+========== Evaluation result of iter 41 ==========
+====== UGB          : 8946950.0 Hz
+====== Phase_Margin : 70.6824 deg
+====== Gain_db      : 31.0708 db
+====== Gain_Margin  : -13.7165 deg
+====== I_OPA        : 1.5489499999999998 mA
+====== Total_Area   : 9853.1685 um^2
+
+==== iter 42 fitness -57.193218 (score 57.19, viol 0.00) PM=70.6824 GM=-13.7165 Gain=31.0708 UGB=8946950.0 I=0.00154895 Area=9853.1685
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 42 fitness -57.193218
+Design save result: True
+
+==== total area:  9730.9594375
+
+==== total area:  9730.9594375
+
+==== iter 43 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 43 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 43 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 43 Begin simulate ====
+
+==== iter 43 Simulation completed successfully ====
+==== iter 43 Succeeds in closing MDE ====
+
+==== iter 43 Result name: Results154
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_43/params.txt ====
+
+========== Evaluation result of iter 43 ==========
+====== UGB          : 9147000.0 Hz
+====== Phase_Margin : 69.3681 deg
+====== Gain_db      : 32.9368 db
+====== Gain_Margin  : -13.0968 deg
+====== I_OPA        : 1.5156 mA
+====== Total_Area   : 9730.9594375 um^2
+
+==== iter 44 fitness -57.546135 (score 57.55, viol 0.00) PM=69.3681 GM=-13.0968 Gain=32.9368 UGB=9147000.0 I=0.0015156 Area=9730.9594375
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== new best: iter 44 fitness -57.546135
+Design save result: True
+
+==== total area:  9429.36915
+
+==== total area:  9429.36915
+
+==== iter 45 ae.MdeSession.open(2026_EDA_case1, OPA_loopgain, spe_state1_Corner) successfully ====
+
+==== iter 45 Project directory: /home/edauser32/simulation/edauser32
+
+==== iter 45 Current settings: MdeSetting (ProjectDir: /home/edauser32/simulation/edauser32, FilePath: /home/edauser32/smoke/eda_2025_case_1/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/setting)
+Creating simulation netlist succeeds.
+
+==== iter 45 Begin simulate ====
+
+==== iter 45 Simulation completed successfully ====
+==== iter 45 Succeeds in closing MDE ====
+
+==== iter 45 Result name: Results156
+==== [P0-4] wrote 105 lines (schema=from input file) -> ./results/iter_45/params.txt ====
+
+========== Evaluation result of iter 45 ==========
+====== UGB          : 3175570.0 Hz
+====== Phase_Margin : 78.4996 deg
+====== Gain_db      : -44.8174 db
+====== Gain_Margin  : -15.9995 deg
+====== I_OPA        : 1.5963399999999999 mA
+====== Total_Area   : 9429.36915 um^2
+
+==== iter 46 fitness -53.678867 (score 53.68, viol 0.00) PM=78.4996 GM=-15.9995 Gain=-44.8174 UGB=3175570.0 I=0.00159634 Area=9429.36915
+Design save result: True
+==== iter 47 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 48 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 49 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 50 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 51 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 52 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 53 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 54 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 55 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 56 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 57 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 58 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 59 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 60 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 61 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 62 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 63 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+Design save result: True
+==== iter 64 TIMEOUT-SKIP\uff08\u9884\u7b97\u5df2\u7528\u5b8c\uff0c\u8df3\u8fc7\u4eff\u771f\uff09====
+==== \u65f6\u95f4\u9884\u7b97\u5230\u8fbe\uff0c\u63d0\u524d\u7ed3\u675f ====
+
+==== DE done: success=False fun=-57.546135 nit=1 ====
+==== [P0-4] wrote 105 lines (schema=from input file) -> /home/edauser32/smoke/best_pdf.txt ====
+==== TOTAL: 250.2s, iters=64, best_param_file=/home/edauser32/smoke/best_pdf.txt(\u5b58\u5728=True) ====
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+Simulation run started.
+[edauser32@eda202601 eda_2025_case_1]$ grep 'fitness' ~/smoke_pdf.log | tail -8
+==== new best: iter 36 fitness -57.111625
+==== iter 38 fitness -56.330046 (score 56.33, viol 0.00) PM=72.6941 GM=-14.62 Gain=25.6696 UGB=7659790.0 I=0.00161452 Area=9911.712000000001
+==== iter 40 fitness -56.365441 (score 56.37, viol 0.00) PM=74.6343 GM=-15.5209 Gain=28.8211 UGB=7208200.0 I=0.00152316 Area=9965.62
+==== iter 42 fitness -57.193218 (score 57.19, viol 0.00) PM=70.6824 GM=-13.7165 Gain=31.0708 UGB=8946950.0 I=0.00154895 Area=9853.1685
+==== new best: iter 42 fitness -57.193218
+==== iter 44 fitness -57.546135 (score 57.55, viol 0.00) PM=69.3681 GM=-13.0968 Gain=32.9368 UGB=9147000.0 I=0.0015156 Area=9730.9594375
+==== new best: iter 44 fitness -57.546135
+==== iter 46 fitness -53.678867 (score 53.68, viol 0.00) PM=78.4996 GM=-15.9995 Gain=-44.8174 UGB=3175570.0 I=0.00159634 Area=9429.36915
+[edauser32@eda202601 eda_2025_case_1]$ grep -c 'UGB          : -inf' ~/smoke_pdf.log
+0
+[edauser32@eda202601 eda_2025_case_1]$ grep 'TOTAL:' ~/smoke_pdf.log
+==== TOTAL: 250.2s, iters=64, best_param_file=/home/edauser32/smoke/best_pdf.txt(\u5b58\u5728=True) ====
+
+[edauser32@eda202601 eda_2025_case_1]$ 

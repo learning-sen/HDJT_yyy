@@ -1,0 +1,40 @@
+ Working Dir: /home/edauser32/EDA_2026_Empyrean_lab_start/EDA_2026_Empyrean_score/2026_EDA_case1_output/eda_2026_case_1
+Command Args: emy2netlist "2026_EDA_case1" "OPA_loopgain" "schematic" -t spectre -o "/home/edauser32/simulation/edauser32/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/Results/1074/OPA_loopgain.netlist" -mf "/home/edauser32/simulation/edauser32/2026_EDA_case1/OPA_loopgain/spe_state1_Corner/Results/1074/OPA_loopgain.map" -hier -disp -name keep -max 80 -maxerrors 1 -ntlviewlist spectreText spectre schematic veriloga -ntlstoplist spectreText spectre -glo -as0 -ael -noexclam -pow "VDD! VCC! VEE! vdd! vcc!" -gnd "GND! GROUND! gnd! vss!" -end -cir : -quo single -del '<' -exprquo quotation -gsub -printMFactor -mdeparam "vdd I_BIAS" 
+  Start At: Mon Oct 19 2026 00:00:00
+
+
+                        Empyrean emy2netlist
+              Version 2025.09.sp2, Build on 02/02/2026
+                        For [linux26-x86_64]
+                      Copyright (c) 2009-2026
+                    Empyrean Technology Co.,Ltd.
+                        ALL RIGHTS RESERVED
+
+OpenAccess 2.2 is loaded from /home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/openaccess/lib/linux_rhel60_64/opt
+*****************************
+*  Aether Netlist Exporter  *
+*****************************
+
+Load OA TCL shared library (1) successfully.
+
+Load initialize file 'emyLibInit.tcl' for library 'analog'.
+Load initialize file 'emyLibInit.tcl' for library 'amsLib'.
+/home/PyAether_Packages/tools_2509sp2/Aether_2025.09.sp2_linux-x86_64_rh6_20260202/tools/aether/data/netlist_procedure.tbc
+Load initialize file 'emyLibInit.tcl' for library '013um_PDK'.
+Exporting beginning...
+Exporting Netlist Progress: 0%
+Exporting Netlist Progress: 20%
+Exporting design "2026_EDA_case1/OPA/schematic" ...
+Exporting Netlist Progress: 60%
+Exporting design "2026_EDA_case1/OPA_loopgain/schematic" ...
+Exporting Netlist Progress: 100%
+Successfully exported design 2026_EDA_case1/OPA_loopgain/schematic!
+
+
+
+**************************************************
+** End
+** Exit Code: 0
+** Stop At: Mon Oct 19 2026 01:27:01
+** Time Elapsed: 01:27:01(s)
+**************************************************

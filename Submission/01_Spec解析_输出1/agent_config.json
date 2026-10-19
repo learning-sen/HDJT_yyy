@@ -1,0 +1,66 @@
+{
+  "agent": {
+    "name": "EDA-Spec-Agent",
+    "version": "1.0",
+    "max_steps": 12,
+    "verbose": true,
+    "language": "zh-CN"
+  },
+  "llm": {
+    "provider": "qwen",
+    "model": "qwen3.8-max",
+    "base_url": "https://ws-r96l7kx7y1u2cnpy.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    "api_key_env": [
+      "DASHSCOPE_API_KEY"
+    ],
+    "temperature": 0.2,
+    "timeout_s": 120,
+    "max_retries": 3,
+    "json_mode": true,
+    "note": "赛题指定模型：Qwen3.8-Max，APIKey 调用方式（八、参赛平台 2）"
+  },
+  "tools": {
+    "enabled": [
+      "parse_requirement",
+      "normalize_metric_unit",
+      "validate_spec_schema",
+      "check_grading_gates",
+      "lookup_device_bounds",
+      "emit_structured_spec",
+      "parse_netlist",
+      "detect_topology_modules",
+      "reduce_parameters",
+      "emit_topology_report"
+    ]
+  },
+  "policy": {
+    "require_llm": false,
+    "fallback_to_rules": true,
+    "halt_on_schema_invalid": true,
+    "note": "无 API Key 时回退确定性工具链，但仍按 agent 步骤记录决策链"
+  },
+  "thresholds": {
+    "dc_gain_db": 40.0,
+    "phase_margin_deg": 50.0,
+    "gain_margin_db": -10.0,
+    "i_opa_ma": 3.0
+  },
+  "paths": {
+    "output_dir": "./output"
+  },
+  "pvt": {
+    "condition": "all_corners",
+    "model_corners": [
+      "TT",
+      "FF",
+      "SS"
+    ],
+    "temperatures_c": [
+      -40,
+      27,
+      125
+    ],
+    "supply_tolerance_pct": 10
+  },
+  "prompt_file": "system_prompt.txt"
+}
