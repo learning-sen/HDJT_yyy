@@ -126,17 +126,43 @@ def read_corner_csv(path):
 
 
 def coverage_check(corner_rows):
-    """检查 TT/FF/SS、温度、电压是否覆盖到位（赛题 6.2 第 5 项）。"""
-    text = " ".join(
-        " ".join(str(v) for v in r.values()).lower() for r in corner_rows)
-    has = {k: (k.lower() in text) for k in ("tt", "ff", "ss", "125", "-40", "40")}
+    """检查 TT/FF/SS、温度、电压是否覆盖到位（赛题 6.2 第 5 项）。
+
+    注意：**按数值判断电压 ±10%**，不能靠 grep "1.1"/"0.9" 字样 ——
+    实测逐角表里 vdd 写的是 1.62/1.98（= 1.8 × 0.9/1.1），字样匹配会误判成"未覆盖"。
+    """
+    procs, temps, vdds = set(), [], []
+    nominal_vdd = None
+    for r in corner_rows:
+        proc = str(r.get("process", "")).strip().lower()
+        if proc:
+            procs.add(proc)
+        for key, bucket in (("temp", temps), ("vdd", vdds)):
+            try:
+                v = float(str(r.get(key, "")).strip())
+            except (TypeError, ValueError):
+                continue
+            bucket.append(v)
+            if key == "vdd" and "nominal" in str(r.get("corner", "")).strip().lower():
+                nominal_vdd = v
+
+    has_nominal = any("nominal" in str(r.get("corner", "")).strip().lower() for r in corner_rows)
+    # ±10% 判定：有 Nominal 电压时，检查是否同时存在 ~0.9Vnom 与 ~1.1Vnom
+    if nominal_vdd and vdds:
+        tol = max(0.05 * abs(nominal_vdd), 1e-9)
+        has_pm10 = (any(abs(v - nominal_vdd * 0.9) <= tol for v in vdds)
+                    and any(abs(v - nominal_vdd * 1.1) <= tol for v in vdds))
+    else:
+        has_pm10 = len(set(round(v, 4) for v in vdds)) >= 3
+
     checks = [
-        ("工艺角 TT", has["tt"]),
-        ("工艺角 FF", has["ff"]),
-        ("工艺角 SS", has["ss"]),
-        ("高温 125℃", "125" in text),
-        ("低温 −40℃", ("-40" in text) or ("40" in text)),
-        ("电压 ±10%", ("1.1" in text) or ("0.9" in text) or ("±10" in text) or ("10%" in text)),
+        ("工艺角 TT", ("tt" in procs) or has_nominal),
+        ("工艺角 FF", "ff" in procs),
+        ("工艺角 SS", "ss" in procs),
+        ("低温 −40℃", any(t <= -40 for t in temps)),
+        ("高温 125℃", any(t >= 125 for t in temps)),
+        ("标称电压 ±10%", has_pm10),
+        ("常温 27℃（Nominal）", any(20 <= t <= 35 for t in temps)),
     ]
     return checks
 
@@ -183,6 +209,7 @@ def main(argv=None):
     ap.add_argument("--init_dir", default="", help="含 metrics.json 的目录（初始解，用于对比）")
     ap.add_argument("--corner_csv", default="", help="逐角明细 CSV")
     ap.add_argument("--wave_dir", default="", help="波形图目录（png/pdf）")
+    ap.add_argument("--fig_dir", default="", help="电路图目录（png/pdf，报告 5.2 节）")
     ap.add_argument("--opt_log", default="", help="优化日志（算法性能摘要）")
     ap.add_argument("--title", default="全 PVT 仿真验证报告")
     ap.add_argument("--out", default="pvt_report.md")
@@ -286,23 +313,42 @@ def main(argv=None):
         L.append("> 现有 `metrics.json` 只含 Min/Max/Typ 包络，**需要补逐角数据**。")
         L.append("")
 
-    # 5. 波形
-    L.append("## 5. 仿真波形")
+    # 5. 波形与电路图
+    L.append("## 5. 波形与电路图")
+    L.append("")
+    base_dir = os.path.dirname(os.path.abspath(a.out))
+    figs = scan_waves(a.fig_dir)
+
+    def _rel(path):
+        p = os.path.abspath(path)
+        try:
+            return os.path.relpath(p, base_dir).replace(os.sep, "/")
+        except Exception:
+            return p
+
+    L.append("### 5.1 仿真波形（AC 扫频 / Bode）")
     L.append("")
     if waves:
-        base_dir = os.path.dirname(os.path.abspath(a.out))
         for w in waves:
-            ap = os.path.abspath(w)
-            try:
-                shown = os.path.relpath(ap, base_dir)     # 相对报告自身的路径，便于整体拷走
-            except Exception:
-                shown = ap
             L.append("- `%s`" % os.path.basename(w))
             L.append("")
-            L.append("  ![](%s)" % shown.replace(os.sep, "/"))
+            L.append("  ![](%s)" % _rel(w))
             L.append("")
     else:
         L.append("> ⚠️ 未提供波形图（`--wave_dir`）。需要环路增益/相位 vs 频率的 Bode 图。")
+        L.append("")
+    L.append("### 5.2 电路图（参数化 / 反标后）")
+    L.append("")
+    if figs:
+        for w in figs:
+            L.append("- `%s`" % os.path.basename(w))
+            L.append("")
+            L.append("  ![](%s)" % _rel(w))
+            L.append("")
+    else:
+        L.append("> 未提供电路图（`--fig_dir`）。")
+        L.append("")
+
         L.append("")
 
     # 6. 算法性能
