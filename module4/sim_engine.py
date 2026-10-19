@@ -73,6 +73,41 @@ WAVE_EXTS = (".psf", ".psfascii", ".psf.ascii", ".tr0", ".tr0.csv", ".ac0", ".sd
              ".dat", ".csv", ".txt", ".log", ".wr", ".raw")
 
 
+WAVE_FILE = "ac.ac"          # AC 扫频波形（Bode 原始数据）
+
+
+def archive_waves(proj_dir, lib, mde_cell, mde_view, result_name, dst_dir):
+    """把 MDE 工程目录 Results/<N>/<角>/psf/ac.ac 复制到 dst_dir/<角>/ac.ac。"""
+    if not proj_dir or not os.path.isdir(proj_dir):
+        return None
+    n = result_name[len("Results"):] if result_name.startswith("Results") else result_name
+    rd = os.path.join(proj_dir, lib, mde_cell, mde_view, "Results", n)
+    if not os.path.isdir(rd):
+        # 兜底：按修改时间取最新的 Results* 目录
+        cands = sorted(glob.glob(os.path.join(proj_dir, lib, mde_cell, mde_view, "Results", "*")),
+                       key=os.path.getmtime, reverse=True)
+        if not cands:
+            return None
+        rd = cands[0]
+    corners = []
+    for d in sorted(glob.glob(os.path.join(rd, "*"))):
+        src = os.path.join(d, "psf", WAVE_FILE)
+        if not os.path.exists(src):
+            continue
+        corner = os.path.basename(d)
+        dst = os.path.join(dst_dir, corner)
+        os.makedirs(dst, exist_ok=True)
+        try:
+            shutil.copy2(src, os.path.join(dst, WAVE_FILE))
+            corners.append(corner)
+        except OSError as e:
+            print("WARN: 复制波形失败 %s: %s" % (src, e))
+    if not corners:
+        return None
+    print("==== 波形归档: %d 个角 x %s -> %s ====" % (len(corners), WAVE_FILE, dst_dir))
+    return {"dir": dst_dir, "file": WAVE_FILE, "corners": corners}
+
+
 def peak_mem_mb():
     """进程峰值内存（MB）；非 Linux 或不可用时返回 None。"""
     if resource is None:
@@ -317,8 +352,10 @@ def run_simulation(a):
     mde = ae.MdeSession.open(a.ae_lib, a.mde_cell, a.mde_view)
     if not mde:
         raise RuntimeError("MdeSession.open 失败: %s" % getattr(ae.MdeSession, "s", ""))
+    proj_dir = None
     try:
-        print("==== MDE 工程目录: %s ====" % mde.getSetting().getProjectDirectory())
+        proj_dir = mde.getSetting().getProjectDirectory()
+        print("==== MDE 工程目录: %s ====" % proj_dir)
         if not mde.createSimulationNetlist():
             raise RuntimeError("createSimulationNetlist 失败（多半是 [P0-8] 旧路径没修掉）")
         result = mde.netlistAndRun()
@@ -345,6 +382,12 @@ def run_simulation(a):
 
     metrics = worst_case(rows)
     area_um2 = area[0] if isinstance(area, tuple) else area
+
+    # ---- 波形归档：ac.ac（AC 扫频 = Bode 原始数据），每角一份 ----
+    wave_info = None
+    if not a.no_waves and proj_dir and str(result_name).startswith("Results"):
+        wave_info = archive_waves(proj_dir, a.ae_lib, a.mde_cell, a.mde_view,
+                                  str(result_name), os.path.join(out_dir, "waves"))
     payload = {
         "peak_mem_mb": peak_mem_mb(),
         "raw_inventory": inventory_files(raw_dir),
@@ -360,6 +403,7 @@ def run_simulation(a):
         "raw_rows": rows,
         "verdict": judge(metrics, area_um2),
         "result_name": result_name,
+        "waves": wave_info,
     }
     emit_outputs(out_dir, payload)
     return payload
@@ -461,6 +505,13 @@ def emit_outputs(out_dir, payload):
         if inv:
             lines += ["", "| 文件 | 大小(B) |", "|---|---|"]
             lines += ["| `%s` | %d |" % (x["path"], x["size"]) for x in inv[:30]]
+    wv = payload.get("waves")
+    if wv:
+        lines += ["", "## 波形文件（Bode 原始数据）", "",
+                  "- 目录：`%s`" % wv["dir"],
+                  "- 文件：`%s`（AC 扫频）" % wv["file"],
+                  "- 角：%s" % ", ".join(wv["corners"]),
+                  "- 用 `iwave` 打开任一 `ac.ac` 即可看环路增益/相位曲线。"]
     if payload.get("mock"):
         lines += ["", "> ⚠️ 本次为 `--mock` 模式（假数据），仅验证解析/聚合/输出链路。"]
     with io.open(os.path.join(out_dir, "metrics.md"), "w", encoding="utf-8", newline="\n") as f:
@@ -493,6 +544,8 @@ def build_parser():
     p.add_argument("--mock", action="store_true", help="本地验证模式（假数据，不需要 PyAether）")
     p.add_argument("--mock_area", type=float, default=5200.0, help="--mock 时使用的面积（µm²）")
     p.add_argument("--no_fix_paths", action="store_true", help="跳过 [P0-8] 旧路径修复")
+    p.add_argument("--no_waves", action="store_true",
+                   help="不归档 ac.ac 波形（默认会复制各角波形到 out_dir/waves/）")
     p.add_argument("--fix_paths_only", action="store_true", help="只修复旧路径，不仿真")
     p.add_argument("--dry_run", action="store_true", help="只写参数、不跑仿真")
     return p
