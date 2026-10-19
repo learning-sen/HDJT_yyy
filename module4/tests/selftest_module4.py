@@ -266,6 +266,38 @@ def main():
           str({k: stj.get(k) for k in ("评估/迭代次数", "总运行时间(s)")}))
     check("T13c 峰值内存缺失时写 None 而不是编数", stj.get("峰值内存(MB)") is None)
 
+    # ---------- T14 corner_extract（6.2 第 5 项逐角表，格式照服务器实测）----------
+    ce = os.path.join(MOD4, "corner_extract.py")
+    raw_dir = os.path.join(tmp, "raw2")
+    os.makedirs(raw_dir, exist_ok=True)
+    import csv as _csv
+    header = ['Corner', 'spe_demo.scs', 'spe_demo.scs', 'vdd', 'temp', 'Pass/Fail',
+              'Loop_Gain', 'LP_Phase', 'Gain_db', 'UGB', 'Phase_Margin', 'Gain_Margin', 'I_OPA']
+    rows_def = [
+        ("Nominal", "tt", "<AS IS>", 1.8, 27, 42.9, 1.25e7, 74.8, -15.8, 0.00154),
+        ("C1_0", "<AS IS>", "ff", 1.62, -40, 41.7, 1.60e7, 73.2, -15.5, 0.00152),
+        ("C1_1", "<AS IS>", "ff", 1.62, 125, 33.0, 1.01e7, 74.5, -16.2, 0.00151),
+        ("C1_4", "<AS IS>", "ss", 1.62, -40, 40.1, 1.42e7, 72.8, -15.2, 0.00149),
+        ("C1_5", "<AS IS>", "ss", 1.62, 125, 29.4, 7.64e6, 75.1, -16.4, 0.00146),
+    ]
+    with io.open(os.path.join(raw_dir, "Results478_transpose.csv"), "w",
+                 encoding="utf-8", newline="") as f:
+        w = _csv.writer(f, quoting=_csv.QUOTE_ALL)
+        w.writerow(header)
+        for r in rows_def:
+            w.writerow([r[0], r[1], r[2], r[3], r[4], "", "", ""] + list(r[5:]))
+    ce_out = os.path.join(tmp, "ce_out")
+    rc = subprocess.call([sys.executable, ce, "--raw_dir", raw_dir, "--out_dir", ce_out])
+    check("T14a corner_extract 退出码 0", rc == 0, "rc=%d" % rc)
+    pc_rows = list(_csv.DictReader(io.open(os.path.join(ce_out, "per_corner.csv"), encoding="utf-8")))
+    check("T14b 逐角表行数正确", len(pc_rows) == 5, "%d" % len(pc_rows))
+    check("T14c 工艺角解析正确（tt/ff/ss）",
+          {r["process"] for r in pc_rows} == {"tt", "ff", "ss"},
+          str({r["process"] for r in pc_rows}))
+    ce_md = io.open(os.path.join(ce_out, "per_corner.md"), encoding="utf-8").read()
+    check("T14d 输出含全场景覆盖检查", "全场景覆盖检查" in ce_md)
+    check("T14e 输出含与 summary 的交叉校验", "交叉校验" in ce_md)
+
     print()
     if _fail:
         print("❌ 失败 %d 项: %s" % (len(_fail), _fail))

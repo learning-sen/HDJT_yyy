@@ -50,7 +50,8 @@ UGB_BASE = 2.0e8
 AREA_BASE = 8000.0
 GAIN_BASE = 20.0
 
-CORNER_COLS = ["corner", "temp", "vdd", "Phase_Margin", "Gain_Margin", "Gain_db", "UGB", "I_OPA"]
+CORNER_COLS = ["corner", "process", "temp", "vdd", "Phase_Margin", "Gain_Margin",
+               "Gain_db", "UGB", "I_OPA"]
 
 
 def load_metrics(sim_dir):
