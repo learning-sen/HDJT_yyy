@@ -43,6 +43,11 @@ import json
 import os
 import sys
 
+try:
+    import resource                      # Linux：记录峰值内存（6.2 第 6 项）
+except Exception:                       # pragma: no cover
+    resource = None
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from m4_common import (EXPORT_SCHEMA, bounds_for, dimensionless, fix_sim_paths,
                        kind_of, param_to_float, parse_param_line, read_param_file,
@@ -64,6 +69,43 @@ def _load_ae():
         from m4_common import load_aether
         ae = load_aether()
     return ae
+WAVE_EXTS = (".psf", ".psfascii", ".psf.ascii", ".tr0", ".tr0.csv", ".ac0", ".sda",
+             ".dat", ".csv", ".txt", ".log", ".wr", ".raw")
+
+
+def peak_mem_mb():
+    """进程峰值内存（MB）；非 Linux 或不可用时返回 None。"""
+    if resource is None:
+        return None
+    try:
+        kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        # Linux: 单位 KB；macOS: 单位字节
+        return round(kb / 1024.0, 1) if sys.platform != "darwin" else round(kb / 1024.0 / 1024.0, 1)
+    except Exception:
+        return None
+
+
+def inventory_files(root, max_files=80):
+    """清点结果目录里的文件（用于报告里说明波形/原始结果在哪）。"""
+    out = []
+    if not root or not os.path.isdir(root):
+        return out
+    for dirpath, _dirs, files in os.walk(root):
+        for fn in sorted(files):
+            low = fn.lower()
+            if not (low.endswith(WAVE_EXTS) or any(e in low for e in (".psf", ".tr0", ".ac0", ".sda"))):
+                continue
+            full = os.path.join(dirpath, fn)
+            try:
+                size = os.path.getsize(full)
+            except OSError:
+                size = -1
+            out.append({"path": os.path.relpath(full, root), "size": size})
+            if len(out) >= max_files:
+                return out
+    return sorted(out, key=lambda x: -x["size"])
+
+
 DEFAULTS = {
     "ae_lib": "2026_EDA_case1",
     "ae_cell": "OPA",
@@ -304,6 +346,8 @@ def run_simulation(a):
     metrics = worst_case(rows)
     area_um2 = area[0] if isinstance(area, tuple) else area
     payload = {
+        "peak_mem_mb": peak_mem_mb(),
+        "raw_inventory": inventory_files(raw_dir),
         "param_file": os.path.abspath(a.param_file),
         "ae": {"lib": a.ae_lib, "cell": a.ae_cell, "view": a.ae_view},
         "mde": {"cell": a.mde_cell, "view": a.mde_view},
@@ -410,6 +454,13 @@ def emit_outputs(out_dir, payload):
         lines += ["", "## ⚠️ schema 提示（[P0-4]）", ""] + ["- " + u for u in payload["schema_unknown"][:15]]
     if payload.get("apply_failed"):
         lines += ["", "## 写参数失败项", ""] + ["- `%s`: %s" % (n, r) for n, r in payload["apply_failed"]]
+    if payload.get("peak_mem_mb") is not None or payload.get("raw_inventory"):
+        lines += ["", "## 结果文件与资源占用", "",
+                  "- 峰值内存：%s MB" % (payload.get("peak_mem_mb") if payload.get("peak_mem_mb") is not None else "未记录")]
+        inv = payload.get("raw_inventory") or []
+        if inv:
+            lines += ["", "| 文件 | 大小(B) |", "|---|---|"]
+            lines += ["| `%s` | %d |" % (x["path"], x["size"]) for x in inv[:30]]
     if payload.get("mock"):
         lines += ["", "> ⚠️ 本次为 `--mock` 模式（假数据），仅验证解析/聚合/输出链路。"]
     with io.open(os.path.join(out_dir, "metrics.md"), "w", encoding="utf-8", newline="\n") as f:
@@ -421,6 +472,12 @@ def emit_outputs(out_dir, payload):
     print("  %-14s %s um^2" % ("Total_Area", payload["area_um2"]))
     print("  估算分(不含时间分): %.2f / 80  可行: %s"
           % (payload["verdict"]["est_score_no_time"], payload["verdict"]["feasible"]))
+    if payload.get("peak_mem_mb") is not None:
+        print("  峰值内存        %s MB" % payload["peak_mem_mb"])
+    inv = payload.get("raw_inventory") or []
+    if inv:
+        print("  结果/波形文件   %d 个（最大的 5 个：%s）"
+              % (len(inv), ", ".join(os.path.basename(x["path"]) for x in inv[:5])))
     print("==== 已写出 %s/{metrics.json, metrics.csv, metrics.md} ====" % out_dir)
 
 

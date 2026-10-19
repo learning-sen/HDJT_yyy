@@ -244,6 +244,28 @@ def main():
     check("T11c sim_engine 面积计算已全部走 str()",
           "def _get(param):" in src_sim and "to_num(_get(" in src_sim)
 
+    # ---------- T12 report_gen（6.2 第 5 项）/ T13 stats（6.2 第 6 项）----------
+    rg = os.path.join(MOD4, "report_gen.py")
+    stats_py = os.path.join(MOD4, "stats.py")
+    rep_out = os.path.join(tmp, "pvt_report.md")
+    rc = subprocess.call([sys.executable, rg, "--sim_dir", out, "--out", rep_out])
+    check("T12a report_gen 退出码 0", rc == 0, "rc=%d" % rc)
+    rep_text = io.open(rep_out, encoding="utf-8").read() if os.path.exists(rep_out) else ""
+    check("T12b 报告含三个关键小节",
+          all(k in rep_text for k in ("最坏情况指标", "全 PVT 逐角明细", "代码质量与算法性能")),
+          "%d 字符" % len(rep_text))
+    log_path = os.path.join(tmp, "fake_opt.log")
+    io.open(log_path, "w", encoding="utf-8").write(
+        "iter 1 fitness -50\niter 25 fitness -78\nTOTAL: 1234.5s\n  t_eval=12.3s\n  n_param=63 budget=6900s\n")
+    stats_out = os.path.join(tmp, "stats.md")
+    rc = subprocess.call([sys.executable, stats_py, "--log", log_path, "--out", stats_out])
+    check("T13a stats 退出码 0", rc == 0, "rc=%d" % rc)
+    stj = json.load(io.open(os.path.join(tmp, "stats.json"), encoding="utf-8"))
+    check("T13b 解析出评估次数/总耗时",
+          stj.get("评估/迭代次数") == 25 and abs((stj.get("总运行时间(s)") or 0) - 1234.5) < 0.1,
+          str({k: stj.get(k) for k in ("评估/迭代次数", "总运行时间(s)")}))
+    check("T13c 峰值内存缺失时写 None 而不是编数", stj.get("峰值内存(MB)") is None)
+
     print()
     if _fail:
         print("❌ 失败 %d 项: %s" % (len(_fail), _fail))
