@@ -8,6 +8,6 @@
   "timeout_s": 120,
   "max_retries": 3,
 
-  "prompt_file": "../system_prompt.txt",
+  "prompt_file": "system_prompt.txt",
   "output_dir": "./output"
 }

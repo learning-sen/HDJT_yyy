@@ -30,8 +30,11 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent            # 项目根目录
 OUT_ROOT = HERE.parent               # module2/
 
-# 赛题提供的网表（默认输入）
-DEFAULT_INPUT = (ROOT / "extracted" / "赛题数据本身" / "netlist" / "OPA_loopgain.netlist")
+# 默认输入网表：优先用随包附带的样例（保证解包即可运行）
+DEFAULT_INPUT = (HERE / "sample" / "OPA_loopgain.netlist")
+_LEGACY_INPUT = (ROOT / "extracted" / "赛题数据本身" / "netlist" / "OPA_loopgain.netlist")
+if not DEFAULT_INPUT.exists() and _LEGACY_INPUT.exists():
+    DEFAULT_INPUT = _LEGACY_INPUT
 
 # 本次实际使用的约减规则（会写进事实包，模型必须逐条解释）
 REDUCTION_RULES = [

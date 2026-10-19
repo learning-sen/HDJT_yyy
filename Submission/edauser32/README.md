@@ -4,6 +4,30 @@
 > **智能体流程 Python 源码**（Spec 解析、拓扑模块识别与参数约减）
 > + **九天平台源码**（参数化电路图标注、基于约束的多目标尺寸优化）。
 
+## 快速验证（无需 API Key）
+
+```bash
+python -m pip install -r requirements.txt
+
+# ① 拓扑识别与参数约减（纯确定性，离线可跑）
+cd module2_topology_agent
+python agent.py --no-llm                  # 用自带 sample/OPA_loopgain.netlist
+# 期望：识别覆盖 59/59 个器件；参数约减 105 -> 47（55.2%）
+
+# ② 智能体自检（离线）
+cd ../module1_spec_agent
+python agent.py self-test
+# 期望：约束 4 条 / 目标 1 条 / 推理链 8 步
+
+# ③ 需要大模型时（可选）
+export DASHSCOPE_API_KEY=sk-xxx           # Windows: $env:DASHSCOPE_API_KEY="sk-xxx"
+python agent.py spec --input sample/需求_全差分运放.txt --out spec_case1.json
+```
+
+> 包内 `module1_spec_agent/sample/` 与 `module2_topology_agent/sample/` 为赛题 Public 样例输入，
+> 因此**解包即可运行**，不依赖仓库其它目录。
+> `module3` / `module4` 需九天服务器环境（`source setup.bash` 后使用 `pythone`）。
+
 ## 目录
 
 | 目录 | 覆盖的赛题功能 | 入口 |
